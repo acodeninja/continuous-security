@@ -9,7 +9,7 @@ const config = {
     title: 'Continuous Security Reports',
     tagline: '',
     url: 'http://localhost:3000',
-    baseUrl: '/documentation',
+    baseUrl: '/continuous-security',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     // favicon: 'img/favicon.ico',
