@@ -1,7 +1,11 @@
+name: Publish Documentation
+
 on:
   push:
     branches: [main]
-    paths: documentation/
+    paths:
+      - documentation/
+      - .github/workflows/publish-documentation.yml
 
 permissions:
   contents: read
