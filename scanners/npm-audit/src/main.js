@@ -12,10 +12,7 @@ const scanner = {
   version,
   slug: 'npm-audit',
   buildConfiguration: {files: {Dockerfile, 'scan.sh': Scan}},
-  validate: async (configuration) => {
-    if (configuration.name !== name)
-      throw new Error(`Wrong scanner ${name} != ${configuration.name}`);
-  },
+  validate: async (configuration) => {},
   report: async (location) =>
     readFile(location)
       .then(content => content.toString('utf-8'))
