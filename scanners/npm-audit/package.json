@@ -17,6 +17,9 @@
     "package.json",
     "README.md"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "private": false,
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
