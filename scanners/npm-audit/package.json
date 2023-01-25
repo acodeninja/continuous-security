@@ -12,6 +12,11 @@
     "scanner",
     "@continuous-security"
   ],
+  "files": [
+    "dist/main.js",
+    "package.json",
+    "README.md"
+  ],
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
   "devDependencies": {
