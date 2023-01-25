@@ -20,6 +20,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/acodeninja/continuous-security.git",
+    "directory": "scanners/npm-audit"
+  },
   "private": false,
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
