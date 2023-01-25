@@ -17,6 +17,7 @@
     "package.json",
     "README.md"
   ],
+  "private": false,
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
   "devDependencies": {
