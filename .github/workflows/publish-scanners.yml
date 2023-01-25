@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - scanners/
+      - scanners/**
       - .github/workflows/publish-scanners.yml
 
 concurrency:
