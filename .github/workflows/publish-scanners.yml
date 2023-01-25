@@ -37,3 +37,5 @@ jobs:
         working-directory: scanners/${{ matrix.scanner }}
       - run: npm run build
         working-directory: scanners/${{ matrix.scanner }}
+      - run: npm publish
+        working-directory: scanners/${{ matrix.scanner }}
