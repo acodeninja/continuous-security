@@ -1,0 +1,21 @@
+{
+  "name": "@continuous-security/scanner-npm-audit",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack"
+  },
+  "keywords": [
+    "security",
+    "scanner",
+    "@continuous-security"
+  ],
+  "author": "Lawrence <lawrence@acode.ninja>",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "webpack-cli": "^5.0.1"
+  }
+}
