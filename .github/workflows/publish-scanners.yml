@@ -15,7 +15,7 @@ jobs:
   find-scanners:
     runs-on: ubuntu-latest
     outputs:
-      scanners: ${{ fromJSON(steps.scanners.outputs.scanners) }}
+      scanners: ${{ steps.scanners.outputs.scanners }}
     steps:
       - uses: actions/checkout@v3
       - id: scanners
@@ -26,7 +26,7 @@ jobs:
     needs: [find-scanners]
     strategy:
       matrix:
-        scanner: ${{ needs.find-scanners.outputs.scanners }}
+        scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
