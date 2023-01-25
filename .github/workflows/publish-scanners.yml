@@ -35,3 +35,5 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
         working-directory: scanners/${{ matrix.scanner }}
+      - run: npm run build
+        working-directory: scanners/${{ matrix.scanner }}
