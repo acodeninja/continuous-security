@@ -1,7 +1,5 @@
 import {readFile} from "fs/promises";
 
-import {Scanner, ScanReport} from "../../../types";
-
 import packageJson from "../package.json";
 import Dockerfile from "./assets/Dockerfile";
 import Scan from "./assets/scan.sh";

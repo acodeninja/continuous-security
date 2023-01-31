@@ -2,7 +2,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "outDir": "build"
+    "outDir": "build",
+    "types": ["node"]
   },
   "include": ["./src/*.ts", "./types.d.ts"]
 }

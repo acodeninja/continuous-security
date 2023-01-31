@@ -19,7 +19,7 @@ type ScannerConfiguration = {
   target?: string;
 } | string;
 
-export type ScanReport = {
+type ScanReport = {
   issues: Array<{
     title: string;
     description: string;
@@ -41,6 +41,3 @@ declare module './assets/*' {
   const content: string;
   export default content;
 }
-
-declare const _default: Scanner;
-export default _default;
