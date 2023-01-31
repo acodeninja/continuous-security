@@ -1,4 +1,5 @@
 import {readFile} from "fs/promises";
+import {resolve} from "path";
 
 import packageJson from "../package.json";
 import Dockerfile from "./assets/Dockerfile";
@@ -12,7 +13,7 @@ export default {
   validate: async (_configuration) => {
   },
   report: async (location): Promise<ScanReport> =>
-    readFile(location)
+    readFile(resolve(location, 'report.json'))
       .then((content: Buffer) => content.toString('utf-8'))
       .then((content: string) => JSON.parse(content))
       .then((report: NpmAudit) => {
