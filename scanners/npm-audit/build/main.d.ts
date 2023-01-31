@@ -41,3 +41,6 @@ declare module './assets/*' {
   const content: string;
   export default content;
 }
+
+declare const _scanner: Scanner;
+export default _scanner;
