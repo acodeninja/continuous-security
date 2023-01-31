@@ -1,3 +1,5 @@
+const {name} = require('./package.json');
+
 module.exports = {
   mode: 'production',
   entry: './src/main.ts',
@@ -6,6 +8,9 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: require('path').resolve(__dirname, 'build'),
+    library: {
+      type: 'commonjs'
+    },
   },
   resolve: {
     extensions: ['.ts', '.js'],
