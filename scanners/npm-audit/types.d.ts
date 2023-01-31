@@ -1,4 +1,4 @@
-export interface NpmAudit {
+interface NpmAudit {
   vulnerabilities: {
     [name: string]: {
       name: string;
@@ -17,6 +17,13 @@ export interface NpmAudit {
       moderate: number;
       high: number;
       critical: number;
+      total: number;
     }
   }
+}
+
+// @ts-ignore
+declare module './assets/*' {
+  const content: string;
+  export default content;
 }

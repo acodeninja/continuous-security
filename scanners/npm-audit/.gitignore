@@ -1,3 +1,4 @@
 node_modules/
 report.json
-dist/
+!build/main.d.ts
+build/*
