@@ -1,5 +1,3 @@
-const {name} = require('./package.json');
-
 module.exports = {
   mode: 'production',
   entry: './src/main.ts',
@@ -25,7 +23,7 @@ module.exports = {
         test: /assets\/.+/,
         type: 'asset/inline',
         generator: {
-          dataUrl: content => Buffer.from(content.toString(), 'base64'),
+          dataUrl: content => content.toString(),
         },
       },
     ]
