@@ -18,6 +18,7 @@ export default {
       .then((content: string) => JSON.parse(content))
       .then((report: NpmAudit) => {
         return {
+          scanner: packageJson.name,
           issues: Object.entries(report.vulnerabilities).map(([_name, content]) => {
             const title = content.via.map(v => v.title)
               .filter((t, i) => content.via.map(v => v.title).indexOf(t) === i)

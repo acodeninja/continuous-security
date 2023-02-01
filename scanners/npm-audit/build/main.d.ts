@@ -20,6 +20,7 @@ type ScannerConfiguration = {
 } | string;
 
 type ScanReport = {
+  scanner: string;
   issues: Array<{
     title: string;
     description: string;
