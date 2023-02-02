@@ -16,22 +16,20 @@ export default {
     readFile(resolve(location, 'report.json'))
       .then((content: Buffer) => content.toString('utf-8'))
       .then((content: string) => JSON.parse(content))
-      .then((report: NpmAudit) => {
-        return {
-          scanner: packageJson.name,
-          issues: Object.entries(report.vulnerabilities).map(([_name, content]) => {
-            const title = content.via.map(v => v.title)
-              .filter((t, i) => content.via.map(v => v.title).indexOf(t) === i)
-              .join(' & ');
-
-            return {
-              title,
-              description: '',
+      .then((report: NpmAudit) => ({
+        counts: report.metadata.vulnerabilities,
+        issues: Object.entries(report.vulnerabilities)
+          .map(([_name, {via, fixAvailable, range}]) =>
+            via.map((v): ScanReport['issues'][0] => ({
+              title: `Vulnerable Third-Party Library \`${v.dependency}\``,
+              description: v.title,
               type: 'dependency',
-              severity: content.severity,
-            };
-          }),
-          counts: report.metadata.vulnerabilities,
-        };
-      }),
+              package: v.dependency,
+              cwe: v.cwe.map(c => c.toLowerCase().replace('cwe-', '')),
+              severity: v.severity,
+              fix: fixAvailable ? `Upgrade to version above ${range}` : 'Unknown',
+            }))
+          ).flat(),
+        scanner: packageJson.name,
+      })),
 } as Scanner;

@@ -1,27 +1,3 @@
-interface NpmAudit {
-  vulnerabilities: {
-    [name: string]: {
-      name: string;
-      severity: 'info' | 'low' | 'moderate' | 'high' | 'critical';
-      via: Array<{
-        title: string,
-        url: string,
-        cwe: Array<string>;
-      }>;
-    }
-  };
-  metadata: {
-    vulnerabilities: {
-      info: number;
-      low: number;
-      moderate: number;
-      high: number;
-      critical: number;
-      total: number;
-    }
-  }
-}
-
 type Scanner = {
   name: string;
   slug: string;
@@ -31,6 +7,19 @@ type Scanner = {
   report: (location: string) => Promise<ScanReport>;
 }
 
+type ScannerConfiguration = {
+  name: string;
+  target?: string;
+}
+
+type ScannerRunConfiguration = {
+  imageHash: string;
+  host: {
+    target: string;
+    output: string;
+  },
+}
+
 type ScannerBuildConfiguration = {
   files: {
     Dockerfile: string;
@@ -38,17 +27,15 @@ type ScannerBuildConfiguration = {
   };
 }
 
-type ScannerConfiguration = {
-  name: string;
-  target?: string;
-} | string;
-
 type ScanReport = {
   scanner: string;
   issues: Array<{
     title: string;
     description: string;
-    type: 'dependency';
+    type: 'dependency' | 'code smell';
+    package?: string;
+    cwe?: string | Array<string>;
+    fix: string;
     severity: 'info' | 'low' | 'moderate' | 'high' | 'critical';
   }>;
   counts: {
