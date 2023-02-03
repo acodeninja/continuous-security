@@ -1,6 +1,6 @@
-import scanner from "./main";
-import {npmAudit} from "../test/fixtures";
-import {readFile} from "fs/promises";
+import scanner from './main';
+import {npmAudit} from '../test/fixtures';
+import {readFile} from 'fs/promises';
 
 jest.mock('fs/promises', () => ({readFile: jest.fn()}));
 (readFile as jest.Mock).mockResolvedValue(npmAudit);
@@ -22,7 +22,7 @@ describe('npm-audit scanner', () => {
     });
   });
   test('has a report function', () => {
-    expect(scanner).toHaveProperty('report', expect.any(Function))
+    expect(scanner).toHaveProperty('report', expect.any(Function));
   });
 
   describe('generating a report', () => {
