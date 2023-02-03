@@ -21,9 +21,43 @@ jobs:
       - id: scanners
         run: echo "scanners=$(ls -1 ./scanners | jq -Rnrc '[inputs]')" >> $GITHUB_OUTPUT
 
-  publish-scanner:
+  lint:
     runs-on: ubuntu-latest
     needs: [find-scanners]
+    strategy:
+      matrix:
+        scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+        working-directory: scanners/${{ matrix.scanner }}
+      - run: npm run lint
+        working-directory: scanners/${{ matrix.scanner }}
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [find-scanners]
+    strategy:
+      matrix:
+        scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+        working-directory: scanners/${{ matrix.scanner }}
+      - run: npm test
+        working-directory: scanners/${{ matrix.scanner }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [find-scanners, lint, test]
     strategy:
       matrix:
         scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}

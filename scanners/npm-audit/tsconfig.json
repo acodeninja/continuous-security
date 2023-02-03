@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "outDir": "build",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "lib": ["ES2015"]
   },
   "include": ["./src/*.ts", "./types.d.ts", "./types.local.d.ts"]

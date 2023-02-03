@@ -3,7 +3,7 @@ type Scanner = {
   slug: string;
   version: string;
   buildConfiguration: ScannerBuildConfiguration;
-  validate: (configuration: ScannerConfiguration) => Promise<void>;
+  validate?: (configuration: ScannerConfiguration) => Promise<void>;
   report: (location: string) => Promise<ScanReport>;
 }
 

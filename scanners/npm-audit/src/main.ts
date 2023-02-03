@@ -1,17 +1,15 @@
-import {readFile} from "fs/promises";
-import {resolve} from "path";
+import {readFile} from 'fs/promises';
+import {resolve} from 'path';
 
-import packageJson from "../package.json";
-import Dockerfile from "./assets/Dockerfile";
-import Scan from "./assets/scan.sh";
+import packageJson from '../package.json';
+import Dockerfile from './assets/Dockerfile';
+import Scan from './assets/scan.sh';
 
 export default {
   name: packageJson.name,
   version: packageJson.version,
   slug: 'npm-audit',
   buildConfiguration: {files: {Dockerfile, 'scan.sh': Scan}},
-  validate: async (_configuration) => {
-  },
   report: async (location): Promise<ScanReport> =>
     readFile(resolve(location, 'report.json'))
       .then((content: Buffer) => content.toString('utf-8'))
@@ -19,12 +17,12 @@ export default {
       .then((report: NpmAudit) => ({
         counts: report.metadata.vulnerabilities,
         issues: Object.entries(report.vulnerabilities)
-          .map(([_name, {via, fixAvailable, range}]) =>
+          .map(([name, {via, fixAvailable, range}]) =>
             via.map((v): ScanReport['issues'][0] => ({
               title: `Vulnerable Third-Party Library \`${v.dependency}\``,
               description: v.title,
               type: 'dependency',
-              package: v.dependency,
+              package: name,
               cwe: v.cwe.map(c => c.toLowerCase().replace('cwe-', '')),
               severity: v.severity,
               fix: fixAvailable ? `Upgrade to version above ${range}` : 'Unknown',

@@ -17,7 +17,7 @@ export default class Scan {
   async setup() {
     this.emitter.emit('scan:setup:started', this.scanner.name);
 
-    await this.scanner.validate(this.configuration);
+    if (this.scanner.validate) await this.scanner.validate(this.configuration);
 
     this.imageHash = await buildImage(this.scanner.buildConfiguration);
     this.output = await makeTemporaryFolder(`${this.scanner.slug}-`);
