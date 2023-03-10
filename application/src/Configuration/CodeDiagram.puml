@@ -1,0 +1,12 @@
+@startuml
+skinparam backgroundColor transparent
+skinparam linetype polyline
+
+class ConfigurationLoadError extends Error {
+    +{field} string message = "Failed to load configuration file."
+}
+
+class Configuration {
+    +{method} static Configuration load(path: string)
+}
+@enduml
