@@ -21,7 +21,7 @@ export class Configuration {
     const filePath = (await Promise.all(
       ['json', 'yaml', 'yml']
         .map(ext => resolve(path, '.continuous-security.' + ext))
-        .map(file => access(file).then(() => file).catch(e => null))
+        .map(file => access(file).then(() => file).catch(() => null))
     )).find(file => !!file);
 
     try {

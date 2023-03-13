@@ -71,9 +71,7 @@ describe('Configuration', () => {
     describe('a non-existent configuration file', () => {
       beforeAll(async () => {
         (access as jest.Mock).mockRejectedValue(new Error('File does not exist'));
-        try {
-          await Configuration.load('/test');
-        } catch (e) {}
+        await Configuration.load('/test').catch(() => null);
       });
 
       afterAll(() => {
