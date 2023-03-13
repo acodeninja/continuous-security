@@ -1,37 +1,40 @@
 import {access, readFile} from 'fs/promises';
 import {resolve} from 'path';
-import Emitter from './Emitter';
+import {load as YamlLoad} from 'js-yaml';
 
 export class ConfigurationLoadError extends Error {
   override message = 'Failed to load configuration file.';
 }
 
-export default class Configuration {
-  public scanners: Array<ScannerConfiguration> = [];
+export class Configuration {
+  public readonly scanners: Array<ScannerConfiguration>;
 
-  constructor(configuration: ConfigurationFile) {
-    this.scanners = configuration.scanners.map((scanner): ScannerConfiguration => {
-      if (typeof scanner === 'string')
-        scanner = {name: scanner};
-
-      return scanner;
-    });
+  constructor({scanners}: ConfigurationFile) {
+    this.scanners = scanners.map(scanner => typeof scanner === 'string' ? {name: scanner} : scanner);
   }
 
-  static async load(rootDirectory: string, emitter?: Emitter): Promise<Configuration> {
-    const configurationPath = resolve(rootDirectory, 'continuous-security.json');
+  /**
+   * @param path
+   * @throws ConfigurationLoadError
+   */
+  static async load(path: string) {
+    const filePath = (await Promise.all(
+      ['json', 'yaml', 'yml']
+        .map(ext => resolve(path, '.continuous-security.' + ext))
+        .map(file => access(file).then(() => file).catch(() => null))
+    )).find(file => !!file);
 
-    return await access(configurationPath)
-      .then(() => readFile(configurationPath))
-      .then(file => file.toString())
-      .then((content): ConfigurationFile => JSON.parse(content))
-      .then(configuration => {
-        emitter?.emit('configuration:loaded', `path: ${rootDirectory}`);
-        return new Configuration(configuration);
-      })
-      .catch((e) => {
-        emitter?.emit('configuration:error', e.toString());
-        throw new ConfigurationLoadError();
-      });
+    try {
+      const fileContents = (await readFile(filePath)).toString('utf8');
+
+      if (filePath.endsWith('.json'))
+        return new Configuration(JSON.parse(fileContents));
+
+      if (filePath.endsWith('.yaml'))
+        return new Configuration(YamlLoad(fileContents));
+
+    } catch (e) {
+      throw new ConfigurationLoadError();
+    }
   }
 }
