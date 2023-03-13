@@ -17,9 +17,14 @@ export class Configuration {
    * @throws ConfigurationLoadError
    */
   static async load(path: string) {
+    const filePath = (await Promise.all(
+      ['json', 'yaml', 'yml']
+        .map(ext => resolve(path, '.continuous-security.' + ext))
+        .map(file => access(file).then(() => file).catch(e => null))
+    )).find(file => !!file);
+
     try {
-      await access(resolve(path, '.continuous-security.json'));
-      const fileContents = await readFile(resolve(path, '.continuous-security.json'));
+      const fileContents = await readFile(filePath);
       const configuration = JSON.parse(fileContents.toString('utf8'));
       return new Configuration(configuration);
     } catch (e) {

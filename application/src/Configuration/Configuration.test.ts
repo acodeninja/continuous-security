@@ -11,10 +11,20 @@ describe('Configuration', () => {
   describe('Configuration.load', () => {
     describe('JSON configuration file', () => {
       let configuration: Configuration;
+
       beforeAll(async () => {
-        (access as jest.Mock).mockResolvedValueOnce(null);
+        (access as jest.Mock).mockImplementation(async file => {
+          if (file.endsWith('.json')) return null;
+          throw new Error('file does not exist');
+        });
+
         (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(JSONConfiguration));
+
         configuration = await Configuration.load('/test');
+      });
+
+      afterAll(() => {
+        (access as jest.Mock).mockReset();
       });
 
       test('attempts to read from .continuous-security.json', () => {
@@ -30,8 +40,27 @@ describe('Configuration', () => {
     });
 
     describe('a non-existent configuration file', () => {
-      beforeAll(() => {
-        (access as jest.Mock).mockRejectedValueOnce(new Error('File does not exist'));
+      beforeAll(async () => {
+        (access as jest.Mock).mockRejectedValue(new Error('File does not exist'));
+        try {
+          await Configuration.load('/test')
+        } catch (e) {}
+      });
+
+      afterAll(() => {
+        (access as jest.Mock).mockReset();
+      });
+
+      test('attempts to read from /test/.continuous-security.json', () => {
+        expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
+      });
+
+      test('attempts to read from /test/.continuous-security.yaml', () => {
+        expect(access).toHaveBeenCalledWith('/test/.continuous-security.yaml');
+      });
+
+      test('attempts to read from /test/.continuous-security.yml', () => {
+        expect(access).toHaveBeenCalledWith('/test/.continuous-security.yml');
       });
 
       test('throws a ConfigurationLoadError', async () => {
