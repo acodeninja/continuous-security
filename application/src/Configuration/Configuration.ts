@@ -1,5 +1,6 @@
 import {access, readFile} from 'fs/promises';
 import {resolve} from 'path';
+import {load as YamlLoad} from 'js-yaml';
 
 export class ConfigurationLoadError extends Error {
   override message = 'Failed to load configuration file.';
@@ -24,9 +25,14 @@ export class Configuration {
     )).find(file => !!file);
 
     try {
-      const fileContents = await readFile(filePath);
-      const configuration = JSON.parse(fileContents.toString('utf8'));
-      return new Configuration(configuration);
+      const fileContents = (await readFile(filePath)).toString('utf8');
+
+      if (filePath.endsWith('.json'))
+        return new Configuration(JSON.parse(fileContents));
+
+      if (filePath.endsWith('.yaml'))
+        return new Configuration(YamlLoad(fileContents));
+
     } catch (e) {
       throw new ConfigurationLoadError();
     }

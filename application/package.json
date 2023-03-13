@@ -27,6 +27,7 @@
     "eslint": "^8.33.0",
     "eventemitter2": "^6.4.9",
     "jest": "^29.3.1",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "tar-stream": "^3.0.0",
     "ts-jest": "^29.0.5",
