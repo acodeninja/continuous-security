@@ -2,7 +2,7 @@ import {promisify} from 'util';
 import {exec} from 'child_process';
 import Emitter from './Emitter';
 import Scan from './Scan';
-import Configuration from './Configuration';
+import {Configuration} from './Configuration';
 import {loadScannerModule} from './Helpers';
 import {Report} from './Report';
 import {resolve} from 'path';
@@ -22,7 +22,7 @@ export default class Orchestrator {
   }
 
   async run(): Promise<void> {
-    this.configuration = await Configuration.load(this.projectRoot, this.emitter);
+    this.configuration = await Configuration.load(this.projectRoot);
 
     await promisify(exec)(
       `npm install -g ${this.configuration.scanners.map(scanner => scanner.name).join(' ')}`,

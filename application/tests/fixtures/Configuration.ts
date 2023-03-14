@@ -1,7 +1,8 @@
-export const VerboseConfiguration: ConfigurationFile = {
-  scanners: [{name: 'test-scanner'}],
-};
-
-export const TerseConfiguration: ConfigurationFile = {
+export const JSONConfiguration = Buffer.from(JSON.stringify({
   scanners: ['test-scanner'],
-};
+}));
+
+export const YAMLConfiguration = Buffer.from(`
+scanners:
+  - test-scanner
+`);

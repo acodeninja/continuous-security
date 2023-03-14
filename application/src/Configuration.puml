@@ -1,0 +1,27 @@
+@startuml
+skinparam backgroundColor transparent
+skinparam linetype polyline
+
+class ConfigurationLoadError extends Error {
+  +{field} string message = "Failed to load configuration file."
+}
+
+class Configuration {
+  +{field} Array<ScannerConfiguration> scanners
+  +{method} Configuration new(ConfigurationFile configuration)
+  +{method} static Configuration load(path: string)
+}
+
+interface ConfigurationFile {
+  {field} Array<ScannerConfiguration | string> scanners;
+}
+
+interface ScannerConfiguration {
+  {field} string name
+}
+
+ConfigurationFile "1" *-- "Many" ScannerConfiguration
+Configuration "1" *-- "Many" ScannerConfiguration
+Configuration -> ConfigurationLoadError: load() <<throws>>
+ConfigurationFile -> Configuration
+@enduml
