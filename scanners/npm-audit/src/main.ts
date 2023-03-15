@@ -15,7 +15,8 @@ export default {
       .then((content: Buffer) => content.toString('utf-8'))
       .then((content: string) => JSON.parse(content))
       .then((report: NpmAudit) => ({
-        counts: report.metadata.vulnerabilities,
+        scanner: packageJson.name,
+        counts: {...report.metadata.vulnerabilities, unknown: 0},
         issues: Object.entries(report.vulnerabilities)
           .map(([name, {via, fixAvailable}]) =>
             via.map((v): ScanReport['issues'][0] => ({
@@ -28,6 +29,5 @@ export default {
               fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'Unknown',
             }))
           ).flat(),
-        scanner: packageJson.name,
       })),
 } as Scanner;

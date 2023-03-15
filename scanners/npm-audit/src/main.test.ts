@@ -57,6 +57,7 @@ describe('npm-audit scanner', () => {
         fix: 'Unknown',
       }]));
     });
+
     test('returns the issues counts', () => {
       expect(report).toHaveProperty('counts', {
         info: 0,
@@ -65,6 +66,7 @@ describe('npm-audit scanner', () => {
         high: 1,
         critical: 0,
         total: 1,
+        unknown: 0,
       });
     });
 

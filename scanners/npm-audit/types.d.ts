@@ -36,7 +36,7 @@ type ScanReport = {
     package?: string;
     cwe?: string | Array<string>;
     fix: string;
-    severity: 'info' | 'low' | 'moderate' | 'high' | 'critical';
+    severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
   }>;
   counts: {
     info: number;
@@ -44,6 +44,7 @@ type ScanReport = {
     moderate: number;
     high: number;
     critical: number;
+    unknown: number;
     total: number;
   };
 }
