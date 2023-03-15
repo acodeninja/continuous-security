@@ -10,10 +10,10 @@ jest.setTimeout(60 * 1000);
 
 describe('building the docker image', () => {
   test('successfully builds the image', async () => {
-    await expect(promisify(exec)('docker build -t scanner-npm-audit-test .', {
+    await expect(promisify(exec)('docker buildx build -t scanner-npm-audit-test .', {
       cwd: resolve(process.cwd(), 'src', 'assets'),
     })).resolves.toEqual(expect.objectContaining({
-      stderr: expect.stringContaining("scanner-npm-audit-test"),
+      stderr: expect.stringContaining("docker.io/library/scanner-npm-audit-test done"),
     }));
   });
 });
@@ -22,7 +22,7 @@ describe('running the docker container', () => {
   let temporaryDirectory;
 
   beforeAll(async () => {
-    await promisify(exec)('docker build -t scanner-npm-audit-test .', {
+    await promisify(exec)('docker buildx build -t scanner-npm-audit-test .', {
       cwd: resolve(process.cwd(), 'src', 'assets'),
     });
 
