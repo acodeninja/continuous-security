@@ -1,6 +1,6 @@
 module.exports = {
   transform: {
-    '^.+\\.(t|j)sx?$': ['ts-jest'],
+    '^.+\\.ts$': ['ts-jest'],
   },
   moduleNameMapper: {
     'assets/(.*)': "<rootDir>/test/assetMock.js"
