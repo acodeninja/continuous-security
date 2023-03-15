@@ -17,7 +17,7 @@ export default {
       .then((report: NpmAudit) => ({
         counts: report.metadata.vulnerabilities,
         issues: Object.entries(report.vulnerabilities)
-          .map(([name, {via, fixAvailable, range}]) =>
+          .map(([name, {via, fixAvailable}]) =>
             via.map((v): ScanReport['issues'][0] => ({
               title: `Vulnerable Third-Party Library \`${v.dependency}\``,
               description: v.title,
@@ -25,7 +25,7 @@ export default {
               package: name,
               cwe: v.cwe.map(c => c.toLowerCase().replace('cwe-', '')),
               severity: v.severity,
-              fix: fixAvailable ? `Upgrade to version above ${range}` : 'Unknown',
+              fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'Unknown',
             }))
           ).flat(),
         scanner: packageJson.name,
