@@ -69,6 +69,7 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
       - run: npm audit
+        working-directory: scanners/${{ matrix.scanner }}
 
   publish:
     runs-on: ubuntu-latest
