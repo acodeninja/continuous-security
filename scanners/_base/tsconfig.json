@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "outDir": "build",
+    "types": ["node", "jest"],
+    "lib": ["ES2015"]
+  },
+}
