@@ -56,9 +56,23 @@ jobs:
       - run: npm run test:integration --if-present
         working-directory: scanners/${{ matrix.scanner }}
 
+  audit:
+    runs-on: ubuntu-latest
+    needs: [find-scanners]
+    strategy:
+      matrix:
+        scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm audit
+
   publish:
     runs-on: ubuntu-latest
-    needs: [find-scanners, lint, test]
+    needs: [find-scanners, lint, test, audit]
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
