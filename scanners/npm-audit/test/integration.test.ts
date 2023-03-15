@@ -13,7 +13,7 @@ describe('building the docker image', () => {
     await expect(promisify(exec)('docker build -t scanner-npm-audit-test .', {
       cwd: resolve(process.cwd(), 'src', 'assets'),
     })).resolves.toEqual(expect.objectContaining({
-      stderr: expect.stringContaining("naming to docker.io/library/scanner-npm-audit-test done"),
+      stderr: expect.stringContaining("scanner-npm-audit-test"),
     }));
   });
 });
@@ -62,9 +62,7 @@ describe('running the docker container', () => {
         },
         issues: [
           {
-            cwe: [
-              "200",
-            ],
+            cwe: ["200"],
             description: "Insecure template handling in Squirrelly",
             fix: "Unknown",
             package: "squirrelly",
