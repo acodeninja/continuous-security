@@ -27,7 +27,7 @@ export default {
               cwe: v.cwe.map(c => c.toLowerCase().replace('cwe-', '')),
               severity: v.severity,
               fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'Unknown',
-            }))
+            })),
           ).flat(),
       })),
 } as Scanner;

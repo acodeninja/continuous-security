@@ -1,10 +1,10 @@
-import {exec} from "child_process";
-import {resolve} from "path";
-import {promisify} from "util";
-import {mkdtemp, readdir} from "fs/promises";
-import {join} from "path";
-import {tmpdir} from "os";
-import scanner from "../src/main";
+import {exec} from 'child_process';
+import {resolve} from 'path';
+import {promisify} from 'util';
+import {mkdtemp, readdir} from 'fs/promises';
+import {join} from 'path';
+import {tmpdir} from 'os';
+import scanner from '../src/main';
 
 jest.setTimeout(60 * 1000);
 
@@ -13,7 +13,7 @@ describe('building the docker image', () => {
     await expect(promisify(exec)('docker buildx build -t scanner-npm-audit-test .', {
       cwd: resolve(process.cwd(), 'src', 'assets'),
     })).resolves.toEqual(expect.objectContaining({
-      stderr: expect.stringContaining("docker.io/library/scanner-npm-audit-test done"),
+      stderr: expect.stringContaining('docker.io/library/scanner-npm-audit-test done'),
     }));
   });
 });
@@ -33,7 +33,7 @@ describe('running the docker container', () => {
         'docker run',
         `-v ${resolve(process.cwd(), '..', '..', 'examples', 'nodejs')}:/target`,
         `-v ${temporaryDirectory}:/output`,
-        'scanner-npm-audit-test'
+        'scanner-npm-audit-test',
       ].join(' '),
       {cwd: resolve(process.cwd())},
     );
@@ -62,16 +62,16 @@ describe('running the docker container', () => {
         },
         issues: [
           {
-            cwe: ["200"],
-            description: "Insecure template handling in Squirrelly",
-            fix: "Unknown",
-            package: "squirrelly",
-            severity: "high",
-            title: "Vulnerable Third-Party Library `squirrelly`",
-            type: "dependency",
+            cwe: ['200'],
+            description: 'Insecure template handling in Squirrelly',
+            fix: 'Unknown',
+            package: 'squirrelly',
+            severity: 'high',
+            title: 'Vulnerable Third-Party Library `squirrelly`',
+            type: 'dependency',
           },
         ],
-        scanner: "@continuous-security/scanner-npm-audit",
+        scanner: '@continuous-security/scanner-npm-audit',
       });
   });
 });

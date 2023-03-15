@@ -5,9 +5,10 @@ module.exports = {
   devtool: 'inline-source-map',
   output: {
     filename: 'main.js',
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     path: require('path').resolve(__dirname, 'build'),
     library: {
-      type: 'commonjs'
+      type: 'commonjs',
     },
   },
   resolve: {
@@ -17,7 +18,7 @@ module.exports = {
     rules: [
       {
         test: /\.([cm]?tsx?)$/,
-        loader: "ts-loader",
+        loader: 'ts-loader',
       },
       {
         test: /assets\/.+/,
@@ -26,6 +27,6 @@ module.exports = {
           dataUrl: content => content.toString(),
         },
       },
-    ]
+    ],
   },
 };

@@ -5,7 +5,6 @@ interface NpmAudit {
       name: string;
       severity: 'info' | 'low' | 'moderate' | 'high' | 'critical';
       isDirect: boolean;
-      effects: Array<{}>;
       range: string;
       nodes: Array<string>;
       fixAvailable: boolean;

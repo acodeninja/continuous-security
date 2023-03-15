@@ -3,6 +3,6 @@ module.exports = {
     '^.+\\.ts$': ['ts-jest'],
   },
   moduleNameMapper: {
-    'assets/(.*)': "<rootDir>/test/assetMock.js"
+    'assets/(.*)': '<rootDir>/test/assetMock.js',
   },
 };
