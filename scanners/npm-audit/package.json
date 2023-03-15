@@ -8,7 +8,7 @@
     "build": "webpack",
     "lint": "eslint ./src",
     "prepublishOnly": "npm run update-types && npm run build",
-    "update-types": "mkdir -p ./build && cp ../../application/types.scanner.d.ts ./types.d.ts && cp ./types.d.ts ./build/main.d.ts && echo \"\n\ndeclare const _scanner: Scanner;\nexport default _scanner;\n\" >> ./build/main.d.ts"
+    "update-types": "mkdir -p ./build && cp ../../application/types.scanner.d.ts ./types.d.ts && cp ./types.d.ts ./build/main.d.ts && echo \"\ndeclare const _scanner: Scanner;\nexport default _scanner;\n\" >> ./build/main.d.ts"
   },
   "keywords": [
     "security",
