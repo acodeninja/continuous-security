@@ -4,7 +4,8 @@
   "description": "Run npm audit against your codebase.",
   "main": "build/main.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest src/",
+    "test:integration": "jest test/integration.test.ts",
     "build": "webpack",
     "lint": "eslint ./src",
     "prepublishOnly": "npm run update-types && npm run build",

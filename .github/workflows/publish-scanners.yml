@@ -53,6 +53,8 @@ jobs:
         working-directory: scanners/${{ matrix.scanner }}
       - run: npm test
         working-directory: scanners/${{ matrix.scanner }}
+      - run: npm run test:integration --if-present
+        working-directory: scanners/${{ matrix.scanner }}
 
   publish:
     runs-on: ubuntu-latest
