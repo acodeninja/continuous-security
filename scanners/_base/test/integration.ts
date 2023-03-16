@@ -6,7 +6,7 @@ import {join} from 'path';
 import {tmpdir} from 'os';
 
 export const setupIntegrationTests = (
-  {jest, describe, test, expect, beforeAll, afterAll},
+  {afterAll, beforeAll, describe, expect, jest, test},
   scanner,
   process,
   exampleCodebase,
