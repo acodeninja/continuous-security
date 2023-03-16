@@ -9,7 +9,6 @@ type Scanner = {
 
 type ScannerConfiguration = {
   name: string;
-  target?: string;
 }
 
 type ScannerRunConfiguration = {
@@ -37,6 +36,10 @@ type ScanReport = {
     cwe?: string | Array<string>;
     fix: string;
     severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
+    extracts?: Array<{
+      code: string;
+      path: string;
+    }>;
   }>;
   counts: {
     info: number;
@@ -49,8 +52,16 @@ type ScanReport = {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 declare module './assets/*' {
+  const content: string;
+  export default content;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+declare module '../assets/*' {
   const content: string;
   export default content;
 }
