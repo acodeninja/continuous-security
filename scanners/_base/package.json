@@ -1,0 +1,6 @@
+{
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "@types/node": "^18.15.3"
+  }
+}
