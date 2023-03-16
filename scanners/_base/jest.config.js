@@ -1,8 +1,9 @@
+const {resolve} = require("path");
 module.exports = {
   transform: {
     '^.+\\.ts$': ['ts-jest'],
   },
   moduleNameMapper: {
-    'assets/(.*)': '<rootDir>/test/assetMock.js',
+    'assets/(.*)': resolve(__dirname, 'test', 'assetMock.js'),
   },
 };
