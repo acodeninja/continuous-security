@@ -1,8 +1,1 @@
-module.exports = {
-  transform: {
-    '^.+\\.ts$': ['ts-jest'],
-  },
-  moduleNameMapper: {
-    'assets/(.*)': '<rootDir>/test/assetMock.js',
-  },
-};
+module.exports = require('../_base/jest.config');
