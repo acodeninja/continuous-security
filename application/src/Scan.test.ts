@@ -1,5 +1,5 @@
 import Scan from './Scan';
-import Emitter from './Emitter';
+import {Emitter} from './Emitter';
 import {
   buildImage,
   makeTemporaryFolder,

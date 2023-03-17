@@ -1,6 +1,6 @@
 import {promisify} from 'util';
 import {exec} from 'child_process';
-import Emitter from './Emitter';
+import {Emitter} from './Emitter';
 import Scan from './Scan';
 import {Configuration} from './Configuration';
 import {loadScannerModule} from './Helpers';
