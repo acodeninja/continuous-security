@@ -37,7 +37,7 @@ export default class Scan {
       imageHash: this.imageHash,
       host: {
         output: this.output,
-        target: this.configuration.target || process.cwd(),
+        target: process.cwd(),
       },
     });
 
