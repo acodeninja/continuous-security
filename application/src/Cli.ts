@@ -1,6 +1,6 @@
 import {Command, InvalidArgumentError} from 'commander';
 
-import Orchestrator from './Orchestrator';
+import {Orchestrator} from './Orchestrator';
 import {Logger} from './Logger';
 
 import packageJson from '../package.json';

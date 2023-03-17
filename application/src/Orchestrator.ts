@@ -8,7 +8,7 @@ import {Report} from './Report';
 import {resolve} from 'path';
 import {writeFile} from 'fs/promises';
 
-export default class Orchestrator {
+export class Orchestrator {
   public readonly emitter: Emitter;
   private readonly projectRoot: string;
   public configuration?: Configuration;
