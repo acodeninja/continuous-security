@@ -9,7 +9,7 @@ type ConfigurationFile = {
 
 type ReportOutput = {
   title: string;
-  date: string;
+  date: Date;
   issues: Array<{
     title: string;
     description: string;
