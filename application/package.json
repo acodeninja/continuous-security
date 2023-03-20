@@ -7,12 +7,21 @@
     "build": "webpack",
     "update-cwe": "scripts/update-cwe.js",
     "lint": "eslint ./src",
-    "prepublishOnly": "npm run update-cwe && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
   "bin": "build/continuous-security",
+  "files": [
+    "build/*",
+    "package.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
   "devDependencies": {
     "@types/dockerode": "^3.3.14",
     "@types/jest": "^29.2.6",
