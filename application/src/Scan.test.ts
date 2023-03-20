@@ -6,7 +6,7 @@ import {
   destroyTemporaryFolder,
   runImage
 } from './Helpers';
-import {resolve} from "path";
+import {resolve} from 'path';
 
 const Dockerfile = `FROM node:latest
 WORKDIR /target
