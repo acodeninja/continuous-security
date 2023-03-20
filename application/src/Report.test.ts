@@ -2,7 +2,7 @@ import {Report} from './Report';
 
 beforeAll(() => {
   jest.useFakeTimers();
-  jest.setSystemTime(new Date(2020, 3, 1));
+  jest.setSystemTime(new Date(2020, 3, 1, 1, 30, 10, 30));
 });
 
 afterAll(() => {
@@ -70,7 +70,7 @@ issue fix: unknown
       expect(jsonReport.toString()).toMatchInlineSnapshot(`
 "{
   "title": "Security Reporting",
-  "date": "2020-03-31T23:00:00.000Z",
+  "date": "2020-04-01T01:30:10.030Z",
   "issues": [
     {
       "title": "test-issue-title",

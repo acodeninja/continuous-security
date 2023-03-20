@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "test": "jest",
+    "test": "LANG=en_GB.utf8 TZ=UTC jest",
     "build": "webpack",
     "update-cwe": "scripts/update-cwe.js",
     "lint": "eslint ./src",
