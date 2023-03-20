@@ -1,4 +1,4 @@
-import Scan from './Scan';
+import {Scan} from './Scan';
 import {Emitter} from './Emitter';
 import {
   buildImage,
@@ -6,6 +6,7 @@ import {
   destroyTemporaryFolder,
   runImage
 } from './Helpers';
+import {resolve} from "path";
 
 const Dockerfile = `FROM node:latest
 WORKDIR /target

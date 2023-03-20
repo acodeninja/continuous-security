@@ -1,6 +1,6 @@
 import {buildImage, makeTemporaryFolder, destroyTemporaryFolder, runImage} from './Helpers';
 
-export default class Scan {
+export class Scan {
   private readonly configuration: ScannerConfiguration;
   private readonly emitter: EventEmitter;
   private output?: string;
