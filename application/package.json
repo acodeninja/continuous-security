@@ -12,7 +12,9 @@
   "keywords": [],
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
-  "bin": "build/continuous-security",
+  "bin": {
+    "continuous-security": "build/continuous-security"
+  },
   "files": [
     "build/*",
     "package.json",
