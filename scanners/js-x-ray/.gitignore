@@ -1,0 +1,4 @@
+node_modules/
+report.json
+!build/main.d.ts
+build/*
