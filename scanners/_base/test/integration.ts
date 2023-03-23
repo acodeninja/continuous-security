@@ -15,6 +15,15 @@ export const setupIntegrationTests = (
 ) => {
   jest.setTimeout(60 * 1000);
 
+  beforeAll(async () => {
+    const installCommands = {nodejs: 'npm ci'};
+
+    await promisify(exec)(
+      installCommands[exampleCodebase],
+      {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
+    );
+  });
+
   describe('building the docker image', () => {
     test('successfully builds the image', async () => {
       await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
