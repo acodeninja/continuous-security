@@ -56,7 +56,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
         working-directory: application/
-      - run: npm publish
+      - run: bash ../.github/scripts/npm-publish.sh
         working-directory: application/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
