@@ -1,6 +1,6 @@
 import EventEmitter2 from 'eventemitter2';
 
-export default class Emitter implements EventEmitter {
+export class Emitter implements EventEmitter {
   private eventEmitter: EventEmitter2;
 
   constructor() {

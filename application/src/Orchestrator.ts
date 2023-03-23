@@ -1,14 +1,14 @@
 import {promisify} from 'util';
 import {exec} from 'child_process';
-import Emitter from './Emitter';
-import Scan from './Scan';
+import {Emitter} from './Emitter';
+import {Scan} from './Scan';
 import {Configuration} from './Configuration';
 import {loadScannerModule} from './Helpers';
 import {Report} from './Report';
 import {resolve} from 'path';
 import {writeFile} from 'fs/promises';
 
-export default class Orchestrator {
+export class Orchestrator {
   public readonly emitter: Emitter;
   private readonly projectRoot: string;
   public configuration?: Configuration;
@@ -56,7 +56,7 @@ export default class Orchestrator {
     );
   }
 
-  async writeReport(path: string, type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<void> {
+  async writeReport(path: string, type: 'markdown' | 'json'): Promise<void> {
     const [extension, report] = await this.report.getReport(type);
     await writeFile(resolve(path, `report.${extension}`), report);
   }

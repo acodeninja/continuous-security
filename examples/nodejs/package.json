@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@continuous-security/scanner-npm-audit": "^0.0.5",
     "squirrelly": "^8.0.8"
   }
 }

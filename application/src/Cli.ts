@@ -1,6 +1,6 @@
 import {Command, InvalidArgumentError} from 'commander';
 
-import Orchestrator from './Orchestrator';
+import {Orchestrator} from './Orchestrator';
 import {Logger} from './Logger';
 
 import packageJson from '../package.json';
@@ -9,8 +9,8 @@ const program = new Command();
 const orchestrator = new Orchestrator(process.cwd());
 new Logger(orchestrator.emitter);
 
-const isValidReport = (input: unknown): input is 'markdown' | 'json' | 'html' | 'pdf' =>
-  typeof input === 'string' && ['html', 'markdown', 'pdf', 'json'].includes(input);
+const isValidReport = (input: unknown): input is 'markdown' | 'json' =>
+  typeof input === 'string' && ['markdown', 'json'].includes(input);
 
 program.name('continuous-security')
   .description(packageJson.description)
@@ -23,7 +23,7 @@ program.command('scan')
   .option('--report  <type>', 'The type of report you want the scan to produce.', 'markdown')
   .action(async (options: { ci?: boolean, report?: string }) => {
     if (!isValidReport(options.report))
-      throw new InvalidArgumentError('--report must be one of html, markdown, pdf or json');
+      throw new InvalidArgumentError('--report must be markdown or json');
 
     await orchestrator.run();
     await orchestrator.writeReport(process.cwd(), options.report);

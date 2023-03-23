@@ -9,7 +9,7 @@ type ConfigurationFile = {
 
 type ReportOutput = {
   title: string;
-  date: string;
+  date: Date;
   issues: Array<{
     title: string;
     description: string;
@@ -17,7 +17,7 @@ type ReportOutput = {
     package?: string;
     cwe?: string | Array<string>;
     fix: string;
-    severity: 'info' | 'low' | 'moderate' | 'high' | 'critical';
+    severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
   }>
   counts: {
     info: number;

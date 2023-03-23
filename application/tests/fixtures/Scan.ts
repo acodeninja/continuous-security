@@ -1,5 +1,5 @@
 import {TestScanner} from "./Scanner";
-import Emitter from "../../src/Emitter";
+import {Emitter} from "../../src/Emitter";
 
 export const TestScanInput = {
   configuration: {

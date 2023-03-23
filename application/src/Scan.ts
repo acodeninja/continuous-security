@@ -1,6 +1,6 @@
 import {buildImage, makeTemporaryFolder, destroyTemporaryFolder, runImage} from './Helpers';
 
-export default class Scan {
+export class Scan {
   private readonly configuration: ScannerConfiguration;
   private readonly emitter: EventEmitter;
   private output?: string;
@@ -37,7 +37,7 @@ export default class Scan {
       imageHash: this.imageHash,
       host: {
         output: this.output,
-        target: this.configuration.target || process.cwd(),
+        target: process.cwd(),
       },
     });
 

@@ -1,4 +1,4 @@
-import Emitter from './Emitter';
+import {Emitter} from './Emitter';
 
 export class Logger {
   private readonly emitter: Emitter;

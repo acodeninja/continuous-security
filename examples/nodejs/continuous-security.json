@@ -1,5 +1,0 @@
-{
-  "scanners": [
-    "@continuous-security/scanner-npm-audit"
-  ]
-}

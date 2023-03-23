@@ -1,5 +1,5 @@
 import {Logger} from './Logger';
-import Emitter from './Emitter';
+import {Emitter} from './Emitter';
 
 const consoleLog = jest.fn();
 const backupConsoleLog = console.log;

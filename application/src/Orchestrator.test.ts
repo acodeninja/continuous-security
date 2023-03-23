@@ -1,4 +1,4 @@
-import Orchestrator from './Orchestrator';
+import {Orchestrator} from './Orchestrator';
 import {access, readFile} from 'fs/promises';
 import {exec} from 'child_process';
 import {loadScannerModule} from './Helpers';

@@ -1,37 +1,101 @@
 import {Report} from './Report';
 
-describe('getting cwe details', () => {
+beforeAll(() => {
+  jest.useFakeTimers();
+  jest.setSystemTime(new Date(2020, 3, 1, 1, 30, 10, 30));
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
+
+describe('producing a report', () => {
   const report = new Report();
+  report.addScanReport({
+    counts: {critical: 1, high: 2, info: 3, low: 4, moderate: 5, unknown: 6, total: 21},
+    issues: [{
+      title: 'test-issue-title',
+      description: 'test-issue-description',
+      type: 'dependency',
+      cwe: ['5839'],
+      package: 'test-package',
+      fix: 'Unknown',
+      severity: 'unknown',
+    }],
+    scanner: 'test-scanner'
+  });
 
-  describe('a numerical reference', () => {
-    const details = report.getCweDetails(1004);
+  describe('in markdown', () => {
+    let markdownReport: Buffer;
 
-    test('gets the cwe name', () => {
-      expect(details).toHaveProperty('name', 'Sensitive Cookie Without \'HttpOnly\' Flag');
+    beforeAll(async () => {
+      [, markdownReport] = await report.getReport('markdown');
     });
-    test('gets the cwe description', () => {
-      expect(details).toHaveProperty('description', 'The HttpOnly flag directs compatible browsers to prevent client-side script from accessing cookies. Including the HttpOnly flag in the Set-Cookie HTTP response header helps mitigate the risk associated with Cross-Site Scripting (XSS) where an attacker\'s script code might attempt to read the contents of a cookie and exfiltrate information obtained. When set, browsers that support the flag will not reveal the contents of the cookie to a third party via client-side script executed via XSS.');
-    });
-    test('gets the link to the mitre website', () => {
-      expect(details).toHaveProperty('link', 'https://cwe.mitre.org/data/definitions/1004.html');
+
+    test('matches snapshot', () => {
+      expect(markdownReport.toString()).toMatchInlineSnapshot(`
+"
+title: Security Reporting
+date: 01/04/2020
+critical: 1
+high: 2
+moderate: 5
+low: 4
+info: 3
+unknown: 6
+total: 21
+
+issue title: test-issue-title
+issue description: test-issue-description
+cwe refs: 5839, 
+issue type: dependency
+issue severity: unknown
+issue package: test-package
+issue found by: test-scanner
+issue fix: unknown
+
+"
+`);
     });
   });
 
-  describe('a prefixed string reference', () => {
-    const details = report.getCweDetails('CWE-1004');
+  describe('in json', () => {
+    let jsonReport: Buffer;
 
-    test('gets the cwe name', () => {
-      expect(details).toHaveProperty('name', 'Sensitive Cookie Without \'HttpOnly\' Flag');
+    beforeAll(async () => {
+      [, jsonReport] = await report.getReport('json');
     });
-    test('gets the cwe description', () => {
-      expect(details).toHaveProperty('description', 'The HttpOnly flag directs compatible browsers to prevent client-side script from accessing cookies. Including the HttpOnly flag in the Set-Cookie HTTP response header helps mitigate the risk associated with Cross-Site Scripting (XSS) where an attacker\'s script code might attempt to read the contents of a cookie and exfiltrate information obtained. When set, browsers that support the flag will not reveal the contents of the cookie to a third party via client-side script executed via XSS.');
-    });
-    test('gets the link to the mitre website', () => {
-      expect(details).toHaveProperty('link', 'https://cwe.mitre.org/data/definitions/1004.html');
-    });
-  });
 
-  test('throws an error for a non-existent CWE', () => {
-    expect(() => report.getCweDetails(9999)).toThrow('Could not find CWE');
+    test('matches snapshot', () => {
+      expect(jsonReport.toString()).toMatchInlineSnapshot(`
+"{
+  "title": "Security Reporting",
+  "date": "2020-04-01T01:30:10.030Z",
+  "issues": [
+    {
+      "title": "test-issue-title",
+      "description": "test-issue-description",
+      "type": "dependency",
+      "cwe": [
+        "5839"
+      ],
+      "package": "test-package",
+      "fix": "Unknown",
+      "severity": "unknown",
+      "foundBy": "test-scanner"
+    }
+  ],
+  "counts": {
+    "critical": 1,
+    "high": 2,
+    "info": 3,
+    "low": 4,
+    "moderate": 5,
+    "unknown": 6,
+    "total": 21
+  }
+}"
+`);
+    });
   });
 });

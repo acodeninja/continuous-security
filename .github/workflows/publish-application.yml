@@ -1,0 +1,62 @@
+name: 'Publish: Application'
+
+on:
+  push:
+    paths:
+      - application/**
+      - .github/workflows/publish-application.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+        working-directory: application/
+      - run: npm test
+        working-directory: application/
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+        working-directory: application/
+      - run: npm run lint
+        working-directory: application/
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm audit
+        working-directory: application/
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [lint, test, audit]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+        working-directory: application/
+      - run: npm publish
+        working-directory: application/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
