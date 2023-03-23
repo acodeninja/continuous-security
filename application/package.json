@@ -1,7 +1,7 @@
 {
   "name": "@continuous-security/application",
   "version": "0.0.1",
-  "description": "",
+  "description": "Command line application for running security scans against application code.",
   "scripts": {
     "test": "LANG=en_GB.utf8 TZ=UTC jest",
     "build": "webpack",
