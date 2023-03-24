@@ -9,17 +9,20 @@ module.exports = {
           {
             path: 'node_modules/squirrelly/dist/browser/squirrelly.dev.js',
             lines: ['141'],
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
+            language: 'javascript',
+            code: '  var singleQuoteReg = /\'(?:\\\\[\\s\\w"\'\\\\`]|[^\\n\\r\'\\\\])*?\'/g;\r',
           },
           {
             path: 'node_modules/squirrelly/dist/squirrelly.cjs.js',
             lines: ['167'],
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
+            language: 'javascript',
+            code: 'var singleQuoteReg = /\'(?:\\\\[\\s\\w"\'\\\\`]|[^\\n\\r\'\\\\])*?\'/g;\r',
           },
           {
             path: 'node_modules/squirrelly/dist/squirrelly.es.js',
             lines: ['163'],
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
+            language: 'javascript',
+            code: 'var singleQuoteReg = /\'(?:\\\\[\\s\\w"\'\\\\`]|[^\\n\\r\'\\\\])*?\'/g;\r',
           },
         ],
       },

@@ -7,6 +7,7 @@ interface JSXRayReport {
       path: string;
       lines: Array<string>;
       code: string;
+      language: string;
     }>;
   }>;
 }

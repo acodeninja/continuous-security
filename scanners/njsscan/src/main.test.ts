@@ -52,6 +52,7 @@ describe('njsscan scanner', () => {
         description: 'MD5 is a a weak hash which is known to have collision. Use a strong hashing function.',
         extracts: [{
           code: 'require("crypto")\n  .createHash("md5")',
+          language: 'javascript',
           lines: ['2', '3'],
           path: 'main.js',
         }],

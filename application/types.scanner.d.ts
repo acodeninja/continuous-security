@@ -39,6 +39,7 @@ type ScanReport = {
     extracts?: Array<{
       code: string;
       path: string;
+      language?: string;
     }>;
   }>;
   counts: {

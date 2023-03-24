@@ -29,6 +29,7 @@ setupIntegrationTests(
             code: 'require("crypto")\n  .createHash("md5")',
             lines: ['2', '3'],
             path: 'main.js',
+            language: 'javascript',
           },
         ],
       },
