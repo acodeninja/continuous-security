@@ -38,7 +38,9 @@ type ScanReport = {
     severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
     extracts?: Array<{
       code: string;
+      lines: Array<string>;
       path: string;
+      language?: string;
     }>;
   }>;
   counts: {
