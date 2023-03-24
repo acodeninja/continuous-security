@@ -27,6 +27,7 @@ export default {
               path: file_path.replace('/target/', ''),
               code: match_string,
               lines: match_lines.map(line => line.toString()),
+              language: 'javascript',
             })),
           };
         }),
