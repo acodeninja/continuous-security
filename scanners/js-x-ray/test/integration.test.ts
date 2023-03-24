@@ -26,19 +26,22 @@ setupIntegrationTests(
         type: 'code smell',
         extracts: expect.arrayContaining([
           {
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
-            lines: ['163'],
-            path: 'node_modules/squirrelly/dist/squirrelly.es.js',
-          },
-          {
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
-            lines: ['141'],
             path: 'node_modules/squirrelly/dist/browser/squirrelly.dev.js',
+            lines: ['141'],
+            language: 'javascript',
+            code: '  var singleQuoteReg = /\'(?:\\\\[\\s\\w"\'\\\\`]|[^\\n\\r\'\\\\])*?\'/g;\r',
           },
           {
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
-            lines: ['167'],
             path: 'node_modules/squirrelly/dist/squirrelly.cjs.js',
+            lines: ['167'],
+            language: 'javascript',
+            code: 'var singleQuoteReg = /\'(?:\\\\[\\s\\w"\'\\\\`]|[^\\n\\r\'\\\\])*?\'/g;\r',
+          },
+          {
+            path: 'node_modules/squirrelly/dist/squirrelly.es.js',
+            lines: ['163'],
+            language: 'javascript',
+            code: 'var singleQuoteReg = /\'(?:\\\\[\\s\\w"\'\\\\`]|[^\\n\\r\'\\\\])*?\'/g;\r',
           },
         ]),
       },
