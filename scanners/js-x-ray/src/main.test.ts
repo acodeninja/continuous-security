@@ -53,17 +53,20 @@ describe('js-x-ray scanner', () => {
           {
             path: 'node_modules/squirrelly/dist/browser/squirrelly.dev.js',
             lines: ['141'],
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
+            code: "  var singleQuoteReg = /'(?:\\\\[\\s\\w\"'\\\\`]|[^\\n\\r'\\\\])*?'/g;\r",
+            language: "javascript",
           },
           {
             path: 'node_modules/squirrelly/dist/squirrelly.cjs.js',
             lines: ['167'],
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
+            code: "var singleQuoteReg = /'(?:\\\\[\\s\\w\"'\\\\`]|[^\\n\\r'\\\\])*?'/g;\r",
+            language: "javascript",
           },
           {
             path: 'node_modules/squirrelly/dist/squirrelly.es.js',
             lines: ['163'],
-            code: '`(?:\\\\[\\s\\S]|\\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\\${)[^\\\\`])*`',
+            code: "var singleQuoteReg = /'(?:\\\\[\\s\\w\"'\\\\`]|[^\\n\\r'\\\\])*?'/g;\r",
+            language: "javascript",
           },
         ]),
         fix: 'unknown',

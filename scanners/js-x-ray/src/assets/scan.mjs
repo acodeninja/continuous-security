@@ -33,7 +33,7 @@ Array.prototype.groupBy = function (field) {
   this.forEach(item => {
     const current = grouped[item[field]] ?? {};
 
-    grouped[item[field]] = _.mergeWith(item, current, function(a, b) {
+    grouped[item[field]] = _.mergeWith(item, current, function (a, b) {
       if (Array.isArray(a)) {
         return b.concat(a);
       }
@@ -67,12 +67,19 @@ const analysis = getAllFiles()
       lines: warning.location.map(([line]) => line)
         .filter((element, index, lines) => lines.indexOf(element) === index)
         .map(line => `${line}`),
-      code: warning.value,
       language: 'javascript',
     }],
   })))
   // Flatten
   .flat()
+  // Read file to get full code
+  .map(issue => ({
+    ...issue,
+    extracts: issue.extracts?.map(extract => ({
+      ...extract,
+      code: readFileSync(extract.path).toString().split('\n')[extract.lines[0]],
+    })),
+  }))
   // Group the results by title, merging extracts
   .groupBy('title');
 
