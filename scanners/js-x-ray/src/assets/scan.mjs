@@ -68,6 +68,7 @@ const analysis = getAllFiles()
         .filter((element, index, lines) => lines.indexOf(element) === index)
         .map(line => `${line}`),
       code: warning.value,
+      language: 'javascript',
     }],
   })))
   // Flatten
