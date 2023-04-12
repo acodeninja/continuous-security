@@ -62,16 +62,4 @@ export class Orchestrator {
     const [extension, report] = await this.report.getReport(type);
     await writeFile(resolve(path, `report.${extension}`), report);
   }
-
-  // async report() {
-  //   const report = new Report();
-
-  //
-  //   const mergedReports = this.reports.map(report => report.issues.map(issue => ({
-  //     ...issue,
-  //     scanner: report.scanner,
-  //   }))).flat(1).sort((a, b) => a.scanner.localeCompare(b.scanner));
-  //
-  //   console.log(mergedReports, mergedCounts);
-  // }
 }
