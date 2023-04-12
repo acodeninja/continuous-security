@@ -17,7 +17,7 @@ export class Configuration {
    * @param path
    * @throws ConfigurationLoadError
    */
-  static async load(path: string) {
+  static async load(path: string): Promise<Configuration> {
     const filePath = (await Promise.all(
       ['json', 'yaml', 'yml']
         .map(ext => resolve(path, '.continuous-security.' + ext))
