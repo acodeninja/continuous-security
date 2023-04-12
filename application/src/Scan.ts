@@ -55,7 +55,7 @@ export class Scan {
 
     if (!this.output) throw new Error('output directory not found');
 
-    await destroyTemporaryFolder(this.output);
+    if (!process.env.DEBUG) await destroyTemporaryFolder(this.output);
 
     this.emitter.emit('scan:teardown:finished', this.scanner.name);
 
