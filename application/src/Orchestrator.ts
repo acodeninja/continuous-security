@@ -22,6 +22,7 @@ export class Orchestrator {
   }
 
   async run(): Promise<void> {
+    this.emitter.emit('application:started', '');
     this.configuration = await Configuration.load(this.projectRoot);
 
     await promisify(exec)(
@@ -53,7 +54,9 @@ export class Orchestrator {
           this.emitter.emit('scanner:report:collected', s.scanner.name);
         })
       ),
-    );
+    ).then(() => {
+      this.emitter.emit('application:finished', '');
+    });
   }
 
   async writeReport(path: string, type: 'markdown' | 'json'): Promise<void> {
