@@ -25,12 +25,11 @@ export class Orchestrator {
     this.emitter.emit('application:started', '');
     this.configuration = await Configuration.load(this.projectRoot);
 
-    await promisify(exec)(
-      `npm install -g ${this.configuration.scanners.map(scanner => scanner.name).join(' ')}`,
-      {
-        cwd: process.cwd(),
-      }
-    );
+    if (!process.env.DEBUG)
+      await promisify(exec)(
+        `npm install -g ${this.configuration.scanners.map(scanner => scanner.name).join(' ')}`,
+        {cwd: process.cwd()},
+      );
 
     this.configuration.scanners.forEach(configuration => {
       this.emitter.emit('scanner:installed', configuration.name);
