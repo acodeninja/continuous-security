@@ -18,10 +18,11 @@ export const setupIntegrationTests = (
   beforeAll(async () => {
     const installCommands = {nodejs: 'npm ci'};
 
-    await promisify(exec)(
-      installCommands[exampleCodebase],
-      {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
-    );
+    if (installCommands[exampleCodebase])
+      await promisify(exec)(
+        installCommands[exampleCodebase],
+        {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
+      );
   });
 
   describe('building the docker image', () => {
