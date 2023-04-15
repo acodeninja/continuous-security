@@ -22,6 +22,8 @@ export class Scan {
     this.imageHash = await buildImage(this.scanner.buildConfiguration);
     this.output = await makeTemporaryFolder(`${this.scanner.slug}-`);
 
+    if (process.env.DEBUG) this.emitter.emit('debug', `${this.scanner.name} output at ${this.output}`);
+
     this.emitter.emit('scan:setup:finished', this.scanner.name);
 
     return this;
@@ -53,7 +55,7 @@ export class Scan {
 
     if (!this.output) throw new Error('output directory not found');
 
-    await destroyTemporaryFolder(this.output);
+    if (!process.env.DEBUG) await destroyTemporaryFolder(this.output);
 
     this.emitter.emit('scan:teardown:finished', this.scanner.name);
 

@@ -22,14 +22,14 @@ export class Orchestrator {
   }
 
   async run(): Promise<void> {
+    this.emitter.emit('application:started', '');
     this.configuration = await Configuration.load(this.projectRoot);
 
-    await promisify(exec)(
-      `npm install -g ${this.configuration.scanners.map(scanner => scanner.name).join(' ')}`,
-      {
-        cwd: process.cwd(),
-      }
-    );
+    if (!process.env.DEBUG)
+      await promisify(exec)(
+        `npm install -g ${this.configuration.scanners.map(scanner => scanner.name).join(' ')}`,
+        {cwd: process.cwd()},
+      );
 
     this.configuration.scanners.forEach(configuration => {
       this.emitter.emit('scanner:installed', configuration.name);
@@ -53,23 +53,13 @@ export class Orchestrator {
           this.emitter.emit('scanner:report:collected', s.scanner.name);
         })
       ),
-    );
+    ).then(() => {
+      this.emitter.emit('application:finished', '');
+    });
   }
 
   async writeReport(path: string, type: 'markdown' | 'json'): Promise<void> {
     const [extension, report] = await this.report.getReport(type);
     await writeFile(resolve(path, `report.${extension}`), report);
   }
-
-  // async report() {
-  //   const report = new Report();
-
-  //
-  //   const mergedReports = this.reports.map(report => report.issues.map(issue => ({
-  //     ...issue,
-  //     scanner: report.scanner,
-  //   }))).flat(1).sort((a, b) => a.scanner.localeCompare(b.scanner));
-  //
-  //   console.log(mergedReports, mergedCounts);
-  // }
 }
