@@ -17,7 +17,10 @@ describe('producing a report', () => {
       title: 'test-issue-title',
       description: 'test-issue-description',
       type: 'dependency',
-      cwe: ['5839'],
+      references: [{
+        id: '5839',
+        type: 'cwe',
+      }],
       package: 'test-package',
       fix: 'Unknown',
       severity: 'unknown',
@@ -47,7 +50,7 @@ total: 21
 
 issue title: test-issue-title
 issue description: test-issue-description
-cwe refs: 5839, 
+refs: 5839 (cwe) 
 issue type: dependency
 issue severity: unknown
 issue package: test-package
@@ -76,8 +79,11 @@ issue fix: unknown
       "title": "test-issue-title",
       "description": "test-issue-description",
       "type": "dependency",
-      "cwe": [
-        "5839"
+      "references": [
+        {
+          "id": "5839",
+          "type": "cwe"
+        }
       ],
       "package": "test-package",
       "fix": "Unknown",

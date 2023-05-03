@@ -16,7 +16,6 @@ export class Report {
   async toObject(): Promise<ReportOutput> {
     const issues = this.reports.map(r => r.issues.map(issue => ({
       ...issue,
-      cwe: typeof issue.cwe === 'string' ? [issue.cwe] : issue.cwe,
       foundBy: r.scanner,
     }))).flat();
 

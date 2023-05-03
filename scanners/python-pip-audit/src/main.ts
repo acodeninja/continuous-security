@@ -22,12 +22,16 @@ export default {
               title: `Vulnerable Third-Party Library \`${name}\``,
             })))
             .flat()
-            .map(({title}) => ({
+            .map(({title, id}) => ({
               title,
               description: '',
               severity: 'unknown',
               type: 'dependency',
               fix: 'unknown',
+              references: [{
+                type: 'ghsa',
+                id,
+              }],
             })),
           counts: {
             info: 0,

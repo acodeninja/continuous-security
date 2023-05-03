@@ -47,15 +47,17 @@ describe('js-x-ray scanner', () => {
     });
 
     test('returns the expected issues', () => {
-      expect(report).toHaveProperty('issues', expect.arrayContaining([
-        {
-          title: 'Vulnerable Third-Party Library `cairosvg`',
-          severity: 'unknown',
-          description: '',
-          fix: 'unknown',
-          type: 'dependency',
-        },
-      ]));
+      expect(report).toHaveProperty('issues', expect.arrayContaining([{
+        title: 'Vulnerable Third-Party Library `cairosvg`',
+        severity: 'unknown',
+        description: '',
+        fix: 'unknown',
+        type: 'dependency',
+        references: [{
+          id: "GHSA-rwmf-w63j-p7gv",
+          type: "ghsa",
+        }],
+      }]));
     });
 
     test('returns the issues counts', () => {

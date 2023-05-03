@@ -17,14 +17,16 @@ setupIntegrationTests(
       total: 1,
       unknown: 1,
     },
-    issues: expect.arrayContaining([
-      {
-        title: 'Vulnerable Third-Party Library `cairosvg`',
-        severity: 'unknown',
-        description: '',
-        type: 'dependency',
-        fix: 'unknown',
-      },
-    ]),
+    issues: expect.arrayContaining([{
+      title: 'Vulnerable Third-Party Library `cairosvg`',
+      severity: 'unknown',
+      description: '',
+      type: 'dependency',
+      fix: 'unknown',
+      references: [{
+        id: "GHSA-rwmf-w63j-p7gv",
+        type: "ghsa",
+      }],
+    }]),
   },
 );

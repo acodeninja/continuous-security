@@ -18,11 +18,14 @@ setupIntegrationTests(
     },
     issues: [
       {
-        cwe: ['327'],
+        title: 'Use of a Broken or Risky Cryptographic Algorithm',
         description: 'MD5 is a a weak hash which is known to have collision. Use a strong hashing function.',
         fix: 'Unknown',
+        references: [{
+          id: '327',
+          type: 'cwe',
+        }],
         severity: 'unknown',
-        title: 'Use of a Broken or Risky Cryptographic Algorithm',
         type: 'code smell',
         extracts: [
           {

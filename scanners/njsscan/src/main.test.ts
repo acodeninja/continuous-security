@@ -48,7 +48,7 @@ describe('njsscan scanner', () => {
 
     test('returns an expected issue', () => {
       expect(report).toHaveProperty('issues', expect.arrayContaining([{
-        cwe: ['327'],
+        title: 'Use of a Broken or Risky Cryptographic Algorithm',
         description: 'MD5 is a a weak hash which is known to have collision. Use a strong hashing function.',
         extracts: [{
           code: 'require("crypto")\n  .createHash("md5")',
@@ -57,8 +57,11 @@ describe('njsscan scanner', () => {
           path: 'main.js',
         }],
         fix: 'Unknown',
+        references: [{
+          id: '327',
+          type: 'cwe',
+        }],
         severity: 'unknown',
-        title: 'Use of a Broken or Risky Cryptographic Algorithm',
         type: 'code smell',
       }]));
     });

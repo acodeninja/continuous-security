@@ -11,7 +11,7 @@ total: <%= counts.total %>
 <% issues.forEach(issue => { %>
 issue title: <%= issue.title %>
 issue description: <%= issue.description %>
-cwe refs: <% issue.cwe.forEach(cwe => { %><%=cwe %>, <% }) %>
+refs: <% issue.references.forEach(ref => { %><%= ref.id %> (<%= ref.type %>) <% }) %>
 issue type: <%= issue.type %>
 issue severity: <%= issue.severity %>
 <% if(!!issue.package) { %>issue package: <%= issue.package %><% } %>

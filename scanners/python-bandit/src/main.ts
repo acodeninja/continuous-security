@@ -7,14 +7,14 @@ import {resolve} from 'path';
 const translateSeverity =
   (severity: 'HIGH' | 'MEDIUM' | 'LOW' | 'UNDEFINED'): 'low' | 'moderate' | 'high' | 'unknown' => {
     switch (severity) {
-    case 'LOW':
-      return 'low';
-    case 'MEDIUM':
-      return 'moderate';
-    case 'HIGH':
-      return 'high';
-    case 'UNDEFINED':
-      return 'unknown';
+      case 'LOW':
+        return 'low';
+      case 'MEDIUM':
+        return 'moderate';
+      case 'HIGH':
+        return 'high';
+      case 'UNDEFINED':
+        return 'unknown';
     }
   };
 
@@ -39,7 +39,10 @@ export default {
           title: result.issue_text,
           description: '',
           type: 'code smell',
-          cwe: result.issue_cwe?.id.toString(),
+          references: result.issue_cwe ? [{
+            id: result.issue_cwe.id.toString(),
+            type: 'cwe',
+          }] : [],
           fix: 'unknown',
           severity: translateSeverity(result.issue_severity),
           extracts: [{

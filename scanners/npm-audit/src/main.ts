@@ -24,7 +24,10 @@ export default {
               description: v.title,
               type: 'dependency',
               package: name,
-              cwe: v.cwe.map(c => c.toLowerCase().replace('cwe-', '')),
+              references: v.cwe.map(c => ({
+                id: c.toLowerCase().replace('cwe-', ''),
+                type: 'cwe',
+              })),
               severity: v.severity,
               fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'Unknown',
             })),

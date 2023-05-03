@@ -33,7 +33,10 @@ type ScanReport = {
     description: string;
     type: 'dependency' | 'code smell';
     package?: string;
-    cwe?: string | Array<string>;
+    references?: Array<{
+      type: 'cwe' | 'cve' | 'ghsa';
+      id: string;
+    }>;
     fix: string;
     severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
     extracts?: Array<{
