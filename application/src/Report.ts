@@ -1,6 +1,5 @@
 import {template, TemplateExecutor} from 'lodash';
 import BaseTemplate from './assets/report.template.md';
-import axios from "axios";
 
 export class Report {
   private readonly template: TemplateExecutor;
@@ -85,10 +84,10 @@ export class Report {
 
   async getReport(type: 'markdown' | 'json'): Promise<[string, Buffer]> {
     switch (type) {
-      case 'markdown':
-        return await this.toMarkdown();
-      case 'json':
-        return await this.toJSON();
+    case 'markdown':
+      return await this.toMarkdown();
+    case 'json':
+      return await this.toJSON();
     }
   }
 }
