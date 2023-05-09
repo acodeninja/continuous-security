@@ -23,10 +23,11 @@ setupIntegrationTests(
       description: '',
       type: 'dependency',
       fix: 'unknown',
-      references: [{
-        id: "GHSA-rwmf-w63j-p7gv",
-        type: "ghsa",
-      }],
+      package: {
+        name: 'cairosvg',
+        version: '2.6.0',
+      },
+      references: ["PYSEC-2023-9"],
     }]),
   },
 );

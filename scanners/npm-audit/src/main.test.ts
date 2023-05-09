@@ -51,11 +51,8 @@ describe('npm-audit scanner', () => {
         title: 'Vulnerable Third-Party Library `squirrelly`',
         description: 'Insecure template handling in Squirrelly',
         type: 'dependency',
-        package: 'squirrelly',
-        references: [{
-          id: '200',
-          type: 'cwe',
-        }],
+        package: {name: 'squirrelly'},
+        references: ["CWE-200", "GHSA-q8j6-pwqx-pm96"],
         severity: 'high',
         fix: 'Unknown',
       }]));

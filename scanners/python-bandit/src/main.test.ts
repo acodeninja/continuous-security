@@ -52,10 +52,7 @@ describe('python-bandit scanner', () => {
           title: 'Possible hardcoded password: \'password\'',
           severity: 'low',
           description: '',
-          references: [{
-            id: '259',
-            type: 'cwe',
-          }],
+          references: ["CWE-259"],
           fix: 'unknown',
           type: 'code smell',
           extracts: [
@@ -73,10 +70,7 @@ describe('python-bandit scanner', () => {
           title: 'Try, Except, Pass detected.',
           severity: 'low',
           description: '',
-          references: [{
-            id: '703',
-            type: 'cwe',
-          }],
+          references: ["CWE-703"],
           fix: 'unknown',
           type: 'code smell',
           extracts: [

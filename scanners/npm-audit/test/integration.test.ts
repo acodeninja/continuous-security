@@ -20,12 +20,9 @@ setupIntegrationTests(
       {
         description: 'Insecure template handling in Squirrelly',
         fix: 'Unknown',
-        package: 'squirrelly',
+        package: {name: 'squirrelly'},
         severity: 'high',
-        references: [{
-          id: '200',
-          type: 'cwe',
-        }],
+        references: ["CWE-200", "GHSA-q8j6-pwqx-pm96"],
         title: 'Vulnerable Third-Party Library `squirrelly`',
         type: 'dependency',
       },

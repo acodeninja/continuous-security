@@ -39,10 +39,7 @@ export default {
           title: result.issue_text,
           description: '',
           type: 'code smell',
-          references: result.issue_cwe ? [{
-            id: result.issue_cwe.id.toString(),
-            type: 'cwe',
-          }] : [],
+          references: result.issue_cwe ? [`CWE-${result.issue_cwe.id.toString()}`] : [],
           fix: 'unknown',
           severity: translateSeverity(result.issue_severity),
           extracts: [{

@@ -16,23 +16,17 @@ export default {
       .then((r: PipAuditReport) =>
         ({
           scanner: packageJson.name,
-          issues: r.dependencies
-            .map(({name, vulns}) => vulns.map(vulnerability => ({
-              ...vulnerability,
+          issues: r.dependencies.map(({name, version, vulns}) =>
+            vulns.map((vulnerability): ScanReport['issues'][0] => ({
               title: `Vulnerable Third-Party Library \`${name}\``,
-            })))
-            .flat()
-            .map(({title, id}) => ({
-              title,
               description: '',
               severity: 'unknown',
               type: 'dependency',
               fix: 'unknown',
-              references: [{
-                type: 'ghsa',
-                id,
-              }],
-            })),
+              package: {name, version},
+              references: [vulnerability.id],
+            }))
+          ).flat(),
           counts: {
             info: 0,
             low: 0,

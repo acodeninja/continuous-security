@@ -23,11 +23,8 @@ export default {
               title: `Vulnerable Third-Party Library \`${v.dependency}\``,
               description: v.title,
               type: 'dependency',
-              package: name,
-              references: v.cwe.map(c => ({
-                id: c.toLowerCase().replace('cwe-', ''),
-                type: 'cwe',
-              })),
+              package: {name},
+              references: v.cwe.concat([v.url.split('/')[4]]),
               severity: v.severity,
               fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'Unknown',
             })),

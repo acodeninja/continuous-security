@@ -20,10 +20,7 @@ export default {
             title: cwe.split(': ')[1],
             description,
             type: 'code smell',
-            references: [{
-              id: cwe.replace('CWE-', '').split(':')[0],
-              type: 'cwe',
-            }],
+            references: [cwe.split(':')[0]],
             severity: 'unknown',
             fix: 'Unknown',
             extracts: files.map(({file_path, match_lines, match_string}) => ({

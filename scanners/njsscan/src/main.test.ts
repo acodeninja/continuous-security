@@ -57,10 +57,7 @@ describe('njsscan scanner', () => {
           path: 'main.js',
         }],
         fix: 'Unknown',
-        references: [{
-          id: '327',
-          type: 'cwe',
-        }],
+        references: ["CWE-327"],
         severity: 'unknown',
         type: 'code smell',
       }]));

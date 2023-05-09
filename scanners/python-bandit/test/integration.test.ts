@@ -22,10 +22,7 @@ setupIntegrationTests(
         title: 'Try, Except, Pass detected.',
         severity: 'low',
         description: '',
-        references: [{
-          id: '703',
-          type: 'cwe',
-        }],
+        references: ["CWE-703"],
         type: 'code smell',
         fix: 'unknown',
         extracts: [
@@ -41,10 +38,7 @@ setupIntegrationTests(
         title: 'Possible hardcoded password: \'password\'',
         severity: 'low',
         description: '',
-        references: [{
-          id: '259',
-          type: 'cwe',
-        }],
+        references: ["CWE-259"],
         type: 'code smell',
         fix: 'unknown',
         extracts: [
