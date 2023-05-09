@@ -18,7 +18,7 @@ module.exports = [{
     new BannerPlugin({banner: '#!/usr/bin/env node', raw: true}),
     function () {
       this.hooks.done.tapPromise('Make executable', async function () {
-        await chmod(resolve(__dirname, 'build', 'continuous-security'), 0o777)
+        await chmod(resolve(__dirname, 'build', 'continuous-security'), 0o777);
       });
     },
   ],
@@ -27,7 +27,7 @@ module.exports = [{
       {
         test: /\.[tj]s$/,
         use: {
-          loader: "ts-loader",
+          loader: 'ts-loader',
           options: {
             allowTsInNodeModules: true
           }

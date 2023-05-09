@@ -1,11 +1,11 @@
 export const TestScanner: Scanner = {
-  name: "@continuous-security/scanner-test",
-  slug: "test",
-  version: "0.0.1",
+  name: '@continuous-security/scanner-test',
+  slug: 'test',
+  version: '0.0.1',
   buildConfiguration: {
     files: {
-      Dockerfile: `FROM alpine:latest`,
-      'scan.sh': `echo '{"ran": "yes"}' >> /output/report.json`,
+      Dockerfile: 'FROM alpine:latest',
+      'scan.sh': 'echo \'{"ran": "yes"}\' >> /output/report.json',
     },
   },
   validate: jest.fn(),
