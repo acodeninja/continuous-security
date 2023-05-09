@@ -26,26 +26,28 @@ type ScannerBuildConfiguration = {
   };
 }
 
+type ScanReportIssue = {
+  title: string;
+  description: string;
+  type: 'dependency' | 'code smell';
+  package?: {
+    name: string;
+    version?: string;
+  };
+  references?: Array<string>;
+  fix: string;
+  severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
+  extracts?: Array<{
+    code: string;
+    lines: Array<string>;
+    path: string;
+    language?: string;
+  }>;
+}
+
 type ScanReport = {
   scanner: string;
-  issues: Array<{
-    title: string;
-    description: string;
-    type: 'dependency' | 'code smell';
-    package?: {
-      name: string;
-      version?: string;
-    };
-    references?: Array<string>;
-    fix: string;
-    severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
-    extracts?: Array<{
-      code: string;
-      lines: Array<string>;
-      path: string;
-      language?: string;
-    }>;
-  }>;
+  issues: Array<ScanReportIssue>;
   counts: {
     info: number;
     low: number;

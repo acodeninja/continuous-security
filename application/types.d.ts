@@ -14,11 +14,11 @@ type ReportOutput = {
     title: string;
     description: string;
     type: 'dependency' | 'code smell';
-    package?: string;
-    references?: Array<{
-      type: 'cwe' | 'cve' | 'ghsa';
-      id: string;
-    }>;
+    package?: {
+      name: string;
+      version?: string;
+    };
+    references?: Array<ReportOutputIssueReference>;
     fix: string;
     severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
   }>
@@ -31,6 +31,12 @@ type ReportOutput = {
     total: number;
   }
 }
+
+type ReportOutputIssueReference = {
+  id: string;
+  label: string;
+  url?: string;
+};
 
 declare const __non_webpack_require__: NodeRequire;
 
