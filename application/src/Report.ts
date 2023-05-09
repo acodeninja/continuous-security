@@ -1,5 +1,6 @@
 import {template, TemplateExecutor} from 'lodash';
 import BaseTemplate from './assets/report.template.md';
+import axios from "axios";
 
 export class Report {
   private readonly template: TemplateExecutor;
@@ -13,10 +14,48 @@ export class Report {
     this.reports.push(report);
   }
 
+  private expandReference(reference: string, issue: ScanReportIssue): ReportOutputIssueReference {
+    const slug = reference.toLowerCase();
+    const [label, id] = slug.split('-');
+
+    if (slug.indexOf('cwe') === 0) {
+      return {
+        id,
+        label: label.toUpperCase(),
+        url: `https://cwe.mitre.org/data/definitions/${id}.html`,
+      };
+    }
+
+    if (slug.indexOf('cve') === 0) {
+      return {
+        id,
+        label: label.toUpperCase(),
+        url: `https://www.cve.org/CVERecord?id=${id}`,
+      };
+    }
+
+    if (slug.indexOf('ghsa') === 0) {
+      return {
+        id,
+        label: label.toUpperCase(),
+        url: `https://github.com/advisories/${id}`,
+      };
+    }
+
+    if (slug.indexOf('pysec') === 0) {
+      return {
+        id,
+        label: label.toUpperCase(),
+        url: `https://github.com/pypa/advisory-database/blob/main/vulns/${issue.package.name}/${id}.yaml`,
+      };
+    }
+  }
+
   async toObject(): Promise<ReportOutput> {
     const issues = this.reports.map(r => r.issues.map(issue => ({
       ...issue,
       foundBy: r.scanner,
+      references: issue.references.map(ref => this.expandReference(ref, issue)),
     }))).flat();
 
     return {
@@ -46,10 +85,10 @@ export class Report {
 
   async getReport(type: 'markdown' | 'json'): Promise<[string, Buffer]> {
     switch (type) {
-    case 'markdown':
-      return await this.toMarkdown();
-    case 'json':
-      return await this.toJSON();
+      case 'markdown':
+        return await this.toMarkdown();
+      case 'json':
+        return await this.toJSON();
     }
   }
 }

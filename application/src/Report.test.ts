@@ -17,11 +17,11 @@ describe('producing a report', () => {
       title: 'test-issue-title',
       description: 'test-issue-description',
       type: 'dependency',
-      references: [{
-        id: '5839',
-        type: 'cwe',
-      }],
-      package: 'test-package',
+      references: ['CWE-5839'],
+      package: {
+        name: 'test-package',
+        version: '1.3.24',
+      },
       fix: 'Unknown',
       severity: 'unknown',
     }],
@@ -50,10 +50,10 @@ total: 21
 
 issue title: test-issue-title
 issue description: test-issue-description
-refs: 5839 (cwe) 
+refs: CWE (5839) (https://cwe.mitre.org/data/definitions/5839.html)
 issue type: dependency
 issue severity: unknown
-issue package: test-package
+issue package: test-package@1.3.24
 issue found by: test-scanner
 issue fix: unknown
 
@@ -82,10 +82,14 @@ issue fix: unknown
       "references": [
         {
           "id": "5839",
-          "type": "cwe"
+          "label": "CWE",
+          "url": "https://cwe.mitre.org/data/definitions/5839.html"
         }
       ],
-      "package": "test-package",
+      "package": {
+        "name": "test-package",
+        "version": "1.3.24"
+      },
       "fix": "Unknown",
       "severity": "unknown",
       "foundBy": "test-scanner"
