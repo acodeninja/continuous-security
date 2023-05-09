@@ -22,7 +22,7 @@ setupIntegrationTests(
         fix: 'Unknown',
         package: {name: 'squirrelly'},
         severity: 'high',
-        references: ["CWE-200", "GHSA-q8j6-pwqx-pm96"],
+        references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
         title: 'Vulnerable Third-Party Library `squirrelly`',
         type: 'dependency',
       },

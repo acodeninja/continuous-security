@@ -7,14 +7,14 @@ import {resolve} from 'path';
 const translateSeverity =
   (severity: 'HIGH' | 'MEDIUM' | 'LOW' | 'UNDEFINED'): 'low' | 'moderate' | 'high' | 'unknown' => {
     switch (severity) {
-      case 'LOW':
-        return 'low';
-      case 'MEDIUM':
-        return 'moderate';
-      case 'HIGH':
-        return 'high';
-      case 'UNDEFINED':
-        return 'unknown';
+    case 'LOW':
+      return 'low';
+    case 'MEDIUM':
+      return 'moderate';
+    case 'HIGH':
+      return 'high';
+    case 'UNDEFINED':
+      return 'unknown';
     }
   };
 

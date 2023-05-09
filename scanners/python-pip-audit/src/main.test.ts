@@ -57,7 +57,7 @@ describe('js-x-ray scanner', () => {
           name: 'cairosvg',
           version: '2.6.0',
         },
-        references: ["GHSA-rwmf-w63j-p7gv"],
+        references: ['GHSA-rwmf-w63j-p7gv'],
       }]));
     });
 

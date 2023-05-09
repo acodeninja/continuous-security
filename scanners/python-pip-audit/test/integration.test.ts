@@ -27,7 +27,7 @@ setupIntegrationTests(
         name: 'cairosvg',
         version: '2.6.0',
       },
-      references: ["PYSEC-2023-9"],
+      references: ['PYSEC-2023-9'],
     }]),
   },
 );

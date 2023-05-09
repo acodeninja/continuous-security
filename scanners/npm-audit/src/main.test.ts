@@ -52,7 +52,7 @@ describe('npm-audit scanner', () => {
         description: 'Insecure template handling in Squirrelly',
         type: 'dependency',
         package: {name: 'squirrelly'},
-        references: ["CWE-200", "GHSA-q8j6-pwqx-pm96"],
+        references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
         severity: 'high',
         fix: 'Unknown',
       }]));

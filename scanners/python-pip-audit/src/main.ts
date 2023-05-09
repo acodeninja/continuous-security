@@ -25,7 +25,7 @@ export default {
               fix: 'unknown',
               package: {name, version},
               references: [vulnerability.id],
-            }))
+            })),
           ).flat(),
           counts: {
             info: 0,
