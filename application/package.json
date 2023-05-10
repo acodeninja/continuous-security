@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/application",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Command line application for running security scans against application code.",
   "scripts": {
     "test": "LANG=en_GB.utf8 TZ=UTC jest",
