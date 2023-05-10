@@ -18,11 +18,11 @@ setupIntegrationTests(
     },
     issues: [
       {
-        cwe: ['200'],
         description: 'Insecure template handling in Squirrelly',
         fix: 'Unknown',
-        package: 'squirrelly',
+        package: {name: 'squirrelly'},
         severity: 'high',
+        references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
         title: 'Vulnerable Third-Party Library `squirrelly`',
         type: 'dependency',
       },

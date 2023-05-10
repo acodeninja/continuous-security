@@ -1,7 +1,7 @@
 {
-  "name": "@continuous-security/scanner-js-x-ray",
+  "name": "@continuous-security/scanner-python-pip-audit",
   "version": "1.0.0",
-  "description": "Run js-x-ray against your nodejs codebase.",
+  "description": "Run pip-audit against your python codebase.",
   "main": "build/main.js",
   "scripts": {
     "test": "jest src/",
@@ -27,14 +27,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/acodeninja/continuous-security.git",
-    "directory": "scanners/js-x-ray"
+    "directory": "scanners/python-bandit"
   },
   "private": false,
   "author": "Lawrence <lawrence@acode.ninja>",
-  "license": "LGPL-3.0-only",
+  "license": "Apache-2.0",
   "devDependencies": {
-    "@nodesecure/i18n": "^3.2.0",
-    "@nodesecure/js-x-ray": "^6.0.1",
     "@types/jest": "^29.4.0",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.50.0",

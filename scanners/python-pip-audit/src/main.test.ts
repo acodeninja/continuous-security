@@ -1,19 +1,19 @@
 import scanner from './main';
-import {npmAuditNoFix, npmAuditWithFix} from '../test/fixtures';
+import {pythonPipAuditReport} from '../test/fixtures';
 import {readFile} from 'fs/promises';
 
 jest.mock('fs/promises', () => ({readFile: jest.fn()}));
 
-describe('npm-audit scanner', () => {
+describe('js-x-ray scanner', () => {
   test('has the right name', () => {
     expect(scanner).toHaveProperty(
       'name',
-      '@continuous-security/scanner-npm-audit',
+      '@continuous-security/scanner-python-pip-audit',
     );
   });
 
   test('has the right slug', () => {
-    expect(scanner).toHaveProperty('slug', 'npm-audit');
+    expect(scanner).toHaveProperty('slug', 'python-pip-audit');
   });
 
   test('has the right build configuration', () => {
@@ -31,7 +31,7 @@ describe('npm-audit scanner', () => {
     let report: ScanReport;
 
     beforeAll(async () => {
-      (readFile as jest.Mock).mockResolvedValueOnce(npmAuditNoFix);
+      (readFile as jest.Mock).mockResolvedValueOnce(pythonPipAuditReport);
       report = await scanner.report('/test');
     });
 
@@ -42,19 +42,22 @@ describe('npm-audit scanner', () => {
     test('includes the scanner name', () => {
       expect(report).toHaveProperty(
         'scanner',
-        '@continuous-security/scanner-npm-audit',
+        '@continuous-security/scanner-python-pip-audit',
       );
     });
 
-    test('returns an expected issue', () => {
+    test('returns the expected issues', () => {
       expect(report).toHaveProperty('issues', expect.arrayContaining([{
-        title: 'Vulnerable Third-Party Library `squirrelly`',
-        description: 'Insecure template handling in Squirrelly',
+        title: 'Vulnerable Third-Party Library `cairosvg`',
+        severity: 'unknown',
+        description: '',
+        fix: 'unknown',
         type: 'dependency',
-        package: {name: 'squirrelly'},
-        references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
-        severity: 'high',
-        fix: 'Unknown',
+        package: {
+          name: 'cairosvg',
+          version: '2.6.0',
+        },
+        references: ['GHSA-rwmf-w63j-p7gv'],
       }]));
     });
 
@@ -63,27 +66,10 @@ describe('npm-audit scanner', () => {
         info: 0,
         low: 0,
         moderate: 0,
-        high: 1,
+        high: 0,
         critical: 0,
         total: 1,
-        unknown: 0,
-      });
-    });
-
-    describe('generating a report with a proposed fix', () => {
-      let report: ScanReport;
-
-      beforeAll(async () => {
-        (readFile as jest.Mock).mockResolvedValueOnce(npmAuditWithFix);
-        report = await scanner.report('/test');
-      });
-
-      test('returns an expected issue', () => {
-        expect(report).toHaveProperty('issues', expect.arrayContaining([
-          expect.objectContaining({
-            fix: 'Upgrade to version above <=8.0.8',
-          }),
-        ]));
+        unknown: 1,
       });
     });
   });
