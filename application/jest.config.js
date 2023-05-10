@@ -3,8 +3,7 @@ module.exports = {
     '^.+\\.(t|j)sx?$': ['ts-jest'],
   },
   moduleNameMapper: {
-    'assets/cwe(.*)': '<rootDir>/tests/fixtures/assets/CWEData.js',
-    'assets/cve(.*)': '<rootDir>/tests/fixtures/assets/CVEData.js',
+    '../assets/cwe.xml': '<rootDir>/tests/fixtures/assets/CWEData.js',
     'assets/report.template.md': '<rootDir>/tests/fixtures/assets/ReportTemplate.js',
   },
 };

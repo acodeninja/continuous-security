@@ -1,9 +1,11 @@
 import {template, TemplateExecutor} from 'lodash';
 import BaseTemplate from './assets/report.template.md';
+import {CWE} from "./DataSources/CWE";
 
 export class Report {
   private readonly template: TemplateExecutor;
   private reports: Array<ScanReport> = [];
+  private cweDataset: CWE = new CWE();
 
   constructor() {
     this.template = template(BaseTemplate);
@@ -18,35 +20,7 @@ export class Report {
     const [label, id] = slug.split('-');
 
     if (slug.indexOf('cwe') === 0) {
-      return {
-        id,
-        label: label.toUpperCase(),
-        url: `https://cwe.mitre.org/data/definitions/${id}.html`,
-      };
-    }
-
-    if (slug.indexOf('cve') === 0) {
-      return {
-        id,
-        label: label.toUpperCase(),
-        url: `https://www.cve.org/CVERecord?id=${id}`,
-      };
-    }
-
-    if (slug.indexOf('ghsa') === 0) {
-      return {
-        id,
-        label: label.toUpperCase(),
-        url: `https://github.com/advisories/${id}`,
-      };
-    }
-
-    if (slug.indexOf('pysec') === 0) {
-      return {
-        id,
-        label: label.toUpperCase(),
-        url: `https://github.com/pypa/advisory-database/blob/main/vulns/${issue.package.name}/${id}.yaml`,
-      };
+      return this.cweDataset.getById(reference.toUpperCase())
     }
   }
 

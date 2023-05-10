@@ -33,7 +33,8 @@ type ReportOutput = {
 }
 
 type ReportOutputIssueReference = {
-  id: string;
+  title: string;
+  description: string;
   label: string;
   url?: string;
 };
