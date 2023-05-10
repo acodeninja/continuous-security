@@ -41,9 +41,37 @@ type ReportOutputIssueReference = {
 
 declare const __non_webpack_require__: NodeRequire;
 
-type CWEDetails = {
-  name: string;
+type OSVAPIResponse = {
   id: string;
-  description: string;
-  link: string;
+  summary: string;
+  details: string;
+  aliases: Array<string>;
+  modified: string;
+  published: string;
+  database_specific: never;
+  references: Array<{
+    type: 'WEB' | 'ADVISORY' | 'PACKAGE';
+    url: string;
+  }>;
+  affected: Array<{
+    package: {
+      name: string;
+      ecosystem: string;
+      purl: string;
+    };
+    ranges: Array<{
+      type: string;
+      events: Array<{
+        introduced?: string;
+        fixed?: string;
+      }>;
+    }>;
+    versions: Array<string>;
+  }>;
+  schema_version: string;
+  severity: Array<{
+    type: string;
+    score: string;
+  }>
 }
+
