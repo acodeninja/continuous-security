@@ -37,6 +37,25 @@ type ReportOutputIssueReference = {
   description: string;
   label: string;
   directLink?: string;
+    cwe?: {
+      extendedDescription: string;
+      background: string;
+      consequences: Array<{
+        scopeImpacts: Array<{
+          scope: string;
+          impact?: string;
+        }>;
+        likelihood?: string;
+        note?: string;
+      }>;
+      mitigations: Array<{
+        phase: string;
+        description: string;
+        effectiveness: string;
+        notes: string;
+      }>;
+    };
+  };
 };
 
 declare const __non_webpack_require__: NodeRequire;

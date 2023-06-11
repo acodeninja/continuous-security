@@ -2,6 +2,7 @@ import {DOMParser} from '@xmldom/xmldom';
 import XmlReader from 'xml-reader';
 import XmlQuery from 'xml-query';
 import {select} from 'xpath';
+import {tidyString} from '../Helpers';
 
 import CWEDataset from '../assets/cwe.xml';
 
@@ -10,7 +11,10 @@ export class CWEDoesNotExist extends Error {
 }
 
 export class CWE {
-  private data = (new DOMParser()).parseFromString(CWEDataset);
+  private data = (new DOMParser({
+    errorHandler: level => {
+    },
+  })).parseFromString(CWEDataset);
 
   getById(id: string, issue?: ScanReportIssue): ReportOutputIssueReference {
     const parsedId = id.toLowerCase().replace('cwe-', '');
@@ -31,40 +35,66 @@ export class CWE {
       return {
         label: id,
         title: attributes.Name,
-        description: this.tidyString(queryable.find('Description').first().text()),
+        description: this.expandCWELinks(tidyString(queryable.find('Description').first().text())),
         directLink: `https://cwe.mitre.org/data/definitions/${parsedId}.html`,
         dataSourceSpecific: {
           cwe: {
-            extendedDescription: this.tidyString(queryable.find('Extended_Description').first().text()),
-            background: this.tidyString(queryable.find('Background_Detail').first().text()),
-            consequences: queryable.find('Consequence').map(node => {
-              node = XmlQuery(node);
-              return {
-                scope: this.tidyString(node.find('Scope').text()),
-                impact: this.tidyString(node.find('Impact').text()),
-                note: this.tidyString(node.find('Note').text()),
-              };
-            }),
-            mitigations: queryable.find('Mitigation').map(node => {
-              node = XmlQuery(node);
-              return {
-                phase: this.tidyString(node.find('Phase').text()),
-                description: this.tidyString(node.find('Description').text()),
-                effectiveness: this.tidyString(node.find('Effectiveness').text()),
-                notes: this.tidyString(node.find('Effectiveness_Notes').text()),
-              };
-            }),
-          }
-        }
+            extendedDescription: this.expandCWELinks(tidyString(queryable.find('Extended_Description').first().text())),
+            background: this.expandCWELinks(tidyString(queryable.find('Background_Detail').first().text())),
+            consequences: this.expandConsequences(queryable.find('Consequence')),
+            mitigations: this.expandMitigations(queryable.find('Mitigation')),
+          },
+        },
       };
     }
 
     throw new CWEDoesNotExist();
   }
 
-  private tidyString(input: string) {
-    return input.replace(/(\r\n|\n|\r)/gm, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
+  private expandConsequences(consequencesNodes): ReportOutputIssueReference['dataSourceSpecific']['cwe']['consequences'] {
+    const consequences = [];
+
+    consequencesNodes.each(node => {
+      node = XmlQuery(node);
+      const consequence = {};
+      const scopes = node.find('Scope').children().map(n => tidyString(n.value));
+      const impacts = node.find('Impact').children().map(n => tidyString(n.value));
+      const likelihood = tidyString(node.find('Likelihood').text());
+      const note = tidyString(node.find('Note').text());
+
+      consequence['scopeImpacts'] = scopes.map((scope, index) => {
+        const scopeImpact = {scope};
+        if (impacts[index]) scopeImpact['impact'] = impacts[index];
+        return scopeImpact;
+      });
+
+      if (likelihood) consequence['likelihood'] = likelihood;
+      if (note) consequence['note'] = note;
+
+      consequences.push(consequence);
+    });
+
+    return consequences;
+  }
+
+  private expandMitigations(mitigationsNodes) {
+    const mitigations = [];
+
+    mitigationsNodes.each(node => {
+      node = XmlQuery(node);
+
+      mitigations.push({
+        phase: node.find('Phase').children().map(p => tidyString(p.value)).join(' / '),
+        description: tidyString(node.find('Description').text()),
+        effectiveness: tidyString(node.find('Effectiveness').text()),
+        notes: tidyString(node.find('Effectiveness_Notes').text()),
+      });
+    });
+
+    return mitigations;
+  }
+
+  private expandCWELinks(text: string): string {
+    return text.replace(/(CWE-)(\d+)/gm, '[$1$2](https://cwe.mitre.org/data/definitions/$2.html)');
   }
 }

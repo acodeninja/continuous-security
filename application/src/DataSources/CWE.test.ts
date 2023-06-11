@@ -1,4 +1,4 @@
-import {CWE, CWEDoesNotExist} from "./CWE";
+import {CWE, CWEDoesNotExist} from './CWE';
 
 describe('with a CWE id that exists', () => {
   const reference= (new CWE).getById('CWE-1004');
@@ -33,13 +33,11 @@ describe('with a CWE id that exists', () => {
 
   test('has the correct list of consequences', () => {
     expect(reference.dataSourceSpecific.cwe.consequences).toEqual(expect.arrayContaining([{
-      scope: 'Confidentiality',
-      impact: 'Read Application Data',
+      scopeImpacts: [{scope: 'Confidentiality', impact: 'Read Application Data'}],
       note: 'If the HttpOnly flag is not set, then sensitive information stored in the cookie may be exposed to unintended parties.',
     }]));
     expect(reference.dataSourceSpecific.cwe.consequences).toEqual(expect.arrayContaining([{
-      scope: 'Integrity',
-      impact: 'Gain Privileges or Assume Identity',
+      scopeImpacts: [{scope: 'Integrity', impact: 'Gain Privileges or Assume Identity'}],
       note: 'If the cookie in question is an authentication cookie, then not setting the HttpOnly flag may allow an adversary to steal authentication data (e.g., a session ID) and assume the identity of the user.',
     }]));
   });
