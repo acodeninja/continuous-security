@@ -12,12 +12,12 @@ export class Report {
   private osvDataset: OSV = new OSV();
   private emitter: Emitter;
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
-  private reportFunctions: Record<string, Function> = {
-    groupBy: (issues, grouping) => {
-      const groupedIssues = [{}, ...issues].reduce((group: Record<string, Array<ReportOutputIssueReference>> = {}, issue) => {
-        if (issue) {
-          group[issue[grouping]] = group[issue[grouping]] ?? [];
-          group[issue[grouping]].push(issue);
+  private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
+    groupBy: (list: Array<unknown>, grouping: string) => {
+      const groupedIssues = [{}, ...list].reduce((group: Record<string, Array<unknown>> = {}, item) => {
+        if (item) {
+          group[item[grouping]] = group[item[grouping]] ?? [];
+          group[item[grouping]].push(item);
         }
         return group;
       });
@@ -28,7 +28,7 @@ export class Report {
 
       return Object.fromEntries(asEntries);
     },
-    capitalise: (words) => words.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    capitalise: (words: string) => words.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
   };
 
   constructor(emitter: Emitter) {
@@ -48,8 +48,6 @@ export class Report {
       for (const ref of referencesToProcess.filter(r => !Object.keys(expandedReferences).includes(r))) {
         const slug = ref.toLowerCase();
         this.emitter.emit('report:reference', `fetching details for ${ref}`);
-
-        const [label, id] = slug.split('-');
 
         if (slug.indexOf('cwe') === 0) {
           expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());

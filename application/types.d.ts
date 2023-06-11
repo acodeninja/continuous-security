@@ -11,18 +11,7 @@ type ReportOutput = {
   title: string;
   date: Date;
   overviewOfIssues: Array<ReportOutputIssueReference>;
-  issues: Array<{
-    title: string;
-    description: string;
-    type: 'dependency' | 'code smell';
-    package?: {
-      name: string;
-      version?: string;
-    };
-    references?: Array<ReportOutputIssueReference>;
-    fix: string;
-    severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
-  }>
+  issues: Array<ReportOutputIssue>
   counts: {
     info: number;
     low: number;
@@ -32,6 +21,19 @@ type ReportOutput = {
     unknown: number;
     total: number;
   }
+}
+
+type ReportOutputIssue = {
+  title: string;
+  description: string;
+  type: 'dependency' | 'code smell';
+  package?: {
+    name: string;
+    version?: string;
+  };
+  references?: Array<ReportOutputIssueReference>;
+  fix: string;
+  severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
 }
 
 type ReportOutputIssueReference = {

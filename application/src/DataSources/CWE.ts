@@ -12,11 +12,10 @@ export class CWEDoesNotExist extends Error {
 
 export class CWE {
   private data = (new DOMParser({
-    errorHandler: level => {
-    },
+    errorHandler: undefined,
   })).parseFromString(CWEDataset);
 
-  getById(id: string, issue?: ScanReportIssue): ReportOutputIssueReference {
+  getById(id: string): ReportOutputIssueReference {
     const parsedId = id.toLowerCase().replace('cwe-', '');
 
     const [weakness] = select(`//*[local-name(.)='Weakness' and @id='${parsedId}']`, this.data);
