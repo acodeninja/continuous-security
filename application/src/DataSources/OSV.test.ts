@@ -1,6 +1,14 @@
-import {OSV} from "./OSV";
+import axios from 'axios';
+import {OSV} from './OSV';
+import {Github} from '../../tests/fixtures/OSVResponse';
+
+jest.mock('axios', () => ({
+  get: jest.fn(),
+}));
 
 describe('a GitHub security advisory', () => {
+  (axios.get as jest.Mock).mockResolvedValueOnce({data: Github});
+
   let reference: ReportOutputIssueReference;
 
   beforeAll(async () => {
