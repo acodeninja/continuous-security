@@ -30,15 +30,6 @@ export default {
               language: 'javascript',
             })),
           };
-        }),
-        counts: {
-          info: 0,
-          low: 0,
-          moderate: 0,
-          high: 0,
-          critical: 0,
-          unknown: Object.keys(r.nodejs).length,
-          total: Object.keys(r.nodejs).length,
-        },
+        })
       })),
 } as Scanner;

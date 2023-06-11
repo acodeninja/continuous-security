@@ -17,22 +17,55 @@ A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of wh
 
 This report found issues with the following severities.
 
-**Critical**: <%= counts.critical %> | **High** <%= counts.high %> | **Medium** <%= counts.moderate %> | **Low** <%= counts.low %> | **Informational** <%= counts.info %> |  **Unknown** <%= counts.unknown %>
+**Critical**: <%= counts.critical %> | 
+**High** <%= counts.high %> | 
+**Medium** <%= counts.moderate %> | 
+**Low** <%= counts.low %> | 
+**Informational** <%= counts.info %> | 
+**Unknown** <%= counts.unknown %>
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
+## Overview of Issues
+<% overviewOfIssues.forEach(o => { %>
+### <%= o.title %>
+
+<% if (o.description) { %><%= o.description %>
+<% } %>
+<% if (o.dataSourceSpecific.cwe.background) { %><%= o.dataSourceSpecific.cwe.background %>
+<% } %>
+<% if (o.dataSourceSpecific.cwe.extendedDescription) { %><%= o.dataSourceSpecific.cwe.extendedDescription %>
+<% } %>
+
+<% if (o.dataSourceSpecific.cwe.consequences.length) { %>#### Consequences
+
+Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
+
+<% o.dataSourceSpecific.cwe.consequences.forEach(c => { %>
+<% c.scopeImpacts.forEach(si => { %>* **<%= si.scope %>**<% if (si.impact) { %>: <%= si.impact %><% } %>
+<% }) %>
+
+<% if (c.likelihood) { %> **Likelihood** <%= c.likelihood %><% } %>
+<% if (c.note) { %> > <%= c.note %><% } %>
+<% }) %><% } %>
+
+For more information see [<%= o.label %>](<%= o.directLink %>).
+<% }) %>
+
 ## Vulnerabilities
-<% if (counts.critical > 0) { %>
-### Critical
-<% issues.filter(i => i.severity === 'critical').forEach(issue => { %>
-#### <%= issue.title %>
 
-**Severity**: <%= issue.severity %> | **Type**: <%= issue.type %> | **Fix**: <%= issue.fix %> | **Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
+<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>### <%= functions.capitalise(severity) %> Severity
 
-<%= issue.description %>
+<% issues.forEach(issue => { %>#### <%= issue.title %> <% if (issue.package) { %>(version <%= issue.package.version %>)<% } %>
 
-<% if (issue.extracts?.length > 0) { %>
-##### Instances
+**Severity**: <%= issue.severity %> | 
+**Type**: <%= issue.type %> | 
+**Fix**: <%= issue.fix %> | 
+**Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
+
+<%= issue.description || issue.references?.[0]?.description %>
+
+<% if (issue.extracts?.length > 0) { %>##### Instances
 
 The following examples were found in the application.
 <% issue.extracts?.forEach(extract => { %>
@@ -40,11 +73,12 @@ The following examples were found in the application.
 ```<%= extract.language %>
 <%= extract.code %>
 ```
-<% }) %>
-<% } %>
+<% }) %><% } %>
+<% if (issue.references?.length > 0) { %>##### References
 
-<% }) %>
+<%= issue.references?.map(r => `[${r.label}](${r.directLink})`).join(' | ') %>
 <% } %>
+<% }) %><% }) %>
 
 ## Additional Information
 

@@ -27,14 +27,5 @@ export default {
               references: [vulnerability.id],
             })),
           ).flat(),
-          counts: {
-            info: 0,
-            low: 0,
-            moderate: 0,
-            high: 0,
-            critical: 0,
-            unknown: r.dependencies.map(dep => dep.vulns).flat().length,
-            total: r.dependencies.map(dep => dep.vulns).flat().length,
-          },
         })),
 } as Scanner;

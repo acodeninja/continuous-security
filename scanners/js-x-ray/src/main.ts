@@ -20,14 +20,5 @@ export default {
           type: 'code smell',
           fix: 'unknown',
         })),
-        counts: {
-          info: r.issues.filter(i => i.severity === 'info').length,
-          low: 0,
-          moderate: r.issues.filter(i => i.severity === 'moderate').length,
-          high: 0,
-          critical: r.issues.filter(i => i.severity === 'critical').length,
-          unknown: 0,
-          total: r.issues.length,
-        },
       })),
 } as Scanner;

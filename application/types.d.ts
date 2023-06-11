@@ -10,6 +10,7 @@ type ConfigurationFile = {
 type ReportOutput = {
   title: string;
   date: Date;
+  overviewOfIssues: Array<ReportOutputIssueReference>;
   issues: Array<{
     title: string;
     description: string;
@@ -28,6 +29,7 @@ type ReportOutput = {
     moderate: number;
     high: number;
     critical: number;
+    unknown: number;
     total: number;
   }
 }
@@ -37,6 +39,11 @@ type ReportOutputIssueReference = {
   description: string;
   label: string;
   directLink?: string;
+  dataSourceSpecific: {
+    osv?: {
+      aliases: Array<string>;
+      severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
+    };
     cwe?: {
       extendedDescription: string;
       background: string;
@@ -67,7 +74,10 @@ type OSVAPIResponse = {
   aliases: Array<string>;
   modified: string;
   published: string;
-  database_specific: never;
+  database_specific: {
+    cwe_ids?: Array<string>;
+    severity?:  'INFO' | 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL' | 'UNKNOWN';
+  };
   references: Array<{
     type: 'WEB' | 'ADVISORY' | 'PACKAGE';
     url: string;
@@ -93,4 +103,3 @@ type OSVAPIResponse = {
     score: string;
   }>
 }
-

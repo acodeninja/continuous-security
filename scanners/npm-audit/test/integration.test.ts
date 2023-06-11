@@ -7,19 +7,11 @@ setupIntegrationTests(
   process,
   'nodejs',
   {
-    counts: {
-      critical: 0,
-      high: 1,
-      info: 0,
-      low: 0,
-      moderate: 0,
-      total: 1,
-      unknown: 0,
-    },
+    scanner: '@continuous-security/scanner-npm-audit',
     issues: [
       {
         description: 'Insecure template handling in Squirrelly',
-        fix: 'Unknown',
+        fix: 'Upgrade to version above <=8.0.8',
         package: {name: 'squirrelly'},
         severity: 'high',
         references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
@@ -27,6 +19,5 @@ setupIntegrationTests(
         type: 'dependency',
       },
     ],
-    scanner: '@continuous-security/scanner-npm-audit',
   },
 );

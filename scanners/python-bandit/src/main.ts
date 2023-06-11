@@ -49,14 +49,5 @@ export default {
             language: 'python',
           }],
         })),
-        counts: {
-          info: 0,
-          low: r.metrics._totals['SEVERITY.LOW'],
-          moderate: r.metrics._totals['SEVERITY.MEDIUM'],
-          high: r.metrics._totals['SEVERITY.HIGH'],
-          critical: 0,
-          unknown: r.metrics._totals['SEVERITY.UNDEFINED'],
-          total: r.results.length,
-        },
       })),
 } as Scanner;

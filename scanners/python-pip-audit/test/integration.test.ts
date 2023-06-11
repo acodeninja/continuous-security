@@ -8,15 +8,6 @@ setupIntegrationTests(
   'python',
   {
     scanner: '@continuous-security/scanner-python-pip-audit',
-    counts: {
-      critical: 0,
-      high: 0,
-      info: 0,
-      low: 0,
-      moderate: 0,
-      total: 1,
-      unknown: 1,
-    },
     issues: expect.arrayContaining([{
       title: 'Vulnerable Third-Party Library `cairosvg`',
       severity: 'unknown',
