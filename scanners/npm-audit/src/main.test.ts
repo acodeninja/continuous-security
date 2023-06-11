@@ -54,20 +54,8 @@ describe('npm-audit scanner', () => {
         package: {name: 'squirrelly'},
         references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
         severity: 'high',
-        fix: 'Unknown',
+        fix: 'No known fix',
       }]));
-    });
-
-    test('returns the issues counts', () => {
-      expect(report).toHaveProperty('counts', {
-        info: 0,
-        low: 0,
-        moderate: 0,
-        high: 1,
-        critical: 0,
-        total: 1,
-        unknown: 0,
-      });
     });
 
     describe('generating a report with a proposed fix', () => {

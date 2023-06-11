@@ -1,4 +1,4 @@
-name: Publish Scanners
+name: 'Test and Publish: Scanners'
 
 on:
   push:

@@ -76,3 +76,8 @@ export const loadScannerModule = async (name: string) => {
 
   return __non_webpack_require__(`${stdout.split('\n')[0]}/${name}/build/main.js`).default;
 };
+
+export const tidyString = (input: string) =>
+  input.replace(/(\r\n|\n|\r)/gm, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();

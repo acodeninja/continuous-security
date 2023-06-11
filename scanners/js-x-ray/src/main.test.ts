@@ -75,17 +75,5 @@ describe('js-x-ray scanner', () => {
         type: 'code smell',
       }]));
     });
-
-    test('returns the issues counts', () => {
-      expect(report).toHaveProperty('counts', {
-        info: 0,
-        low: 0,
-        moderate: 1,
-        high: 0,
-        critical: 0,
-        total: 1,
-        unknown: 0,
-      });
-    });
   });
 });

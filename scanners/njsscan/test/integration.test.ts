@@ -7,15 +7,7 @@ setupIntegrationTests(
   process,
   'nodejs',
   {
-    counts: {
-      critical: 0,
-      high: 0,
-      info: 0,
-      low: 0,
-      moderate: 0,
-      total: 1,
-      unknown: 1,
-    },
+    scanner: '@continuous-security/scanner-njsscan',
     issues: [
       {
         title: 'Use of a Broken or Risky Cryptographic Algorithm',
@@ -34,6 +26,5 @@ setupIntegrationTests(
         ],
       },
     ],
-    scanner: '@continuous-security/scanner-njsscan',
   },
 );

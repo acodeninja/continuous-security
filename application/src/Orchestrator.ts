@@ -18,11 +18,11 @@ export class Orchestrator {
   constructor(projectRoot: string) {
     this.emitter = new Emitter();
     this.projectRoot = projectRoot;
-    this.report = new Report();
+    this.report = new Report(this.emitter);
   }
 
   async run(): Promise<void> {
-    this.emitter.emit('application:started', '');
+    this.emitter.emit('scan:started', '');
     this.configuration = await Configuration.load(this.projectRoot);
 
     if (!process.env.DEBUG)
@@ -54,7 +54,7 @@ export class Orchestrator {
         })
       ),
     ).then(() => {
-      this.emitter.emit('application:finished', '');
+      this.emitter.emit('scan:finished', '');
     });
   }
 

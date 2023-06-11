@@ -48,15 +48,6 @@ type ScanReportIssue = {
 type ScanReport = {
   scanner: string;
   issues: Array<ScanReportIssue>;
-  counts: {
-    info: number;
-    low: number;
-    moderate: number;
-    high: number;
-    critical: number;
-    unknown: number;
-    total: number;
-  };
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

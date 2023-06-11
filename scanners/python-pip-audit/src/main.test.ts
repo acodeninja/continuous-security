@@ -60,17 +60,5 @@ describe('js-x-ray scanner', () => {
         references: ['GHSA-rwmf-w63j-p7gv'],
       }]));
     });
-
-    test('returns the issues counts', () => {
-      expect(report).toHaveProperty('counts', {
-        info: 0,
-        low: 0,
-        moderate: 0,
-        high: 0,
-        critical: 0,
-        total: 1,
-        unknown: 1,
-      });
-    });
   });
 });

@@ -16,7 +16,6 @@ export default {
       .then((content: string) => JSON.parse(content))
       .then((report: NpmAudit) => ({
         scanner: packageJson.name,
-        counts: {...report.metadata.vulnerabilities, unknown: 0},
         issues: Object.entries(report.vulnerabilities)
           .map(([name, {via, fixAvailable}]) =>
             via.map((v): ScanReport['issues'][0] => ({
@@ -26,7 +25,7 @@ export default {
               package: {name},
               references: v.cwe.concat([v.url.split('/')[4]]),
               severity: v.severity,
-              fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'Unknown',
+              fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'No known fix',
             })),
           ).flat(),
       })),

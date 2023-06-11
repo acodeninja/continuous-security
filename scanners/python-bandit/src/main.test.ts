@@ -84,17 +84,5 @@ describe('python-bandit scanner', () => {
         },
       ]));
     });
-
-    test('returns the issues counts', () => {
-      expect(report).toHaveProperty('counts', {
-        info: 0,
-        low: 2,
-        moderate: 0,
-        high: 0,
-        critical: 0,
-        total: 2,
-        unknown: 0,
-      });
-    });
   });
 });
