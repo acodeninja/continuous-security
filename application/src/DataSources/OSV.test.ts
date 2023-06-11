@@ -20,6 +20,6 @@ describe('a GitHub security advisory', () => {
   });
 
   test('has the correct url', () => {
-    expect(reference.url).toEqual('https://osv.dev/vulnerability/GHSA-pjpc-87mp-4332');
+    expect(reference.directLink).toEqual('https://osv.dev/vulnerability/GHSA-pjpc-87mp-4332');
   });
 });

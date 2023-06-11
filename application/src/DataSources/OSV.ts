@@ -16,7 +16,7 @@ export class OSV {
       label: id,
       title: osvData.summary,
       description: osvData.details,
-      url: this.viewVulnerabilityUrl + id,
+        directLink: this.viewVulnerabilityUrl + id,
     }
   }
 }

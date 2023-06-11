@@ -36,7 +36,7 @@ type ReportOutputIssueReference = {
   title: string;
   description: string;
   label: string;
-  url?: string;
+  directLink?: string;
 };
 
 declare const __non_webpack_require__: NodeRequire;

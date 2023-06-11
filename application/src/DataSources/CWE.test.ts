@@ -16,7 +16,7 @@ describe('with a CWE id that exists', () => {
   });
 
   test('has the correct url', () => {
-    expect(reference.url).toEqual('https://cwe.mitre.org/data/definitions/1004.html');
+    expect(reference.directLink).toEqual('https://cwe.mitre.org/data/definitions/1004.html');
   });
 
   test('includes the cwe specific data', () => {

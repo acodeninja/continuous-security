@@ -32,7 +32,7 @@ export class CWE {
         label: id,
         title: attributes.Name,
         description: this.tidyString(queryable.find('Description').first().text()),
-        url: `https://cwe.mitre.org/data/definitions/${parsedId}.html`,
+        directLink: `https://cwe.mitre.org/data/definitions/${parsedId}.html`,
         dataSourceSpecific: {
           cwe: {
             extendedDescription: this.tidyString(queryable.find('Extended_Description').first().text()),
