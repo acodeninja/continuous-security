@@ -30,6 +30,6 @@ export default {
               language: 'javascript',
             })),
           };
-        })
+        }),
       })),
 } as Scanner;
