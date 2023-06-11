@@ -66,17 +66,17 @@ describe('Scan', () => {
   const teardownStarted = jest.fn();
   const teardownFinished = jest.fn();
 
-  emitter.on('scan:setup:started', setupStarted);
-  emitter.on('scan:setup:finished', setupFinished);
-  emitter.on('scan:run:started', runStarted);
-  emitter.on('scan:run:finished', runFinished);
-  emitter.on('scan:teardown:started', teardownStarted);
-  emitter.on('scan:teardown:finished', teardownFinished);
+  emitter.on('scanner:setup:started', setupStarted);
+  emitter.on('scanner:setup:finished', setupFinished);
+  emitter.on('scanner:run:started', runStarted);
+  emitter.on('scanner:run:finished', runFinished);
+  emitter.on('scanner:teardown:started', teardownStarted);
+  emitter.on('scanner:teardown:finished', teardownFinished);
 
   describe('setup', () => {
     beforeAll(async () => await scan.setup());
 
-    test('emits the scan:setup:started event', () => {
+    test('emits the scanner:setup:started event', () => {
       expect(setupStarted).toHaveBeenCalledWith(scan.scanner.name);
     });
 
@@ -92,7 +92,7 @@ describe('Scan', () => {
       expect(makeTemporaryFolder).toHaveBeenCalledWith(`${scanner.slug}-`);
     });
 
-    test('emits the scan:setup:finished event', () => {
+    test('emits the scanner:setup:finished event', () => {
       expect(setupFinished).toHaveBeenCalledWith(scan.scanner.name);
     });
   });
@@ -100,7 +100,7 @@ describe('Scan', () => {
   describe('run', () => {
     beforeAll(async () => await scan.run());
 
-    test('emits the scan:run:started event', () => {
+    test('emits the scanner:run:started event', () => {
       expect(runStarted).toHaveBeenCalledWith(scan.scanner.name);
     });
 
@@ -114,7 +114,7 @@ describe('Scan', () => {
       });
     });
 
-    test('emits the scan:run:finished event', () => {
+    test('emits the scanner:run:finished event', () => {
       expect(runFinished).toHaveBeenCalledWith(scan.scanner.name, {});
     });
   });
@@ -122,7 +122,7 @@ describe('Scan', () => {
   describe('teardown', () => {
     beforeAll(async () => await scan.teardown());
 
-    test('emits the scan:teardown:started event', () => {
+    test('emits the scanner:teardown:started event', () => {
       expect(teardownStarted).toHaveBeenCalledWith(scan.scanner.name);
     });
 
@@ -130,7 +130,7 @@ describe('Scan', () => {
       expect(destroyTemporaryFolder).toHaveBeenCalledWith('/tmp/prefix-random');
     });
 
-    test('emits the scan:teardown:finished event', () => {
+    test('emits the scanner:teardown:finished event', () => {
       expect(teardownFinished).toHaveBeenCalledWith(scan.scanner.name);
     });
   });

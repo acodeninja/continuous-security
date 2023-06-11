@@ -15,7 +15,7 @@ export class Scan {
   }
 
   async setup() {
-    this.emitter.emit('scan:setup:started', this.scanner.name);
+    this.emitter.emit('scanner:setup:started', this.scanner.name);
 
     if (this.scanner.validate) await this.scanner.validate(this.configuration);
 
@@ -24,13 +24,13 @@ export class Scan {
 
     if (process.env.DEBUG) this.emitter.emit('debug', `${this.scanner.name} output at ${this.output}`);
 
-    this.emitter.emit('scan:setup:finished', this.scanner.name);
+    this.emitter.emit('scanner:setup:finished', this.scanner.name);
 
     return this;
   }
 
   async run() {
-    this.emitter.emit('scan:run:started', this.scanner.name);
+    this.emitter.emit('scanner:run:started', this.scanner.name);
 
     if (!this.imageHash) throw new Error('imageHash not found');
     if (!this.output) throw new Error('output directory not found');
@@ -45,19 +45,19 @@ export class Scan {
 
     this.report = await this.scanner.report(this.output);
 
-    this.emitter.emit('scan:run:finished', this.scanner.name, this.report);
+    this.emitter.emit('scanner:run:finished', this.scanner.name, this.report);
 
     return this;
   }
 
   async teardown() {
-    this.emitter.emit('scan:teardown:started', this.scanner.name);
+    this.emitter.emit('scanner:teardown:started', this.scanner.name);
 
     if (!this.output) throw new Error('output directory not found');
 
     if (!process.env.DEBUG) await destroyTemporaryFolder(this.output);
 
-    this.emitter.emit('scan:teardown:finished', this.scanner.name);
+    this.emitter.emit('scanner:teardown:finished', this.scanner.name);
 
     return this;
   }

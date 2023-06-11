@@ -41,17 +41,17 @@ describe('Orchestrator', () => {
     const scannerLoaded = jest.fn();
     orchestrator.emitter.on('scanner:loaded', scannerLoaded);
     const scanSetupStarted = jest.fn();
-    orchestrator.emitter.on('scan:setup:started', scanSetupStarted);
+    orchestrator.emitter.on('scanner:setup:started', scanSetupStarted);
     const scanSetupFinished = jest.fn();
-    orchestrator.emitter.on('scan:setup:finished', scanSetupFinished);
+    orchestrator.emitter.on('scanner:setup:finished', scanSetupFinished);
     const scanRunStarted = jest.fn();
-    orchestrator.emitter.on('scan:run:started', scanRunStarted);
+    orchestrator.emitter.on('scanner:run:started', scanRunStarted);
     const scanRunFinished = jest.fn();
-    orchestrator.emitter.on('scan:run:finished', scanRunFinished);
+    orchestrator.emitter.on('scanner:run:finished', scanRunFinished);
     const scanTeardownStarted = jest.fn();
-    orchestrator.emitter.on('scan:teardown:started', scanTeardownStarted);
+    orchestrator.emitter.on('scanner:teardown:started', scanTeardownStarted);
     const scanTeardownFinished = jest.fn();
-    orchestrator.emitter.on('scan:teardown:finished', scanTeardownFinished);
+    orchestrator.emitter.on('scanner:teardown:finished', scanTeardownFinished);
 
     beforeAll(async () => {
       await orchestrator.run();
