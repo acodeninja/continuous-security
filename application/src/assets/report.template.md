@@ -17,12 +17,7 @@ A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of wh
 
 This report found issues with the following severities.
 
-**Critical**: <%= counts.critical %> | 
-**High** <%= counts.high %> | 
-**Medium** <%= counts.moderate %> | 
-**Low** <%= counts.low %> | 
-**Informational** <%= counts.info %> | 
-**Unknown** <%= counts.unknown %>
+**Critical**: <%= counts.critical %> | **High** <%= counts.high %> | **Medium** <%= counts.moderate %> | **Low** <%= counts.low %> | **Informational** <%= counts.info %> | **Unknown** <%= counts.unknown %>
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
