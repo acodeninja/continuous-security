@@ -1,4 +1,4 @@
-# Scanner: js-x-ray
+# Continuous Security Scanner: NPM Audit
 
 ## Usage
 
@@ -11,11 +11,5 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-js-x-ray
+  - @continuous-security/scanner-javascript-npm-audit
 ```
-
-
-## Attribution
-
-The application is hosted on [GitHub](https://github.com/NodeSecure/js-x-ray).
-This scanner module is released under the same license as the codebase.

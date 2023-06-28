@@ -4,16 +4,16 @@ import {readFile} from 'fs/promises';
 
 jest.mock('fs/promises', () => ({readFile: jest.fn()}));
 
-describe('npm-audit scanner', () => {
+describe('javascript-npm-audit scanner', () => {
   test('has the right name', () => {
     expect(scanner).toHaveProperty(
       'name',
-      '@continuous-security/scanner-npm-audit',
+      '@continuous-security/scanner-javascript-npm-audit',
     );
   });
 
   test('has the right slug', () => {
-    expect(scanner).toHaveProperty('slug', 'npm-audit');
+    expect(scanner).toHaveProperty('slug', 'javascript-npm-audit');
   });
 
   test('has the right build configuration', () => {
@@ -42,7 +42,7 @@ describe('npm-audit scanner', () => {
     test('includes the scanner name', () => {
       expect(report).toHaveProperty(
         'scanner',
-        '@continuous-security/scanner-npm-audit',
+        '@continuous-security/scanner-javascript-npm-audit',
       );
     });
 

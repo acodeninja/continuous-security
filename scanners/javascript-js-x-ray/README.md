@@ -1,4 +1,4 @@
-# Scanner: njsscan
+# Scanner: js-x-ray
 
 ## Usage
 
@@ -11,10 +11,11 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-njsscan
+  - @continuous-security/scanner-javascript-js-x-ray
 ```
+
 
 ## Attribution
 
-The application is hosted on [GitHub](https://github.com/ajinabraham/njsscan).
+The application is hosted on [GitHub](https://github.com/NodeSecure/js-x-ray).
 This scanner module is released under the same license as the codebase.

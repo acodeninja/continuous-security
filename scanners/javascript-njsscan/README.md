@@ -1,4 +1,4 @@
-# Continuous Security Scanner: NPM Audit
+# Scanner: njsscan
 
 ## Usage
 
@@ -11,5 +11,10 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-npm-audit
+  - @continuous-security/scanner-javascript-njsscan
 ```
+
+## Attribution
+
+The application is hosted on [GitHub](https://github.com/ajinabraham/njsscan).
+This scanner module is released under the same license as the codebase.

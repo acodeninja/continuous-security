@@ -7,7 +7,7 @@ setupIntegrationTests(
   process,
   'nodejs',
   {
-    scanner: '@continuous-security/scanner-npm-audit',
+    scanner: '@continuous-security/scanner-javascript-npm-audit',
     issues: [
       {
         description: 'Insecure template handling in Squirrelly',

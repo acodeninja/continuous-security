@@ -7,7 +7,7 @@ setupIntegrationTests(
   process,
   'nodejs',
   {
-    scanner: '@continuous-security/scanner-js-x-ray',
+    scanner: '@continuous-security/scanner-javascript-js-x-ray',
     issues: expect.arrayContaining([
       {
         title: 'Unsafe Regex',

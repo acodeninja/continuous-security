@@ -7,7 +7,7 @@ import {resolve} from 'path';
 export default {
   name: packageJson.name,
   version: packageJson.version,
-  slug: 'js-x-ray',
+  slug: 'javascript-js-x-ray',
   buildConfiguration: {files: {Dockerfile, 'scan.mjs': Scan}},
   report: async (location): Promise<ScanReport> =>
     readFile(resolve(location, 'report.json'))

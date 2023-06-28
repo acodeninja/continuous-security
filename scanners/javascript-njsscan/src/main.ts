@@ -7,7 +7,7 @@ import {resolve} from 'path';
 export default {
   name: packageJson.name,
   version: packageJson.version,
-  slug: 'njsscan',
+  slug: 'javascript-njsscan',
   buildConfiguration: {files: {Dockerfile, 'scan.sh': Scan}},
   report: async (location): Promise<ScanReport> =>
     readFile(resolve(location, 'report.json'))

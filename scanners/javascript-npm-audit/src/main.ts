@@ -8,7 +8,7 @@ import Scan from './assets/scan.sh';
 export default {
   name: packageJson.name,
   version: packageJson.version,
-  slug: 'npm-audit',
+  slug: 'javascript-npm-audit',
   buildConfiguration: {files: {Dockerfile, 'scan.sh': Scan}},
   report: async (location): Promise<ScanReport> =>
     readFile(resolve(location, 'report.json'))

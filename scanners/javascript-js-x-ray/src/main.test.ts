@@ -4,16 +4,16 @@ import {readFile} from 'fs/promises';
 
 jest.mock('fs/promises', () => ({readFile: jest.fn()}));
 
-describe('js-x-ray scanner', () => {
+describe('javascript-js-x-ray scanner', () => {
   test('has the right name', () => {
     expect(scanner).toHaveProperty(
       'name',
-      '@continuous-security/scanner-js-x-ray',
+      '@continuous-security/scanner-javascript-js-x-ray',
     );
   });
 
   test('has the right slug', () => {
-    expect(scanner).toHaveProperty('slug', 'js-x-ray');
+    expect(scanner).toHaveProperty('slug', 'javascript-js-x-ray');
   });
 
   test('has the right build configuration', () => {
@@ -42,7 +42,7 @@ describe('js-x-ray scanner', () => {
     test('includes the scanner name', () => {
       expect(report).toHaveProperty(
         'scanner',
-        '@continuous-security/scanner-js-x-ray',
+        '@continuous-security/scanner-javascript-js-x-ray',
       );
     });
 
