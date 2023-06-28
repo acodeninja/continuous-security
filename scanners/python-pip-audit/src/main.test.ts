@@ -4,7 +4,7 @@ import {readFile} from 'fs/promises';
 
 jest.mock('fs/promises', () => ({readFile: jest.fn()}));
 
-describe('js-x-ray scanner', () => {
+describe('python-pip-audit scanner', () => {
   test('has the right name', () => {
     expect(scanner).toHaveProperty(
       'name',
