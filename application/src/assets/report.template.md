@@ -17,12 +17,7 @@ A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of wh
 
 This report found issues with the following severities.
 
-**Critical**: <%= counts.critical %> | 
-**High** <%= counts.high %> | 
-**Medium** <%= counts.moderate %> | 
-**Low** <%= counts.low %> | 
-**Informational** <%= counts.info %> | 
-**Unknown** <%= counts.unknown %>
+**Critical**: <%= counts.critical %> | **High** <%= counts.high %> | **Medium** <%= counts.moderate %> | **Low** <%= counts.low %> | **Informational** <%= counts.info %> | **Unknown** <%= counts.unknown %>
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
@@ -58,10 +53,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 <% issues.forEach(issue => { %>#### <%= issue.title %> <% if (issue.package) { %>(version <%= issue.package.version %>)<% } %>
 
-**Severity**: <%= issue.severity %> | 
-**Type**: <%= issue.type %> | 
-**Fix**: <%= issue.fix %> | 
-**Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
+**Severity**: [<%= functions.capitalise(issue.severity) %>](#<%= functions.capitalise(issue.severity) %>) | **Type**: <%= issue.type %> | **Fix**: <%= issue.fix %> | **Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
 
 <%= issue.description || issue.references?.[0]?.description %>
 

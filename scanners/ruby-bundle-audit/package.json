@@ -1,7 +1,7 @@
 {
-  "name": "@continuous-security/scanner-python-pip-audit",
+  "name": "@continuous-security/scanner-ruby-bundle-audit",
   "version": "1.1.0",
-  "description": "Run pip-audit against your python codebase.",
+  "description": "Run bundle-audit against your ruby codebase.",
   "main": "build/main.js",
   "scripts": {
     "test": "jest src/",
@@ -27,11 +27,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/acodeninja/continuous-security.git",
-    "directory": "scanners/python-pip-audit"
+    "directory": "scanners/ruby-bundle-audit"
   },
   "private": false,
   "author": "Lawrence <lawrence@acode.ninja>",
-  "license": "Apache-2.0",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/node": "^18.11.18",

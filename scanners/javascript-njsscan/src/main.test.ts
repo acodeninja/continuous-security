@@ -1,19 +1,19 @@
 import scanner from './main';
-import {pythonPipAuditReport} from '../test/fixtures';
+import {njsscanReport} from '../test/fixtures';
 import {readFile} from 'fs/promises';
 
 jest.mock('fs/promises', () => ({readFile: jest.fn()}));
 
-describe('python-pip-audit scanner', () => {
+describe('javascript-njsscan scanner', () => {
   test('has the right name', () => {
     expect(scanner).toHaveProperty(
       'name',
-      '@continuous-security/scanner-python-pip-audit',
+      '@continuous-security/scanner-javascript-njsscan',
     );
   });
 
   test('has the right slug', () => {
-    expect(scanner).toHaveProperty('slug', 'python-pip-audit');
+    expect(scanner).toHaveProperty('slug', 'javascript-njsscan');
   });
 
   test('has the right build configuration', () => {
@@ -31,7 +31,7 @@ describe('python-pip-audit scanner', () => {
     let report: ScanReport;
 
     beforeAll(async () => {
-      (readFile as jest.Mock).mockResolvedValueOnce(pythonPipAuditReport);
+      (readFile as jest.Mock).mockResolvedValueOnce(njsscanReport);
       report = await scanner.report('/test');
     });
 
@@ -42,22 +42,24 @@ describe('python-pip-audit scanner', () => {
     test('includes the scanner name', () => {
       expect(report).toHaveProperty(
         'scanner',
-        '@continuous-security/scanner-python-pip-audit',
+        '@continuous-security/scanner-javascript-njsscan',
       );
     });
 
-    test('returns the expected issues', () => {
+    test('returns an expected issue', () => {
       expect(report).toHaveProperty('issues', expect.arrayContaining([{
-        title: 'Vulnerable Third-Party Library `cairosvg`',
+        title: 'Use of a Broken or Risky Cryptographic Algorithm',
+        description: 'MD5 is a a weak hash which is known to have collision. Use a strong hashing function.',
+        extracts: [{
+          code: 'require("crypto")\n  .createHash("md5")',
+          language: 'javascript',
+          lines: ['2', '3'],
+          path: 'main.js',
+        }],
+        fix: 'Unknown',
+        references: ['CWE-327'],
         severity: 'unknown',
-        description: '',
-        fix: 'unknown',
-        type: 'dependency',
-        package: {
-          name: 'cairosvg',
-          version: '2.6.0',
-        },
-        references: ['GHSA-rwmf-w63j-p7gv'],
+        type: 'code smell',
       }]));
     });
   });

@@ -1,4 +1,4 @@
-# Scanner: python pip-audit
+# Scanner: njsscan
 
 ## Usage
 
@@ -11,11 +11,10 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-python-pip-audit
+  - @continuous-security/scanner-javascript-njsscan
 ```
-
 
 ## Attribution
 
-The application is hosted on [GitHub](https://github.com/pypa/pip-audit).
+The application is hosted on [GitHub](https://github.com/ajinabraham/njsscan).
 This scanner module is released under the same license as the codebase.

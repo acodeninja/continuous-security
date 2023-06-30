@@ -1,4 +1,4 @@
-# Scanner: python pip-audit
+# Continuous Security Scanner: NPM Audit
 
 ## Usage
 
@@ -11,11 +11,5 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-python-pip-audit
+  - @continuous-security/scanner-javascript-npm-audit
 ```
-
-
-## Attribution
-
-The application is hosted on [GitHub](https://github.com/pypa/pip-audit).
-This scanner module is released under the same license as the codebase.
