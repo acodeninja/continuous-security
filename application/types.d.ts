@@ -105,3 +105,28 @@ type OSVAPIResponse = {
     score: string;
   }>
 }
+
+type CVEAPIResponse = {
+  vulnerabilities: Array<{
+    cve: {
+      id: string;
+      descriptions: Array<{
+        lang: string;
+        value: string;
+      }>;
+      metrics: {
+        cvssMetricV31: Array<{
+          cvssData: {
+            baseSeverity: string;
+          };
+        }>;
+      };
+      weaknesses: Array<{
+        description: Array<{
+          lang: string;
+          value: string;
+        }>;
+      }>;
+    }
+  }>;
+}
