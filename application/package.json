@@ -8,7 +8,8 @@
     "update-cwe": "scripts/update-cwe.js",
     "lint": "eslint ./src",
     "update-scanner-types": "cd ../scanners && for d in $(ls); do [ $d != '_base' ] && cd $d && npm run update-types && cd ..; done",
-    "prepublishOnly": "npm run build"
+    "update-scanner-list": "scripts/update-scanner-list.js",
+    "prepublishOnly": "npm run update-scanner-list && npm run build"
   },
   "keywords": [],
   "author": "Lawrence <lawrence@acode.ninja>",
