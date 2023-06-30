@@ -1,11 +1,11 @@
-import select from "@inquirer/select";
-import checkbox from "@inquirer/checkbox";
-import {Command, InvalidArgumentError} from "commander";
-import {stringify as YAMLStringify} from "yaml";
+import select from '@inquirer/select';
+import checkbox from '@inquirer/checkbox';
+import {Command, InvalidArgumentError} from 'commander';
+import {stringify as YAMLStringify} from 'yaml';
 import {writeFile} from 'fs/promises';
-import {resolve} from "path";
+import {resolve} from 'path';
 
-import availableScanners from "../scanners.json";
+import availableScanners from '../scanners.json';
 
 export const InitialiseCommand = (program: Command) => {
   program.command('init')
@@ -35,20 +35,20 @@ export const InitialiseCommand = (program: Command) => {
       const configuration = {scanners: chosenScanners.map(a => `@continuous-security/scanner-${a}`)};
 
       switch (format) {
-        case 'json':
-          await writeFile(
-            resolve(process.cwd(), '.continuous-security.json'),
-            JSON.stringify(configuration, null, 2),
-          );
-          break;
-        case 'yaml':
-          await writeFile(
-            resolve(process.cwd(), '.continuous-security.yml'),
-            YAMLStringify(configuration),
-          );
-          break;
+      case 'json':
+        await writeFile(
+          resolve(process.cwd(), '.continuous-security.json'),
+          JSON.stringify(configuration, null, 2),
+        );
+        break;
+      case 'yaml':
+        await writeFile(
+          resolve(process.cwd(), '.continuous-security.yml'),
+          YAMLStringify(configuration),
+        );
+        break;
       }
 
-      console.log("Success! Scan your project with continuous-security scan");
+      console.log('Success! Scan your project with continuous-security scan');
     });
-}
+};

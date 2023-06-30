@@ -1,6 +1,6 @@
-import {Command, InvalidArgumentError} from "commander";
-import {Orchestrator} from "../Orchestrator";
-import {Logger} from "../Logger";
+import {Command, InvalidArgumentError} from 'commander';
+import {Orchestrator} from '../Orchestrator';
+import {Logger} from '../Logger';
 
 const orchestrator = new Orchestrator(process.cwd());
 new Logger(orchestrator.emitter);
@@ -20,4 +20,4 @@ export const ScanCommand = (program: Command) => {
       await orchestrator.run();
       await orchestrator.writeReport(process.cwd(), options.report);
     });
-}
+};
