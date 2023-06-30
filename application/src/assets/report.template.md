@@ -4,6 +4,10 @@
 
 This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %>.
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
+<% if (summaryImpacts) { %>
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+<% summaryImpacts.forEach(({scope, impacts}) => { %>
+* **<%= scope %>**<% if (impacts.length) { %>: <%= impacts.join(', ') %><% } %><% }) %><% } %>
 
 ### Contents
 

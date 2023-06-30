@@ -53,6 +53,26 @@ describe('producing a report', () => {
 "{
   "title": "Security Report for application",
   "date": "2020-04-01T01:30:10.030Z",
+  "summaryImpacts": [
+    {
+      "scope": "Confidentiality",
+      "impacts": [
+        "Read Application Data"
+      ]
+    },
+    {
+      "scope": "Integrity",
+      "impacts": [
+        "Gain Privileges or Assume Identity"
+      ]
+    },
+    {
+      "scope": "Availability",
+      "impacts": [
+        "DoS: Crash, Exit, or Restart"
+      ]
+    }
+  ],
   "overviewOfIssues": [
     {
       "label": "CWE-248",
@@ -303,6 +323,12 @@ describe('producing a report', () => {
 
 This security report was conducted on 01/04/2020 at 01:30:10.
 A total of 2 issue(s) were found, 0 of which may require immediate attention.
+
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+
+* **Confidentiality**: Read Application Data
+* **Integrity**: Gain Privileges or Assume Identity
+* **Availability**: DoS: Crash, Exit, or Restart
 
 ### Contents
 
