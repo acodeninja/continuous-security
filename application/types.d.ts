@@ -46,6 +46,10 @@ type ReportOutputIssueReference = {
       aliases: Array<string>;
       severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
     };
+    cve?: {
+      aliases: Array<string>;
+      severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
+    };
     cwe?: {
       extendedDescription: string;
       background: string;
@@ -104,4 +108,29 @@ type OSVAPIResponse = {
     type: string;
     score: string;
   }>
+}
+
+type CVEAPIResponse = {
+  vulnerabilities: Array<{
+    cve: {
+      id: string;
+      descriptions: Array<{
+        lang: string;
+        value: string;
+      }>;
+      metrics: {
+        cvssMetricV31: Array<{
+          cvssData: {
+            baseSeverity: string;
+          };
+        }>;
+      };
+      weaknesses: Array<{
+        description: Array<{
+          lang: string;
+          value: string;
+        }>;
+      }>;
+    }
+  }>;
 }

@@ -185,6 +185,20 @@ describe('producing a report', () => {
           }
         },
         {
+          "label": "CVE-2023-2251",
+          "title": "CVE-2023-2251",
+          "description": "Uncaught Exception in GitHub repository eemeli/yaml prior to 2.0.0-5.",
+          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-2251",
+          "dataSourceSpecific": {
+            "cve": {
+              "aliases": [
+                "CWE-248"
+              ],
+              "severity": "high"
+            }
+          }
+        },
+        {
           "label": "CWE-248",
           "title": "Uncaught Exception",
           "description": "An exception is thrown from a function, but it is not caught.",
@@ -374,7 +388,7 @@ test-issue-description
 
 ##### References
 
-[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CWE-248](https://cwe.mitre.org/data/definitions/248.html)
+[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CVE-2023-2251](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-2251) | [CWE-248](https://cwe.mitre.org/data/definitions/248.html)
 
 ### Unknown Severity
 

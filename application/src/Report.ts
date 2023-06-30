@@ -1,6 +1,7 @@
 import {template, TemplateExecutor} from 'lodash';
 import {basename} from 'path';
 import BaseTemplate from './assets/report.template.md';
+import {CVE} from './DataSources/CVE';
 import {CWE} from './DataSources/CWE';
 import {OSV} from './DataSources/OSV';
 import {Emitter} from './Emitter';
@@ -8,6 +9,7 @@ import {Emitter} from './Emitter';
 export class Report {
   private readonly template: TemplateExecutor;
   private reports: Array<ScanReport> = [];
+  private cveDataset: CVE = new CVE();
   private cweDataset: CWE = new CWE();
   private osvDataset: OSV = new OSV();
   private emitter: Emitter;
@@ -51,6 +53,8 @@ export class Report {
 
         if (slug.indexOf('cwe') === 0) {
           expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
+        } else if (slug.indexOf('cve') === 0) {
+          expandedReferences[ref] = await this.cveDataset.getById(ref.toUpperCase());
         } else {
           try {
             expandedReferences[ref] = await this.osvDataset.getById(ref);
