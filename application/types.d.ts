@@ -46,6 +46,10 @@ type ReportOutputIssueReference = {
       aliases: Array<string>;
       severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
     };
+    cve?: {
+      aliases: Array<string>;
+      severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
+    };
     cwe?: {
       extendedDescription: string;
       background: string;
