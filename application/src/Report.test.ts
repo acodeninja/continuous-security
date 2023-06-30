@@ -321,7 +321,7 @@ describe('producing a report', () => {
 
 ## Summary
 
-This security report was conducted on 01/04/2020 at 01:30:10.
+This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
 A total of 2 issue(s) were found, 0 of which may require immediate attention.
 
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
