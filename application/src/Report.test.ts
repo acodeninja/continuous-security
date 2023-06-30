@@ -302,12 +302,7 @@ A total of 2 issue(s) were found, 0 of which may require immediate attention.
 
 This report found issues with the following severities.
 
-**Critical**: 0 | 
-**High** 1 | 
-**Medium** 0 | 
-**Low** 0 | 
-**Informational** 0 | 
-**Unknown** 1
+**Critical**: 0 | **High** 1 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 1
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
@@ -372,10 +367,7 @@ For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.
 
 #### test-issue-title (version 1.3.24)
 
-**Severity**: high | 
-**Type**: dependency | 
-**Fix**: Unknown | 
-**Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [High](#High) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
@@ -388,10 +380,7 @@ test-issue-description
 
 #### test-issue-title 
 
-**Severity**: unknown | 
-**Type**: code smell | 
-**Fix**: Unknown | 
-**Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Unknown](#Unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
