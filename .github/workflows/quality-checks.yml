@@ -44,7 +44,7 @@ jobs:
   scanners:
     name: scanner / ${{ matrix.scanner }}
     runs-on: ubuntu-latest
-    needs: [find-scanners]
+    needs: [ enumerate-scanners ]
     strategy:
       matrix:
         scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}
