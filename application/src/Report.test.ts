@@ -180,17 +180,17 @@ describe('producing a report', () => {
       "type": "dependency",
       "references": [
         {
-          "label": "GHSA-f9xv-q969-pqx4",
-          "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
-          "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
-          "directLink": "https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4",
+          "label": "CVE-2022-25772",
+          "title": "CVE-2022-25772",
+          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
+          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
           "dataSourceSpecific": {
-            "osv": {
+            "cve": {
               "aliases": [
-                "CVE-2022-25772",
-                "CWE-79"
+                "CWE-787",
+                "CWE-120"
               ],
-              "severity": "critical"
+              "severity": "high"
             }
           }
         },
@@ -235,17 +235,17 @@ describe('producing a report', () => {
           }
         },
         {
-          "label": "CVE-2022-25772",
-          "title": "CVE-2022-25772",
-          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
-          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
+          "label": "GHSA-f9xv-q969-pqx4",
+          "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
+          "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
+          "directLink": "https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4",
           "dataSourceSpecific": {
-            "cve": {
+            "osv": {
               "aliases": [
-                "CWE-787",
-                "CWE-120"
+                "CVE-2022-25772",
+                "CWE-79"
               ],
-              "severity": "high"
+              "severity": "critical"
             }
           }
         }
@@ -275,17 +275,17 @@ describe('producing a report', () => {
       ],
       "references": [
         {
-          "label": "GHSA-f9xv-q969-pqx4",
-          "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
-          "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
-          "directLink": "https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4",
+          "label": "CVE-2022-25772",
+          "title": "CVE-2022-25772",
+          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
+          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
           "dataSourceSpecific": {
-            "osv": {
+            "cve": {
               "aliases": [
-                "CVE-2022-25772",
-                "CWE-79"
+                "CWE-787",
+                "CWE-120"
               ],
-              "severity": "critical"
+              "severity": "high"
             }
           }
         },
@@ -330,17 +330,17 @@ describe('producing a report', () => {
           }
         },
         {
-          "label": "CVE-2022-25772",
-          "title": "CVE-2022-25772",
-          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
-          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
+          "label": "GHSA-f9xv-q969-pqx4",
+          "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
+          "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
+          "directLink": "https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4",
           "dataSourceSpecific": {
-            "cve": {
+            "osv": {
               "aliases": [
-                "CWE-787",
-                "CWE-120"
+                "CVE-2022-25772",
+                "CWE-79"
               ],
-              "severity": "high"
+              "severity": "critical"
             }
           }
         }
@@ -500,7 +500,7 @@ test-issue-description
 
 ##### References
 
-[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772)
+[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
 
 #### test-issue-title 
@@ -524,7 +524,7 @@ The following examples were found in the application.
 
 ##### References
 
-[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772)
+[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
 
 ### Unknown Severity

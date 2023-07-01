@@ -71,7 +71,12 @@ export class Report {
       }
     }
 
-    return Object.values(expandedReferences);
+    const outputReferences = Object.values(expandedReferences);
+
+    outputReferences.sort((a, b) =>
+      (a.label < b.label) ? -1 : ((a.label > b.label) ? 1 : 0));
+
+    return outputReferences;
   }
 
   async toObject(): Promise<ReportOutput> {
