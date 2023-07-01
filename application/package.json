@@ -4,12 +4,12 @@
   "description": "Command line application for running security scans against application code.",
   "scripts": {
     "test": "LANG=en_GB.utf8 TZ=UTC jest",
-    "build": "webpack",
+    "build": "npm run update-cwe && npm run update-scanner-list && webpack",
     "update-cwe": "scripts/update-cwe.js",
     "lint": "eslint ./src",
     "update-scanner-types": "cd ../scanners && for d in $(ls); do [ $d != '_base' ] && cd $d && npm run update-types && cd ..; done",
     "update-scanner-list": "scripts/update-scanner-list.js",
-    "prepublishOnly": "npm run update-scanner-list && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "Lawrence <lawrence@acode.ninja>",
