@@ -41,6 +41,7 @@ jobs:
         run: echo "scanners=$(ls -1 ./scanners | jq -Rnrc '[inputs] | map(select(. != "_base"))')" >> $GITHUB_OUTPUT
 
   scanners:
+    name: scanner/${{ matrix.scanner }}
     runs-on: ubuntu-latest
     needs: [find-scanners]
     strategy:
