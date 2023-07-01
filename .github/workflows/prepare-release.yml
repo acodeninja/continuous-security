@@ -64,6 +64,8 @@ jobs:
             await github.rest.repos.createRelease({
               owner,
               repo,
+              name: 'Release v${{ inputs.version }}',
               tag_name: '${{ inputs.version }}',
+              generate_release_notes: true,
               draft: true,
             });
