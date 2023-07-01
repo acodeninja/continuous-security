@@ -44,6 +44,8 @@ Array.prototype.groupBy = function (field) {
 };
 
 const analysis = getAllFiles()
+  // Filter out node_modules/
+  .filter(path => path.indexOf('node_modules/') === -1)
   // Filter out non-javascript files
   .filter(path => lookup(path) === 'application/javascript')
   // Filter out files without .js extention
