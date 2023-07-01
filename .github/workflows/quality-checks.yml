@@ -31,7 +31,8 @@ jobs:
       - run: npm test
         working-directory: application/
 
-  find-scanners:
+  enumerate-scanners:
+    name: scanner / enumerate
     runs-on: ubuntu-latest
     outputs:
       scanners: ${{ steps.scanners.outputs.scanners }}
