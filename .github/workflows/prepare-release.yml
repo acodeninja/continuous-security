@@ -1,11 +1,11 @@
 name: prepare release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        type: string
-        description: The version to tag this release with.
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
 permissions:
   contents: write
@@ -13,20 +13,29 @@ permissions:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
     steps:
       - uses: actions/checkout@v3
         with:
           ref: main
 
+      - name: get release version
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const {title} = context.payload.pull_request;
+            const [version] = title.match(/[0-9]+\.[0-9]+\.[0-9]+/);
+            core.exportVariable('RELEASE_VERSION', version);
+
       - name: bump versions
         run: |
-          echo "setting application version to ${{ inputs.version }}"
-          cat application/package.json | jq -r '.version = "${{ inputs.version }}"' > application/package.json.tmp
+          echo "setting application version to $RELEASE_VERSION"
+          cat application/package.json | jq -r ".version = \"$RELEASE_VERSION\"" > application/package.json.tmp
           mv application/package.json.tmp application/package.json
           for d in $(ls scanners/); do 
             [ $d = '_base' ] && continue
-            echo "setting scanner / $d version to ${{ inputs.version }}"
-            cat scanners/$d/package.json | jq -r '.version = "${{ inputs.version }}"' > scanners/$d/package.json.tmp
+            echo "setting scanner / $d version to $RELEASE_VERSION"
+            cat scanners/$d/package.json | jq -r ".version = \"$RELEASE_VERSION\"" > scanners/$d/package.json.tmp
             mv scanners/$d/package.json.tmp scanners/$d/package.json
           done
 
@@ -52,7 +61,7 @@ jobs:
             scanners/*/package.json scanners/*/package-lock.json
           git config --global user.name "publisher [bot]"
           git config --global user.email "publisher@acode.ninja"
-          git commit -m "chore: creating version ${{ inputs.version }}"
+          git commit -m "chore: creating version $RELEASE_VERSION"
           git push
 
       - name: create draft release
@@ -60,12 +69,13 @@ jobs:
         with:
           script: |
             const {owner, repo} = context.repo;
+            const {RELEASE_VERSION} = process.env;
             
             await github.rest.repos.createRelease({
               owner,
               repo,
-              name: 'Release v${{ inputs.version }}',
-              tag_name: '${{ inputs.version }}',
+              name: `Release v${RELEASE_VERSION}`,
+              tag_name: RELEASE_VERSION,
               generate_release_notes: true,
               draft: true,
             });

@@ -1,2 +1,5 @@
 node_modules/
 build/
+src/assets/cwe.xml
+src/scanners.json
+README.md
