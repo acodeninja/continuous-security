@@ -1,0 +1,62 @@
+name: publish
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish-application:
+    name: application / publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: application/package-lock.json
+      - name: publish
+        working-directory: application/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm ci
+          npm run build
+          npm publish
+
+  enumerate-scanners:
+    name: scanner / enumerate
+    runs-on: ubuntu-latest
+    outputs:
+      scanners: ${{ steps.scanners.outputs.scanners }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: scanners
+        run: echo "scanners=$(ls -1 ./scanners | jq -Rnrc '[inputs] | map(select(. != "_base"))')" >> $GITHUB_OUTPUT
+
+  scanners:
+    name: scanner / ${{ matrix.scanner }} / publish
+    runs-on: ubuntu-latest
+    needs: [ enumerate-scanners ]
+    strategy:
+      matrix:
+        scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
+
+      - name: publish /
+        working-directory: scanners/${{ matrix.scanner }}/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm ci
+          npm run build
+          npm publish
