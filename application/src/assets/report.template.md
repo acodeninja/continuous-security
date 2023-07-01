@@ -2,8 +2,12 @@
 
 ## Summary
 
-This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %>.
+This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %> (UTC<%= (date.getTimezoneOffset()/-60 >= 0 ? '+' : '') + date.getTimezoneOffset()/-60 %>).
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
+<% if (summaryImpacts) { %>
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+<% summaryImpacts.forEach(({scope, impacts}) => { %>
+* **<%= scope %>**<% if (impacts.length) { %>: <%= impacts.join(', ') %><% } %><% }) %><% } %>
 
 ### Contents
 
@@ -35,13 +39,11 @@ To gain a better understanding of the severity levels please see [the appendix](
 <% if (o.dataSourceSpecific.cwe.consequences.length) { %>#### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
-
 <% o.dataSourceSpecific.cwe.consequences.forEach(c => { %>
 <% c.scopeImpacts.forEach(si => { %>* **<%= si.scope %>**<% if (si.impact) { %>: <%= si.impact %><% } %>
-<% }) %>
-
-<% if (c.likelihood) { %> **Likelihood** <%= c.likelihood %><% } %>
-<% if (c.note) { %> > <%= c.note %><% } %>
+<% }) %><% if (c.likelihood) { %> 
+**Likelihood** <%= c.likelihood %><% } %><% if (c.note) { %>
+> <%= c.note %><% } %>
 <% }) %><% } %>
 
 For more information see [<%= o.label %>](<%= o.directLink %>).

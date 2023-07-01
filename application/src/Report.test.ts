@@ -53,6 +53,26 @@ describe('producing a report', () => {
 "{
   "title": "Security Report for application",
   "date": "2020-04-01T01:30:10.030Z",
+  "summaryImpacts": [
+    {
+      "scope": "Confidentiality",
+      "impacts": [
+        "Read Application Data"
+      ]
+    },
+    {
+      "scope": "Integrity",
+      "impacts": [
+        "Gain Privileges or Assume Identity"
+      ]
+    },
+    {
+      "scope": "Availability",
+      "impacts": [
+        "DoS: Crash, Exit, or Restart"
+      ]
+    }
+  ],
   "overviewOfIssues": [
     {
       "label": "CWE-248",
@@ -301,8 +321,14 @@ describe('producing a report', () => {
 
 ## Summary
 
-This security report was conducted on 01/04/2020 at 01:30:10.
+This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
 A total of 2 issue(s) were found, 0 of which may require immediate attention.
+
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+
+* **Confidentiality**: Read Application Data
+* **Integrity**: Gain Privileges or Assume Identity
+* **Availability**: DoS: Crash, Exit, or Restart
 
 ### Contents
 
@@ -334,13 +360,10 @@ When an exception is not caught, it may cause the program to crash or expose sen
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
-
 * **Availability**: DoS: Crash, Exit, or Restart
 * **Confidentiality**: Read Application Data
 
-
-
- > An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors.
+> An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors.
 
 
 For more information see [CWE-248](https://cwe.mitre.org/data/definitions/248.html).
@@ -358,18 +381,13 @@ The HttpOnly flag directs compatible browsers to prevent client-side script from
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
-
 * **Confidentiality**: Read Application Data
 
-
-
- > If the HttpOnly flag is not set, then sensitive information stored in the cookie may be exposed to unintended parties.
+> If the HttpOnly flag is not set, then sensitive information stored in the cookie may be exposed to unintended parties.
 
 * **Integrity**: Gain Privileges or Assume Identity
 
-
-
- > If the cookie in question is an authentication cookie, then not setting the HttpOnly flag may allow an adversary to steal authentication data (e.g., a session ID) and assume the identity of the user.
+> If the cookie in question is an authentication cookie, then not setting the HttpOnly flag may allow an adversary to steal authentication data (e.g., a session ID) and assume the identity of the user.
 
 
 For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html).

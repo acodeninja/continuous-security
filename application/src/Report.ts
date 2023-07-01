@@ -98,14 +98,31 @@ export class Report {
       .filter(r => !!r.dataSourceSpecific.cwe)
       .filter((r, i, all) => all.map(a => a.label).indexOf(r.label) === i);
 
+    const summaryImpacts: Record<string, Array<string>> = {};
+
+    overviewOfIssues
+      .map(({dataSourceSpecific}) =>
+        dataSourceSpecific?.cwe?.consequences?.map(({scopeImpacts}) =>
+          scopeImpacts,
+        ),
+      )
+      .flat(2)
+      .forEach(si => {
+        summaryImpacts[si.scope] = summaryImpacts[si.scope] ?? [];
+        if (si.impact && !summaryImpacts[si.scope].includes(si.impact)) {
+          summaryImpacts[si.scope].push(si.impact);
+        }
+      });
+
     overviewOfIssues.sort((a, b) =>
       parseInt(a.label.replace('CWE-', '')) - parseInt(b.label.replace('CWE-', '')));
 
-    const severities = issues.map(i=> i.severity);
+    const severities = issues.map(i => i.severity);
 
     return {
       title: `Security Report for ${basename(process.cwd())}`,
       date: new Date(),
+      summaryImpacts: Object.entries(summaryImpacts).map(([scope, impacts]) => ({scope, impacts})),
       overviewOfIssues,
       issues,
       counts: {
@@ -123,14 +140,13 @@ export class Report {
   async toJSON(): Promise<[string, Buffer]> {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
+
     return ['json', Buffer.from(JSON.stringify(report, null, 2))];
   }
 
   async toMarkdown(): Promise<[string, Buffer]> {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
-
-    // console.log(JSON.stringify(this.reportFunctions.groupBy(report.issues, 'severity'), null, 2))
 
     return ['md', Buffer.from(this.template({...report, functions: this.reportFunctions}))];
   }

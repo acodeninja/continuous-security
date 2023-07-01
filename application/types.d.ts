@@ -10,6 +10,10 @@ type ConfigurationFile = {
 type ReportOutput = {
   title: string;
   date: Date;
+  summaryImpacts: Array<{
+    scope: string;
+    impacts: Array<string>;
+  }>;
   overviewOfIssues: Array<ReportOutputIssueReference>;
   issues: Array<ReportOutputIssue>
   counts: {
