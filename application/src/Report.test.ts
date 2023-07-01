@@ -1,5 +1,18 @@
+import axios from 'axios';
 import {Report} from './Report';
 import {Emitter} from './Emitter';
+
+import {CVEResponse} from '../tests/fixtures/CVEResponse';
+import {Github} from '../tests/fixtures/OSVResponse';
+
+jest.mock('axios', () => ({
+  get: jest.fn(),
+}));
+
+(axios.get as jest.Mock).mockImplementation(async (url) => {
+  if (url.indexOf('services.nvd.nist.gov') !== -1) return {data: CVEResponse};
+  if (url.indexOf('api.osv.dev') !== -1) return {data: Github};
+});
 
 beforeAll(() => {
   jest.useFakeTimers();
@@ -34,6 +47,23 @@ describe('producing a report', () => {
       title: 'test-issue-title',
       description: 'test-issue-description',
       type: 'code smell',
+      extracts: [{
+        lines: ['5', '7'],
+        path: 'scripts/update-cwe.js',
+        language: 'javascript',
+      }],
+      references: ['GHSA-f9xv-q969-pqx4', 'CWE-1004'],
+      fix: 'Unknown',
+      severity: 'unknown',
+    }],
+    scanner: 'test-scanner'
+  });
+
+  report.addScanReport({
+    issues: [{
+      title: 'test-issue-title',
+      description: 'test-issue-description',
+      type: 'code smell',
       references: ['CWE-248'],
       fix: 'Unknown',
       severity: 'unknown',
@@ -53,6 +83,26 @@ describe('producing a report', () => {
 "{
   "title": "Security Report for application",
   "date": "2020-04-01T01:30:10.030Z",
+  "summaryImpacts": [
+    {
+      "scope": "Confidentiality",
+      "impacts": [
+        "Read Application Data"
+      ]
+    },
+    {
+      "scope": "Integrity",
+      "impacts": [
+        "Gain Privileges or Assume Identity"
+      ]
+    },
+    {
+      "scope": "Availability",
+      "impacts": [
+        "DoS: Crash, Exit, or Restart"
+      ]
+    }
+  ],
   "overviewOfIssues": [
     {
       "label": "CWE-248",
@@ -131,16 +181,16 @@ describe('producing a report', () => {
       "references": [
         {
           "label": "GHSA-f9xv-q969-pqx4",
-          "title": "Uncaught Exception in yaml",
-          "description": "Uncaught Exception in GitHub repository eemeli/yaml starting at version 2.0.0-5 and prior to 2.2.2.",
+          "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
+          "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
           "directLink": "https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4",
           "dataSourceSpecific": {
             "osv": {
               "aliases": [
-                "CVE-2023-2251",
-                "CWE-248"
+                "CVE-2022-25772",
+                "CWE-79"
               ],
-              "severity": "high"
+              "severity": "critical"
             }
           }
         },
@@ -185,30 +235,17 @@ describe('producing a report', () => {
           }
         },
         {
-          "label": "CWE-248",
-          "title": "Uncaught Exception",
-          "description": "An exception is thrown from a function, but it is not caught.",
-          "directLink": "https://cwe.mitre.org/data/definitions/248.html",
+          "label": "CVE-2022-25772",
+          "title": "CVE-2022-25772",
+          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
+          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
           "dataSourceSpecific": {
-            "cwe": {
-              "extendedDescription": "When an exception is not caught, it may cause the program to crash or expose sensitive information.",
-              "background": "",
-              "consequences": [
-                {
-                  "scopeImpacts": [
-                    {
-                      "scope": "Availability",
-                      "impact": "DoS: Crash, Exit, or Restart"
-                    },
-                    {
-                      "scope": "Confidentiality",
-                      "impact": "Read Application Data"
-                    }
-                  ],
-                  "note": "An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors."
-                }
+            "cve": {
+              "aliases": [
+                "CWE-787",
+                "CWE-120"
               ],
-              "mitigations": []
+              "severity": "high"
             }
           }
         }
@@ -218,7 +255,98 @@ describe('producing a report', () => {
         "version": "1.3.24"
       },
       "fix": "Unknown",
-      "severity": "high",
+      "severity": "critical",
+      "foundBy": "test-scanner"
+    },
+    {
+      "title": "test-issue-title",
+      "description": "test-issue-description",
+      "type": "code smell",
+      "extracts": [
+        {
+          "lines": [
+            "5",
+            "7"
+          ],
+          "path": "scripts/update-cwe.js",
+          "language": "javascript",
+          "code": "3| const {createWriteStream} = require('fs');\\n4| const {get} = require('https');\\n5| const {Parse} = require('unzip-stream');\\n6| const {minifyStream} = require('minify-xml');\\n7| "
+        }
+      ],
+      "references": [
+        {
+          "label": "GHSA-f9xv-q969-pqx4",
+          "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
+          "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
+          "directLink": "https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4",
+          "dataSourceSpecific": {
+            "osv": {
+              "aliases": [
+                "CVE-2022-25772",
+                "CWE-79"
+              ],
+              "severity": "critical"
+            }
+          }
+        },
+        {
+          "label": "CWE-1004",
+          "title": "Sensitive Cookie Without 'HttpOnly' Flag",
+          "description": "The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.",
+          "directLink": "https://cwe.mitre.org/data/definitions/1004.html",
+          "dataSourceSpecific": {
+            "cwe": {
+              "extendedDescription": "The HttpOnly flag directs compatible browsers to prevent client-side script from accessing cookies. Including the HttpOnly flag in the Set-Cookie HTTP response header helps mitigate the risk associated with Cross-Site Scripting (XSS) where an attacker's script code might attempt to read the contents of a cookie and exfiltrate information obtained. When set, browsers that support the flag will not reveal the contents of the cookie to a third party via client-side script executed via XSS.",
+              "background": "An HTTP cookie is a small piece of data attributed to a specific website and stored on the user's computer by the user's web browser. This data can be leveraged for a variety of purposes including saving information entered into form fields, recording user activity, and for authentication purposes. Cookies used to save or record information generated by the user are accessed and modified by script code embedded in a web page. While cookies used for authentication are created by the website's server and sent to the user to be attached to future requests. These authentication cookies are often not meant to be accessed by the web page sent to the user, and are instead just supposed to be attached to future requests to verify authentication details.",
+              "consequences": [
+                {
+                  "scopeImpacts": [
+                    {
+                      "scope": "Confidentiality",
+                      "impact": "Read Application Data"
+                    }
+                  ],
+                  "note": "If the HttpOnly flag is not set, then sensitive information stored in the cookie may be exposed to unintended parties."
+                },
+                {
+                  "scopeImpacts": [
+                    {
+                      "scope": "Integrity",
+                      "impact": "Gain Privileges or Assume Identity"
+                    }
+                  ],
+                  "note": "If the cookie in question is an authentication cookie, then not setting the HttpOnly flag may allow an adversary to steal authentication data (e.g., a session ID) and assume the identity of the user."
+                }
+              ],
+              "mitigations": [
+                {
+                  "phase": "Implementation",
+                  "description": "Leverage the HttpOnly flag when setting a sensitive cookie in a response.",
+                  "effectiveness": "High",
+                  "notes": "While this mitigation is effective for protecting cookies from a browser's own scripting engine, third-party components or plugins may have their own engines that allow access to cookies. Attackers might also be able to use XMLHTTPResponse to read the headers directly and obtain the cookie."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "CVE-2022-25772",
+          "title": "CVE-2022-25772",
+          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
+          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
+          "dataSourceSpecific": {
+            "cve": {
+              "aliases": [
+                "CWE-787",
+                "CWE-120"
+              ],
+              "severity": "high"
+            }
+          }
+        }
+      ],
+      "fix": "Unknown",
+      "severity": "critical",
       "foundBy": "test-scanner"
     },
     {
@@ -261,13 +389,13 @@ describe('producing a report', () => {
     }
   ],
   "counts": {
-    "critical": 0,
-    "high": 1,
+    "critical": 2,
+    "high": 0,
     "moderate": 0,
     "low": 0,
     "info": 0,
     "unknown": 1,
-    "total": 2
+    "total": 3
   }
 }"
 `);
@@ -287,8 +415,14 @@ describe('producing a report', () => {
 
 ## Summary
 
-This security report was conducted on 01/04/2020 at 01:30:10.
-A total of 2 issue(s) were found, 0 of which may require immediate attention.
+This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
+A total of 3 issue(s) were found, 2 of which may require immediate attention.
+
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+
+* **Confidentiality**: Read Application Data
+* **Integrity**: Gain Privileges or Assume Identity
+* **Availability**: DoS: Crash, Exit, or Restart
 
 ### Contents
 
@@ -302,12 +436,7 @@ A total of 2 issue(s) were found, 0 of which may require immediate attention.
 
 This report found issues with the following severities.
 
-**Critical**: 0 | 
-**High** 1 | 
-**Medium** 0 | 
-**Low** 0 | 
-**Informational** 0 | 
-**Unknown** 1
+**Critical**: 2 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 1
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
@@ -325,13 +454,10 @@ When an exception is not caught, it may cause the program to crash or expose sen
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
-
 * **Availability**: DoS: Crash, Exit, or Restart
 * **Confidentiality**: Read Application Data
 
-
-
- > An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors.
+> An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors.
 
 
 For more information see [CWE-248](https://cwe.mitre.org/data/definitions/248.html).
@@ -349,18 +475,13 @@ The HttpOnly flag directs compatible browsers to prevent client-side script from
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
-
 * **Confidentiality**: Read Application Data
 
-
-
- > If the HttpOnly flag is not set, then sensitive information stored in the cookie may be exposed to unintended parties.
+> If the HttpOnly flag is not set, then sensitive information stored in the cookie may be exposed to unintended parties.
 
 * **Integrity**: Gain Privileges or Assume Identity
 
-
-
- > If the cookie in question is an authentication cookie, then not setting the HttpOnly flag may allow an adversary to steal authentication data (e.g., a session ID) and assume the identity of the user.
+> If the cookie in question is an authentication cookie, then not setting the HttpOnly flag may allow an adversary to steal authentication data (e.g., a session ID) and assume the identity of the user.
 
 
 For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html).
@@ -368,30 +489,49 @@ For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.
 
 ## Vulnerabilities
 
-### High Severity
+### Critical Severity
 
 #### test-issue-title (version 1.3.24)
 
-**Severity**: high | 
-**Type**: dependency | 
-**Fix**: Unknown | 
-**Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Critical](#Critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
 
 ##### References
 
-[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CWE-248](https://cwe.mitre.org/data/definitions/248.html)
+[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772)
+
+
+#### test-issue-title 
+
+**Severity**: [Critical](#Critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+
+test-issue-description
+
+##### Instances
+
+The following examples were found in the application.
+
+\`scripts/update-cwe.js\` (starting on line: 5)
+\`\`\`javascript
+3| const {createWriteStream} = require('fs');
+4| const {get} = require('https');
+5| const {Parse} = require('unzip-stream');
+6| const {minifyStream} = require('minify-xml');
+7| 
+\`\`\`
+
+##### References
+
+[GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772)
+
 
 ### Unknown Severity
 
 #### test-issue-title 
 
-**Severity**: unknown | 
-**Type**: code smell | 
-**Fix**: Unknown | 
-**Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Unknown](#Unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
@@ -399,6 +539,7 @@ test-issue-description
 ##### References
 
 [CWE-248](https://cwe.mitre.org/data/definitions/248.html)
+
 
 
 

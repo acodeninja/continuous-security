@@ -2,8 +2,12 @@
 
 ## Summary
 
-This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %>.
+This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %> (UTC<%= (date.getTimezoneOffset()/-60 >= 0 ? '+' : '') + date.getTimezoneOffset()/-60 %>).
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
+<% if (summaryImpacts) { %>
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+<% summaryImpacts.forEach(({scope, impacts}) => { %>
+* **<%= scope %>**<% if (impacts.length) { %>: <%= impacts.join(', ') %><% } %><% }) %><% } %>
 
 ### Contents
 
@@ -17,12 +21,7 @@ A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of wh
 
 This report found issues with the following severities.
 
-**Critical**: <%= counts.critical %> | 
-**High** <%= counts.high %> | 
-**Medium** <%= counts.moderate %> | 
-**Low** <%= counts.low %> | 
-**Informational** <%= counts.info %> | 
-**Unknown** <%= counts.unknown %>
+**Critical**: <%= counts.critical %> | **High** <%= counts.high %> | **Medium** <%= counts.moderate %> | **Low** <%= counts.low %> | **Informational** <%= counts.info %> | **Unknown** <%= counts.unknown %>
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
@@ -40,13 +39,11 @@ To gain a better understanding of the severity levels please see [the appendix](
 <% if (o.dataSourceSpecific.cwe.consequences.length) { %>#### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
-
 <% o.dataSourceSpecific.cwe.consequences.forEach(c => { %>
 <% c.scopeImpacts.forEach(si => { %>* **<%= si.scope %>**<% if (si.impact) { %>: <%= si.impact %><% } %>
-<% }) %>
-
-<% if (c.likelihood) { %> **Likelihood** <%= c.likelihood %><% } %>
-<% if (c.note) { %> > <%= c.note %><% } %>
+<% }) %><% if (c.likelihood) { %> 
+**Likelihood** <%= c.likelihood %><% } %><% if (c.note) { %>
+> <%= c.note %><% } %>
 <% }) %><% } %>
 
 For more information see [<%= o.label %>](<%= o.directLink %>).
@@ -58,10 +55,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 <% issues.forEach(issue => { %>#### <%= issue.title %> <% if (issue.package) { %>(version <%= issue.package.version %>)<% } %>
 
-**Severity**: <%= issue.severity %> | 
-**Type**: <%= issue.type %> | 
-**Fix**: <%= issue.fix %> | 
-**Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
+**Severity**: [<%= functions.capitalise(issue.severity) %>](#<%= functions.capitalise(issue.severity) %>) | **Type**: <%= issue.type %> | **Fix**: <%= issue.fix %> | **Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
 
 <%= issue.description || issue.references?.[0]?.description %>
 
@@ -77,6 +71,7 @@ The following examples were found in the application.
 <% if (issue.references?.length > 0) { %>##### References
 
 <%= issue.references?.map(r => `[${r.label}](${r.directLink})`).join(' | ') %>
+
 <% } %>
 <% }) %><% }) %>
 

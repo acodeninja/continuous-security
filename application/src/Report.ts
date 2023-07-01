@@ -1,6 +1,8 @@
 import {template, TemplateExecutor} from 'lodash';
 import {basename} from 'path';
+import {readFile} from 'fs/promises';
 import BaseTemplate from './assets/report.template.md';
+import {CVE} from './DataSources/CVE';
 import {CWE} from './DataSources/CWE';
 import {OSV} from './DataSources/OSV';
 import {Emitter} from './Emitter';
@@ -8,6 +10,7 @@ import {Emitter} from './Emitter';
 export class Report {
   private readonly template: TemplateExecutor;
   private reports: Array<ScanReport> = [];
+  private cveDataset: CVE = new CVE();
   private cweDataset: CWE = new CWE();
   private osvDataset: OSV = new OSV();
   private emitter: Emitter;
@@ -49,15 +52,17 @@ export class Report {
         const slug = ref.toLowerCase();
         this.emitter.emit('report:reference', `fetching details for ${ref}`);
 
-        if (slug.indexOf('cwe') === 0) {
-          expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
-        } else {
-          try {
+        try {
+          if (slug.indexOf('cwe') === 0) {
+            expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
+          } else if (slug.indexOf('cve') === 0) {
+            expandedReferences[ref] = await this.cveDataset.getById(ref.toUpperCase());
+          } else {
             expandedReferences[ref] = await this.osvDataset.getById(ref);
-          } catch (e) {
-            this.emitter.emit('report:reference:failure', `Failed to fetch vulnerability reference ${ref}`);
-            referencesToProcess.splice(referencesToProcess.indexOf(ref), 1);
           }
+        } catch (e) {
+          this.emitter.emit('report:reference:failure', `Failed to fetch vulnerability reference ${ref}`);
+          referencesToProcess.splice(referencesToProcess.indexOf(ref), 1);
         }
 
         if (expandedReferences[ref]?.dataSourceSpecific?.osv?.aliases) {
@@ -70,38 +75,37 @@ export class Report {
   }
 
   async toObject(): Promise<ReportOutput> {
-    const issuesWithScanner = this.reports.map(r => r.issues.map(issue => ({
-      ...issue,
-      foundBy: r.scanner,
-    }))).flat();
+    const issues = await this.getIssues();
 
-    const expandedIssues = await Promise.all(issuesWithScanner.map(async (issue) => ({
-      ...issue,
-      references: issue.references ? await this.expandReferences(issue.references) : [],
-    })));
-
-    const issues = expandedIssues.map(i => {
-      const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
-        .concat(i.severity)
-        .filter(s => !!s);
-
-      severities.sort((a, b) => this.severityOrder.indexOf(a) - this.severityOrder.indexOf(b));
-
-      return {...i, severity: severities[0]};
-    });
-
-    const overviewOfIssues = expandedIssues.map(i => i.references).flat()
+    const overviewOfIssues = issues.map(i => i.references).flat()
       .filter(r => !!r.dataSourceSpecific.cwe)
       .filter((r, i, all) => all.map(a => a.label).indexOf(r.label) === i);
+
+    const summaryImpacts: Record<string, Array<string>> = {};
+
+    overviewOfIssues
+      .map(({dataSourceSpecific}) =>
+        dataSourceSpecific?.cwe?.consequences?.map(({scopeImpacts}) =>
+          scopeImpacts,
+        ),
+      )
+      .flat(2)
+      .forEach(si => {
+        summaryImpacts[si.scope] = summaryImpacts[si.scope] ?? [];
+        if (si.impact && !summaryImpacts[si.scope].includes(si.impact)) {
+          summaryImpacts[si.scope].push(si.impact);
+        }
+      });
 
     overviewOfIssues.sort((a, b) =>
       parseInt(a.label.replace('CWE-', '')) - parseInt(b.label.replace('CWE-', '')));
 
-    const severities = issues.map(i=> i.severity);
+    const severities = issues.map(i => i.severity);
 
     return {
       title: `Security Report for ${basename(process.cwd())}`,
       date: new Date(),
+      summaryImpacts: Object.entries(summaryImpacts).map(([scope, impacts]) => ({scope, impacts})),
       overviewOfIssues,
       issues,
       counts: {
@@ -119,14 +123,13 @@ export class Report {
   async toJSON(): Promise<[string, Buffer]> {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
+
     return ['json', Buffer.from(JSON.stringify(report, null, 2))];
   }
 
   async toMarkdown(): Promise<[string, Buffer]> {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
-
-    // console.log(JSON.stringify(this.reportFunctions.groupBy(report.issues, 'severity'), null, 2))
 
     return ['md', Buffer.from(this.template({...report, functions: this.reportFunctions}))];
   }
@@ -139,5 +142,48 @@ export class Report {
     case 'json':
       return await this.toJSON();
     }
+  }
+
+  private async getIssues(): Promise<Array<ReportOutputIssue>> {
+    const withFoundBy = this.reports.map(r => r.issues.map(issue => ({
+      ...issue,
+      foundBy: r.scanner,
+    }))).flat();
+
+    const withExpandedReferences = await Promise.all(withFoundBy.map(async (issue) => ({
+      ...issue,
+      references: issue.references ? await this.expandReferences(issue.references) : [],
+    })));
+
+    const withHighestSeverities = withExpandedReferences.map(i => {
+      const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
+        .concat(i.severity)
+        .filter(s => !!s);
+
+      severities.sort((a, b) => this.severityOrder.indexOf(a) - this.severityOrder.indexOf(b));
+
+      return {...i, severity: severities[0]};
+    });
+
+    return await Promise.all(withHighestSeverities.map(async issue => {
+      return {
+        ...issue,
+        extracts: issue.extracts ? await Promise.all(issue.extracts.map(async extract => {
+          const code = (await readFile(extract.path)).toString().split('\n');
+          const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
+          const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
+          const lines = new Array(code.slice(start, end).length).fill(null).map((_, i) => start + i + 1);
+
+          return {
+            ...extract,
+            lines: extract.lines.map(line => `${line}`),
+            code: code.slice(start, end).map((l, i) => {
+              const length = lines[lines.length - 1].toString().length;
+              return `${lines[i].toString().padStart(length)}| ${l}`;
+            }).join('\n'),
+          };
+        })) : undefined,
+      };
+    }));
   }
 }

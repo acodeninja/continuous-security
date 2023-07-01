@@ -8,7 +8,8 @@
     "update-cwe": "scripts/update-cwe.js",
     "lint": "eslint ./src",
     "update-scanner-types": "cd ../scanners && for d in $(ls); do [ $d != '_base' ] && cd $d && npm run update-types && cd ..; done",
-    "prepublishOnly": "npm run build"
+    "update-scanner-list": "scripts/update-scanner-list.js",
+    "prepublishOnly": "npm run update-scanner-list && npm run build"
   },
   "keywords": [],
   "author": "Lawrence <lawrence@acode.ninja>",
@@ -26,6 +27,8 @@
   },
   "private": false,
   "devDependencies": {
+    "@inquirer/checkbox": "^1.3.2",
+    "@inquirer/select": "^1.2.2",
     "@types/dockerode": "^3.3.14",
     "@types/jest": "^29.2.6",
     "@types/lodash": "^4.14.191",
@@ -55,5 +58,8 @@
     "xpath": "^0.0.32",
     "yaml": "^2.2.1",
     "zlib": "^1.0.5"
+  },
+  "overrides": {
+    "semver": ">=7.5.3"
   }
 }

@@ -10,6 +10,10 @@ type ConfigurationFile = {
 type ReportOutput = {
   title: string;
   date: Date;
+  summaryImpacts: Array<{
+    scope: string;
+    impacts: Array<string>;
+  }>;
   overviewOfIssues: Array<ReportOutputIssueReference>;
   issues: Array<ReportOutputIssue>
   counts: {
@@ -27,6 +31,7 @@ type ReportOutputIssue = {
   title: string;
   description: string;
   type: 'dependency' | 'code smell';
+  foundBy: string;
   package?: {
     name: string;
     version?: string;
@@ -43,6 +48,10 @@ type ReportOutputIssueReference = {
   directLink?: string;
   dataSourceSpecific: {
     osv?: {
+      aliases: Array<string>;
+      severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
+    };
+    cve?: {
       aliases: Array<string>;
       severity?: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
     };
@@ -104,4 +113,29 @@ type OSVAPIResponse = {
     type: string;
     score: string;
   }>
+}
+
+type CVEAPIResponse = {
+  vulnerabilities: Array<{
+    cve: {
+      id: string;
+      descriptions: Array<{
+        lang: string;
+        value: string;
+      }>;
+      metrics: {
+        cvssMetricV31: Array<{
+          cvssData: {
+            baseSeverity: string;
+          };
+        }>;
+      };
+      weaknesses: Array<{
+        description: Array<{
+          lang: string;
+          value: string;
+        }>;
+      }>;
+    }
+  }>;
 }

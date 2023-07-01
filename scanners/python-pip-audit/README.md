@@ -1,4 +1,4 @@
-# Scanner: python bandit
+# Scanner: python pip-audit
 
 ## Usage
 
@@ -11,11 +11,11 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-python-bandit
+  - @continuous-security/scanner-python-pip-audit
 ```
 
 
 ## Attribution
 
-The application is hosted on [GitHub](https://github.com/PyCQA/bandit).
+The application is hosted on [GitHub](https://github.com/pypa/pip-audit).
 This scanner module is released under the same license as the codebase.

@@ -1,0 +1,5 @@
+{
+  "scanners": [
+    "@continuous-security/scanner-ruby-bundle-audit"
+  ]
+}
