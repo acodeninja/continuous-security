@@ -23,7 +23,7 @@ export default {
             references: [cwe.split(':')[0]],
             severity: 'unknown',
             fix: 'Unknown',
-            extracts: files.map(({file_path, match_lines, match_string}) => ({
+            extracts: files.map(({file_path, match_lines}) => ({
               path: file_path.replace('/target/', ''),
               lines: match_lines.map(line => line.toString()),
               language: 'javascript',
