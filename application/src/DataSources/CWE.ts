@@ -12,7 +12,9 @@ export class CWEDoesNotExist extends Error {
 
 export class CWE {
   private data = (new DOMParser({
-    errorHandler: undefined,
+    errorHandler: (level: string, msg: any) => {
+      return {};
+    },
   })).parseFromString(CWEDataset);
 
   getById(id: string): ReportOutputIssueReference {

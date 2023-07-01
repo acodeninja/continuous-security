@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
     "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
     "outDir": "build",
+    "resolveJsonModule": true,
+    "target": "es6",
     "types": ["node", "jest"]
   },
   "include": ["./src/**/*.ts", "./types.d.ts", "./types.scanner.d.ts"],
