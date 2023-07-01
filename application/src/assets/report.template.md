@@ -39,13 +39,11 @@ To gain a better understanding of the severity levels please see [the appendix](
 <% if (o.dataSourceSpecific.cwe.consequences.length) { %>#### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
-
 <% o.dataSourceSpecific.cwe.consequences.forEach(c => { %>
 <% c.scopeImpacts.forEach(si => { %>* **<%= si.scope %>**<% if (si.impact) { %>: <%= si.impact %><% } %>
-<% }) %>
-
-<% if (c.likelihood) { %> **Likelihood** <%= c.likelihood %><% } %>
-<% if (c.note) { %> > <%= c.note %><% } %>
+<% }) %><% if (c.likelihood) { %> 
+**Likelihood** <%= c.likelihood %><% } %><% if (c.note) { %>
+> <%= c.note %><% } %>
 <% }) %><% } %>
 
 For more information see [<%= o.label %>](<%= o.directLink %>).
