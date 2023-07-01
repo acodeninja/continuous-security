@@ -50,8 +50,6 @@ const analysis = getAllFiles()
   .filter(path => path.endsWith('.js'))
   // Filter out minified javascript files
   .filter(path => path.indexOf('.min.') === -1)
-  // Filter node_modules
-  .filter(path => path.indexOf('node_modules/') === -1)
   // Read the file's contents
   .map(path => ({
     path: path.replace('/target/', ''),
@@ -78,7 +76,8 @@ const analysis = getAllFiles()
     extracts: [{
       path,
       lines: warning.location.map(([line]) => line)
-        .filter((element, index, lines) => lines.indexOf(element) === index),
+        .filter((element, index, lines) => lines.indexOf(element) === index)
+        .map(l => `${l}`),
       language: 'javascript',
     }],
   })))
