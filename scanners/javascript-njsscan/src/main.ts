@@ -25,7 +25,6 @@ export default {
             fix: 'Unknown',
             extracts: files.map(({file_path, match_lines, match_string}) => ({
               path: file_path.replace('/target/', ''),
-              code: match_string,
               lines: match_lines.map(line => line.toString()),
               language: 'javascript',
             })),

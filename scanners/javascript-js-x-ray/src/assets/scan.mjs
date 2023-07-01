@@ -19,7 +19,7 @@ const getAllFiles = (root = '/target') => {
 const translateSeverity = (severity) => {
   switch (severity) {
     case 'Information':
-      return 'info';
+      return 'unknown';
     case 'Warning':
       return 'moderate';
     case 'Critical':
@@ -46,15 +46,28 @@ Array.prototype.groupBy = function (field) {
 const analysis = getAllFiles()
   // Filter out non-javascript files
   .filter(path => lookup(path) === 'application/javascript')
+  // Filter out files without .js extention
+  .filter(path => path.endsWith('.js'))
   // Filter out minified javascript files
   .filter(path => path.indexOf('.min.') === -1)
+  // Filter node_modules
+  .filter(path => path.indexOf('node_modules/') === -1)
   // Read the file's contents
   .map(path => ({
     path: path.replace('/target/', ''),
     file: readFileSync(path).toString('utf-8'),
   }))
   // Pass the file through AST analysis
-  .map(({path, file}) => ({path, analysis: runASTAnalysis(file)}))
+  .map(({path, file}) => {
+    try {
+      return ({path, analysis: runASTAnalysis(file)});
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  })
+  // Filter out files without analysis
+  .filter(file => !!file)
   // Filter out files without warnings
   .filter(({analysis: {warnings}}) => warnings.length > 0)
   // Create exported report
@@ -65,21 +78,12 @@ const analysis = getAllFiles()
     extracts: [{
       path,
       lines: warning.location.map(([line]) => line)
-        .filter((element, index, lines) => lines.indexOf(element) === index)
-        .map(line => `${line}`),
+        .filter((element, index, lines) => lines.indexOf(element) === index),
       language: 'javascript',
     }],
   })))
   // Flatten
   .flat()
-  // Read file to get full code
-  .map(issue => ({
-    ...issue,
-    extracts: issue.extracts?.map(extract => ({
-      ...extract,
-      code: readFileSync(extract.path).toString().split('\n')[extract.lines[0]],
-    })),
-  }))
   // Group the results by title, merging extracts
   .groupBy('title');
 
