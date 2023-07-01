@@ -47,7 +47,7 @@ jobs:
     needs: [ enumerate-scanners ]
     strategy:
       matrix:
-        scanner: ${{ fromJSON(needs.find-scanners.outputs.scanners) }}
+        scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
