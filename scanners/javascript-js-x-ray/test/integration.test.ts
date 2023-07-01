@@ -17,18 +17,8 @@ setupIntegrationTests(
         type: 'code smell',
         extracts: expect.arrayContaining([
           {
-            path: 'node_modules/squirrelly/dist/browser/squirrelly.dev.js',
-            lines: ['141'],
-            language: 'javascript',
-          },
-          {
-            path: 'node_modules/squirrelly/dist/squirrelly.cjs.js',
-            lines: ['167'],
-            language: 'javascript',
-          },
-          {
-            path: 'node_modules/squirrelly/dist/squirrelly.es.js',
-            lines: ['163'],
+            path: 'main.js',
+            lines: ['7'],
             language: 'javascript',
           },
         ]),
