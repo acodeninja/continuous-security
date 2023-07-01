@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 import {Report} from './Report';
 import {Emitter} from './Emitter';
 
-import {CVEResponse} from "../tests/fixtures/CVEResponse";
-import {Github} from "../tests/fixtures/OSVResponse";
+import {CVEResponse} from '../tests/fixtures/CVEResponse';
+import {Github} from '../tests/fixtures/OSVResponse';
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -48,7 +48,7 @@ describe('producing a report', () => {
       description: 'test-issue-description',
       type: 'code smell',
       extracts: [{
-        lines: ['1', '2'],
+        lines: ['5', '7'],
         path: 'scripts/update-cwe.js',
         language: 'javascript',
       }],
@@ -265,11 +265,12 @@ describe('producing a report', () => {
       "extracts": [
         {
           "lines": [
-            "1",
-            "2"
+            "5",
+            "7"
           ],
           "path": "scripts/update-cwe.js",
-          "language": "javascript"
+          "language": "javascript",
+          "code": "3| const {createWriteStream} = require('fs');\\n4| const {get} = require('https');\\n5| const {Parse} = require('unzip-stream');\\n6| const {minifyStream} = require('minify-xml');\\n7| "
         }
       ],
       "references": [
@@ -512,9 +513,13 @@ test-issue-description
 
 The following examples were found in the application.
 
-\`scripts/update-cwe.js\` (starting on line: 1)
+\`scripts/update-cwe.js\` (starting on line: 5)
 \`\`\`javascript
-
+3| const {createWriteStream} = require('fs');
+4| const {get} = require('https');
+5| const {Parse} = require('unzip-stream');
+6| const {minifyStream} = require('minify-xml');
+7| 
 \`\`\`
 
 ##### References

@@ -1,5 +1,6 @@
 import {template, TemplateExecutor} from 'lodash';
 import {basename} from 'path';
+import {readFile} from 'fs/promises';
 import BaseTemplate from './assets/report.template.md';
 import {CVE} from './DataSources/CVE';
 import {CWE} from './DataSources/CWE';
@@ -136,10 +137,10 @@ export class Report {
   async getReport(type: 'markdown' | 'json'): Promise<[string, Buffer]> {
     this.emitter.emit('report:started', `generating output report in ${type}`);
     switch (type) {
-      case 'markdown':
-        return await this.toMarkdown();
-      case 'json':
-        return await this.toJSON();
+    case 'markdown':
+      return await this.toMarkdown();
+    case 'json':
+      return await this.toJSON();
     }
   }
 
@@ -164,6 +165,25 @@ export class Report {
       return {...i, severity: severities[0]};
     });
 
-    return withHighestSeverities;
+    return await Promise.all(withHighestSeverities.map(async issue => {
+      return {
+        ...issue,
+        extracts: issue.extracts ? await Promise.all(issue.extracts.map(async extract => {
+          const code = (await readFile(extract.path)).toString().split('\n');
+          const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
+          const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
+          const lines = new Array(code.slice(start, end).length).fill(null).map((_, i) => start + i + 1);
+
+          return {
+            ...extract,
+            lines: extract.lines.map(line => `${line}`),
+            code: code.slice(start, end).map((l, i) => {
+              const length = lines[lines.length - 1].toString().length;
+              return `${lines[i].toString().padStart(length)}| ${l}`;
+            }).join('\n'),
+          };
+        })) : undefined,
+      };
+    }));
   }
 }
