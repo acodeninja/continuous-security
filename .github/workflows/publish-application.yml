@@ -5,6 +5,7 @@ on:
     paths:
       - application/**
       - .github/workflows/publish-application.yml
+  pull_request:
 
 jobs:
   test:
