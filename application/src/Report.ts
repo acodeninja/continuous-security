@@ -51,17 +51,17 @@ export class Report {
         const slug = ref.toLowerCase();
         this.emitter.emit('report:reference', `fetching details for ${ref}`);
 
-        if (slug.indexOf('cwe') === 0) {
-          expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
-        } else if (slug.indexOf('cve') === 0) {
-          expandedReferences[ref] = await this.cveDataset.getById(ref.toUpperCase());
-        } else {
-          try {
+        try {
+          if (slug.indexOf('cwe') === 0) {
+            expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
+          } else if (slug.indexOf('cve') === 0) {
+            expandedReferences[ref] = await this.cveDataset.getById(ref.toUpperCase());
+          } else {
             expandedReferences[ref] = await this.osvDataset.getById(ref);
-          } catch (e) {
-            this.emitter.emit('report:reference:failure', `Failed to fetch vulnerability reference ${ref}`);
-            referencesToProcess.splice(referencesToProcess.indexOf(ref), 1);
           }
+        } catch (e) {
+          this.emitter.emit('report:reference:failure', `Failed to fetch vulnerability reference ${ref}`);
+          referencesToProcess.splice(referencesToProcess.indexOf(ref), 1);
         }
 
         if (expandedReferences[ref]?.dataSourceSpecific?.osv?.aliases) {
@@ -74,27 +74,9 @@ export class Report {
   }
 
   async toObject(): Promise<ReportOutput> {
-    const issuesWithScanner = this.reports.map(r => r.issues.map(issue => ({
-      ...issue,
-      foundBy: r.scanner,
-    }))).flat();
+    const issues = await this.getIssues();
 
-    const expandedIssues = await Promise.all(issuesWithScanner.map(async (issue) => ({
-      ...issue,
-      references: issue.references ? await this.expandReferences(issue.references) : [],
-    })));
-
-    const issues = expandedIssues.map(i => {
-      const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
-        .concat(i.severity)
-        .filter(s => !!s);
-
-      severities.sort((a, b) => this.severityOrder.indexOf(a) - this.severityOrder.indexOf(b));
-
-      return {...i, severity: severities[0]};
-    });
-
-    const overviewOfIssues = expandedIssues.map(i => i.references).flat()
+    const overviewOfIssues = issues.map(i => i.references).flat()
       .filter(r => !!r.dataSourceSpecific.cwe)
       .filter((r, i, all) => all.map(a => a.label).indexOf(r.label) === i);
 
@@ -154,10 +136,34 @@ export class Report {
   async getReport(type: 'markdown' | 'json'): Promise<[string, Buffer]> {
     this.emitter.emit('report:started', `generating output report in ${type}`);
     switch (type) {
-    case 'markdown':
-      return await this.toMarkdown();
-    case 'json':
-      return await this.toJSON();
+      case 'markdown':
+        return await this.toMarkdown();
+      case 'json':
+        return await this.toJSON();
     }
+  }
+
+  private async getIssues(): Promise<Array<ReportOutputIssue>> {
+    const withFoundBy = this.reports.map(r => r.issues.map(issue => ({
+      ...issue,
+      foundBy: r.scanner,
+    }))).flat();
+
+    const withExpandedReferences = await Promise.all(withFoundBy.map(async (issue) => ({
+      ...issue,
+      references: issue.references ? await this.expandReferences(issue.references) : [],
+    })));
+
+    const withHighestSeverities = withExpandedReferences.map(i => {
+      const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
+        .concat(i.severity)
+        .filter(s => !!s);
+
+      severities.sort((a, b) => this.severityOrder.indexOf(a) - this.severityOrder.indexOf(b));
+
+      return {...i, severity: severities[0]};
+    });
+
+    return withHighestSeverities;
   }
 }
