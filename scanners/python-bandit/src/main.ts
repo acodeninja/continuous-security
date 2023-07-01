@@ -18,12 +18,6 @@ const translateSeverity =
     }
   };
 
-const parseCode = (code: string): string => code
-  .split(/(\\\\n|\\n|\n)/)
-  .map(line => line.split('').slice(2).join(''))
-  .filter(l => !!l)
-  .join('\n');
-
 export default {
   name: packageJson.name,
   version: packageJson.version,
@@ -43,7 +37,6 @@ export default {
           fix: 'unknown',
           severity: translateSeverity(result.issue_severity),
           extracts: [{
-            code: parseCode(result.code),
             lines: result.line_range.map(l => l.toString()),
             path: result.filename.replace('/target/', ''),
             language: 'python',

@@ -71,6 +71,7 @@ The following examples were found in the application.
 <% if (issue.references?.length > 0) { %>##### References
 
 <%= issue.references?.map(r => `[${r.label}](${r.directLink})`).join(' | ') %>
+
 <% } %>
 <% }) %><% }) %>
 

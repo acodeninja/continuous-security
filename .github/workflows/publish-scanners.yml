@@ -2,9 +2,13 @@ name: 'Test and Publish: Scanners'
 
 on:
   push:
+    branches:
+      - main
+      - development
     paths:
       - scanners/**
       - .github/workflows/publish-scanners.yml
+  pull_request:
 
 concurrency:
   group: "scanners"

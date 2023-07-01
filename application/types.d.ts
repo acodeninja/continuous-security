@@ -31,6 +31,7 @@ type ReportOutputIssue = {
   title: string;
   description: string;
   type: 'dependency' | 'code smell';
+  foundBy: string;
   package?: {
     name: string;
     version?: string;

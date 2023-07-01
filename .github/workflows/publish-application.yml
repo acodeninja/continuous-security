@@ -2,9 +2,13 @@ name: 'Test and Publish: Application'
 
 on:
   push:
+    branches:
+      - main
+      - development
     paths:
       - application/**
       - .github/workflows/publish-application.yml
+  pull_request:
 
 jobs:
   test:
