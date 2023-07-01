@@ -1,0 +1,66 @@
+name: prepare release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: The version to tag this release with.
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: bump versions
+        run: |
+          echo "setting application version to ${{ inputs.version }}"
+          cat application/package.json | jq -r '.version = "${{ inputs.version }}"' > application/package.json.tmp
+          mv application/package.json.tmp application/package.json
+          for d in $(ls scanners/); do 
+            [ $d = '_base' ] && continue
+            echo "setting scanner / $d version to ${{ inputs.version }}"
+            cat scanners/$d/package.json | jq -r '.version = "${{ inputs.version }}"' > scanners/$d/package.json.tmp
+            mv scanners/$d/package.json.tmp scanners/$d/package.json
+          done
+
+      - name: update package locks
+        run: |
+          echo "updating application package lock"
+          cd application/
+          npm install
+          cd ..
+          
+          for d in $(ls scanners/); do 
+            [ $d = '_base' ] && continue
+            echo "updating scanner / $d package lock"
+            cd scanners/$d
+            npm install
+            cd ../..
+          done
+
+      - name: commit changes
+        run: |
+          git add \
+            application/package.json application/package-lock.json \
+            scanners/*/package.json scanners/*/package-lock.json
+          git config --global user.name "publisher [bot]"
+          git config --global user.email "publisher@acode.ninja"
+          git commit -m "chore: creating version ${{ inputs.version }}"
+          git push
+
+      - name: create draft release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            
+            await github.rest.repos.createRelease({
+              owner,
+              repo,
+              tag_name: '${{ inputs.version }}',
+              draft: true,
+            });
