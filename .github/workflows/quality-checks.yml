@@ -21,6 +21,7 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
+          cache-dependency-path: application/package-lock.json
       - run: npm ci
         working-directory: application/
       - run: npm audit
@@ -52,6 +53,7 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
+          cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
       - name: install
         run: npm ci
         working-directory: scanners/${{ matrix.scanner }}/
