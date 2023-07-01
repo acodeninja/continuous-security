@@ -52,7 +52,7 @@ jobs:
           cache: npm
           cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
 
-      - name: publish /
+      - name: publish
         working-directory: scanners/${{ matrix.scanner }}/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
