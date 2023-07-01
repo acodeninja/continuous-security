@@ -9,7 +9,7 @@
     "lint": "eslint ./src",
     "update-scanner-types": "cd ../scanners && for d in $(ls); do [ $d != '_base' ] && cd $d && npm run update-types && cd ..; done",
     "update-scanner-list": "scripts/update-scanner-list.js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "cp ../README.md ./README.md && npm run build"
   },
   "keywords": [],
   "author": "Lawrence <lawrence@acode.ninja>",
