@@ -23,19 +23,18 @@ jobs:
             const {owner, repo} = context.repo;
             const pull_number = context.payload.pull_request.number;
             
-            let {draft, title, base: {ref: baseRef}, head: {ref: headRef}} =
-              await github.rest.pulls.get({owner, repo, pull_number});
+            const pr = await github.rest.pulls.get({owner, repo, pull_number});
             
             // Checking you are using the right target.
-            if (baseRef === 'main' && headRef !== 'development') {
-              console.log(`Attempting to merge ${headRef} into main, switching target to development.`);
+            if (pr.base.ref === 'main' && pr.head.ref !== 'development') {
+              console.log(`Attempting to merge ${pr.head.ref} into main, switching target to development.`);
               await github.rest.pulls.update({owner, repo, pull_number, base: 'development'});
-              baseRef = 'development';
+              pr.base.ref = 'development';
             }
             
             // Checking you've given your PR the right name.
-            if (baseRef === 'development') {
-              if (!['feat: ', 'fix: ', 'chore: '].some(t => title.startsWith(t))) {
+            if (pr.base.ref === 'development') {
+              if (!['feat: ', 'fix: ', 'chore: '].some(t => pr.title.startsWith(t))) {
                 throw new Error('Pull request title must start with feat:, fix: or chore:');
               }
             }
