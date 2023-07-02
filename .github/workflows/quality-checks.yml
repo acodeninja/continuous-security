@@ -27,7 +27,6 @@ jobs:
             const pull_number = context.payload.pull_request.number;
             
             const {data: pr} = await github.rest.pulls.get({owner, repo, pull_number});
-            console.log(JSON.stringify([{owner, repo, pull_number}, pr], null, 2));
             
             // Checking you are using the right target.
             if (pr.base.ref === 'main' && pr.head.ref !== 'development') {
