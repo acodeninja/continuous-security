@@ -442,6 +442,7 @@ To gain a better understanding of the severity levels please see [the appendix](
 
 ## Overview of Issues
 
+<a id="CWE-248"></a>
 ### Uncaught Exception
 
 An exception is thrown from a function, but it is not caught.
@@ -462,6 +463,7 @@ Using a vulnerability of this type an attacker may be able to affect the system 
 
 For more information see [CWE-248](https://cwe.mitre.org/data/definitions/248.html).
 
+<a id="CWE-1004"></a>
 ### Sensitive Cookie Without 'HttpOnly' Flag
 
 The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.
@@ -500,7 +502,7 @@ test-issue-description
 
 ##### References
 
-[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
+[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
 
 #### test-issue-title 
@@ -524,7 +526,7 @@ The following examples were found in the application.
 
 ##### References
 
-[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
+[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
 
 ### Unknown Severity
@@ -538,7 +540,7 @@ test-issue-description
 
 ##### References
 
-[CWE-248](https://cwe.mitre.org/data/definitions/248.html)
+[CWE-248](#CWE-248)
 
 
 
