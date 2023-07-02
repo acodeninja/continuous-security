@@ -27,6 +27,7 @@ To gain a better understanding of the severity levels please see [the appendix](
 
 ## Overview of Issues
 <% overviewOfIssues.forEach(o => { %>
+<a id="<%= o.label %>"></a>
 ### <%= o.title %>
 
 <% if (o.description) { %><%= o.description %>
@@ -70,7 +71,7 @@ The following examples were found in the application.
 <% }) %><% } %>
 <% if (issue.references?.length > 0) { %>##### References
 
-<%= issue.references?.map(r => `[${r.label}](${r.directLink})`).join(' | ') %>
+<%= issue.references?.map(r => r.label.startsWith('CWE') ? `[${r.label}](#${r.label})` : `[${r.label}](${r.directLink})`).join(' | ') %>
 
 <% } %>
 <% }) %><% }) %>
