@@ -23,7 +23,7 @@ jobs:
             const {owner, repo} = context.repo;
             const pull_number = context.payload.pull_request.number;
             
-            const pr = await github.rest.pulls.get({owner, repo, pull_number});
+            const {data: pr} = await github.rest.pulls.get({owner, repo, pull_number});
             console.log(JSON.stringify([{owner, repo, pull_number}, pr], null, 2));
             
             // Checking you are using the right target.
