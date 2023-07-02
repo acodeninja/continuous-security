@@ -24,7 +24,7 @@ jobs:
             const pull_number = context.payload.pull_request.number;
             
             let {draft, title, base: {ref: baseRef}, head: {ref: headRef}} =
-              await octokit.rest.pulls.get({owner, repo, pull_number});
+              await github.rest.pulls.get({owner, repo, pull_number});
             
             // Checking you are using the right target.
             if (baseRef === 'main' && headRef !== 'development') {
