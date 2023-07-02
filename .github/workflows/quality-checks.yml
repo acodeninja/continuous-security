@@ -41,6 +41,12 @@ jobs:
                 throw new Error('Pull request title must start with feat:, fix: or chore:');
               }
             }
+            
+            if (pr.base.ref === 'main') {
+              if (!pr.title.match(/^Release [0-9]+\.[0-9]+\.[0-9]+$/)) {
+                throw new Error('Pull requests targeting main must have a title "Release x.x.x"');
+              }
+            }
 
   application:
     runs-on: ubuntu-latest
