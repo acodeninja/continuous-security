@@ -12,6 +12,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  pull-request:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: check and correct pull request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const pull_number = context.payload.pull_request.number;
+            
+            let {draft, title, base: {ref: baseRef}, head: {ref: headRef}} =
+              await octokit.rest.pulls.get({owner, repo, pull_number});
+            
+            // Checking you are using the right target.
+            if (baseRef === 'main' && headRef !== 'development') {
+              console.log(`Attempting to merge ${headRef} into main, switching target to development.`);
+              await github.rest.pulls.update({owner, repo, pull_number, base: 'development'});
+              baseRef = 'development';
+            }
+            
+            // Checking you've given your PR the right name.
+            if (baseRef === 'development') {
+              if (!['feat: ', 'fix: ', 'chore: '].some(t => title.startsWith(t))) {
+                throw new Error('Pull request title must start with feat:, fix: or chore:');
+              }
+            }
+
   application:
     runs-on: ubuntu-latest
     steps:
