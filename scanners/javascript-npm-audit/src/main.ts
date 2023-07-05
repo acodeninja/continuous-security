@@ -18,15 +18,23 @@ export default {
         scanner: packageJson.name,
         issues: Object.entries(report.vulnerabilities)
           .map(([name, {via, fixAvailable}]) =>
-            via.map((v): ScanReport['issues'][0] => ({
-              title: `Vulnerable Third-Party Library \`${v.dependency}\``,
-              description: v.title,
-              type: 'dependency',
-              package: {name},
-              references: v.cwe.concat([v.url.split('/')[4]]),
-              severity: v.severity,
-              fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'No known fix',
-            })),
-          ).flat(),
+            via.map((v): ScanReport['issues'][0] | undefined => {
+              if (typeof v === 'string') return undefined;
+
+              const references: Array<string> = [].concat(v.cwe);
+              const ghsa = v.url.match(/GHSA-\S+$/);
+              if (ghsa) references.push(ghsa[0]);
+
+              return {
+                title: `Vulnerable Third-Party Library \`${v.dependency}\``,
+                description: v.title,
+                type: 'dependency',
+                package: {name},
+                references,
+                severity: v.severity,
+                fix: fixAvailable ? `Upgrade to version above ${v.range}` : 'No known fix',
+              };
+            }),
+          ).flat().filter(i => i !== undefined),
       })),
 } as Scanner;

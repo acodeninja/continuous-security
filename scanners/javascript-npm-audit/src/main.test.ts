@@ -46,7 +46,7 @@ describe('javascript-npm-audit scanner', () => {
       );
     });
 
-    test('returns an expected issue', () => {
+    test('returns the expected issues', () => {
       expect(report).toHaveProperty('issues', expect.arrayContaining([{
         title: 'Vulnerable Third-Party Library `squirrelly`',
         description: 'Insecure template handling in Squirrelly',
@@ -55,6 +55,16 @@ describe('javascript-npm-audit scanner', () => {
         references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
         severity: 'high',
         fix: 'No known fix',
+      }]));
+
+      expect(report).toHaveProperty('issues', expect.arrayContaining([{
+        title: 'Vulnerable Third-Party Library `semver`',
+        description: 'semver vulnerable to Regular Expression Denial of Service',
+        type: 'dependency',
+        package: {name: 'semver'},
+        references: ['CWE-1333', 'GHSA-c2qf-rxjj-qqgw'],
+        severity: 'moderate',
+        fix: 'Upgrade to version above <7.5.2',
       }]));
     });
 
