@@ -11,6 +11,7 @@ export const setupIntegrationTests = (
   process,
   exampleCodebase,
   reportFormat,
+  configuration: Record<string, string> = {},
   outputReportFile = 'report.json',
 ) => {
   jest.setTimeout(60 * 1000);
@@ -45,13 +46,18 @@ export const setupIntegrationTests = (
 
       temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
 
+      const runCommand = [
+        'docker run',
+        `-v ${resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)}:/target`,
+        `-v ${temporaryDirectory}:/output`,
+      ];
+
+      Object.entries(configuration).forEach(([name, value]) => {
+        runCommand.push(`--env "CONFIG_${name.toUpperCase()}=${value}"`);
+      });
+
       await promisify(exec)(
-        [
-          'docker run',
-          `-v ${resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)}:/target`,
-          `-v ${temporaryDirectory}:/output`,
-          `integration-test-${scanner.slug}`,
-        ].join(' '),
+        runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
         {cwd: resolve(process.cwd())},
       );
     });
