@@ -1,4 +1,4 @@
-import {exec} from 'child_process';
+import {exec, spawn} from 'child_process';
 import {resolve} from 'path';
 import {promisify} from 'util';
 import {mkdtemp, readdir} from 'fs/promises';
@@ -15,15 +15,35 @@ export const setupIntegrationTests = (
   outputReportFile = 'report.json',
 ) => {
   jest.setTimeout(60 * 1000);
+  const runningCommands = [];
 
   beforeAll(async () => {
     const installCommands = {nodejs: 'npm ci'};
+    const runCommands = {
+      nodejs: {
+        command: 'node',
+        args: ['app.js'],
+      },
+    };
 
     if (installCommands[exampleCodebase])
       await promisify(exec)(
         installCommands[exampleCodebase],
         {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
       );
+
+    if (runCommands[exampleCodebase]) {
+      const runningCommand = spawn(
+        runCommands[exampleCodebase].command,
+        runCommands[exampleCodebase].args,
+        {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
+      );
+      runningCommands.push(runningCommand);
+    }
+  });
+
+  afterAll(async () => {
+    runningCommands.forEach(c => c.kill());
   });
 
   describe('building the docker image', () => {
