@@ -50,13 +50,11 @@ export const setupIntegrationTests = (
     test('successfully builds the image', async () => {
       const matchingString = `docker.io/library/integration-test-${scanner.slug} (\\d+\\.\\d+s )?done`;
 
-      const { stdout, stderr } = await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
+      await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
         cwd: resolve(process.cwd(), 'src', 'assets'),
       })).resolves.toEqual(expect.objectContaining({
         stderr: expect.stringMatching(new RegExp(matchingString)),
       }));
-
-      console.log(stdout, stderr);
     });
   });
 
@@ -64,9 +62,11 @@ export const setupIntegrationTests = (
     let temporaryDirectory;
 
     beforeAll(async () => {
-      await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
-        cwd: resolve(process.cwd(), 'src', 'assets'),
-      });
+      console.log(
+        await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
+          cwd: resolve(process.cwd(), 'src', 'assets'),
+        })
+      );
 
       temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
 
@@ -80,12 +80,12 @@ export const setupIntegrationTests = (
         runCommand.push(`--env "CONFIG_${name.toUpperCase()}=${value}"`);
       });
 
-      const { stdout, stderr } = await promisify(exec)(
-        runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
-        {cwd: resolve(process.cwd())},
+      console.log(
+        await promisify(exec)(
+          runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
+          {cwd: resolve(process.cwd())},
+        )
       );
-
-      console.log(stdout, stderr);
     });
 
     afterAll(async () => {
