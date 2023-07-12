@@ -12,6 +12,7 @@ export class CWEDoesNotExist extends Error {
 
 export class CWE {
   private data = (new DOMParser({
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     errorHandler: (level: string, msg: any) => {
       return {};
     },

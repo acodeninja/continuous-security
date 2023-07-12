@@ -3,15 +3,19 @@ type Scanner = {
   slug: string;
   version: string;
   buildConfiguration: ScannerBuildConfiguration;
-  validate?: (configuration: ScannerConfiguration) => Promise<void>;
+  runConfiguration?: Record<string, {
+    required?: boolean;
+  }>;
   report: (location: string) => Promise<ScanReport>;
 }
 
 type ScannerConfiguration = {
   name: string;
+  with?: Record<string, string>;
 }
 
 type ScannerRunConfiguration = {
+  configuration: Record<string, string>;
   imageHash: string;
   host: {
     target: string;

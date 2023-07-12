@@ -39,7 +39,7 @@ describe('producing a report', () => {
       fix: 'Unknown',
       severity: 'unknown',
     }],
-    scanner: 'test-scanner'
+    scanner: 'test-scanner',
   });
 
   report.addScanReport({
@@ -56,7 +56,7 @@ describe('producing a report', () => {
       fix: 'Unknown',
       severity: 'unknown',
     }],
-    scanner: 'test-scanner'
+    scanner: 'test-scanner',
   });
 
   report.addScanReport({
@@ -68,7 +68,7 @@ describe('producing a report', () => {
       fix: 'Unknown',
       severity: 'unknown',
     }],
-    scanner: 'test-scanner'
+    scanner: 'test-scanner',
   });
 
   describe('in json', () => {

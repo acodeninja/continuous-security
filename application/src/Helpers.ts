@@ -55,6 +55,8 @@ export const runImage = async (runConfiguration: ScannerRunConfiguration) => {
       Binds: binds,
       NetworkMode: 'host',
     },
+    Env: Object.entries(runConfiguration.configuration || {})
+      .map(([name, value]) => `CONFIG_${name.toUpperCase()}=${value}`),
   });
 };
 export const isURL = (input: unknown): input is URL => {
@@ -69,7 +71,10 @@ export const isURL = (input: unknown): input is URL => {
 
 export const makeTemporaryFolder = async (prefix = '') => await mkdtemp(join(tmpdir(), prefix));
 
-export const destroyTemporaryFolder = async (location: string) => await rm(location, {recursive: true, force: true});
+export const destroyTemporaryFolder = async (location: string) => await rm(location, {
+  recursive: true,
+  force: true,
+});
 
 export const loadScannerModule = async (name: string) => {
   const {stdout} = await promisify(exec)('npm root -g', {cwd: process.cwd()});

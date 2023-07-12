@@ -10,17 +10,17 @@ setupIntegrationTests(
     scanner: '@continuous-security/scanner-javascript-njsscan',
     issues: [
       {
-        title: "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
-        description: "Untrusted User Input in Response will result in Reflected Cross Site Scripting Vulnerability.",
-        fix: "Unknown",
-        references: ["CWE-79"],
-        severity: "unknown",
-        type: "code smell",
+        title: 'Improper Neutralization of Input During Web Page Generation (\'Cross-site Scripting\')',
+        description: 'Untrusted User Input in Response will result in Reflected Cross Site Scripting Vulnerability.',
+        fix: 'Unknown',
+        references: ['CWE-79'],
+        severity: 'unknown',
+        type: 'code smell',
         extracts: [
           {
-            language: "javascript",
-            lines: ["6", "6"],
-            path: "app.js",
+            language: 'javascript',
+            lines: ['6', '6'],
+            path: 'app.js',
           },
         ],
       },

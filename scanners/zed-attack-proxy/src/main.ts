@@ -51,6 +51,9 @@ export default {
   version: packageJson.version,
   slug: 'zed-attack-proxy',
   buildConfiguration: {files: {Dockerfile, 'scan.sh': Scan, 'zap.yml': ZapYAML}},
+  runConfiguration: {
+    target: {required: true},
+  },
   report: async (location): Promise<ScanReport> =>
     readFile(resolve(location, 'report.json'))
       .then((content: Buffer) => content.toString('utf-8'))

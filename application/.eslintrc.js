@@ -18,21 +18,33 @@ module.exports = {
     '@typescript-eslint'
   ],
   'rules': {
-    'indent': [
+    indent: [
       'error',
-      2
+      2,
     ],
     'linebreak-style': [
       'error',
-      'unix'
+      'unix',
     ],
-    'quotes': [
+    quotes: [
       'error',
-      'single'
+      'single',
     ],
-    'semi': [
+    semi: [
       'error',
-      'always'
-    ]
+      'always',
+    ],
+    'comma-dangle': [
+      'error',
+      'always-multiline',
+    ],
+    'quote-props': [
+      "error",
+      "as-needed",
+    ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {varsIgnorePattern: '^_'},
+    ],
   }
 };

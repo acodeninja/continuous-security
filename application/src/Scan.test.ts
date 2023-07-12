@@ -1,10 +1,10 @@
-import {Scan} from './Scan';
+import {Scan, ValidationError} from './Scan';
 import {Emitter} from './Emitter';
 import {
   buildImage,
   makeTemporaryFolder,
   destroyTemporaryFolder,
-  runImage
+  runImage,
 } from './Helpers';
 import {resolve} from 'path';
 
@@ -30,10 +30,7 @@ const scanner: Scanner = {
       'scan.sh': scanSh,
     },
   },
-  validate: jest.fn(),
-  report: jest.fn().mockResolvedValue({
-
-  }),
+  report: jest.fn().mockResolvedValue({}),
 };
 
 jest.mock('./Helpers', () => ({
@@ -80,10 +77,6 @@ describe('Scan', () => {
       expect(setupStarted).toHaveBeenCalledWith(scan.scanner.name);
     });
 
-    test('validates the scan configuration', () => {
-      expect(scanner.validate).toHaveBeenCalledWith(configuration);
-    });
-
     test('calls buildImage with the buildConfiguration', () => {
       expect(buildImage).toHaveBeenCalledWith(scanner.buildConfiguration);
     });
@@ -94,6 +87,33 @@ describe('Scan', () => {
 
     test('emits the scanner:setup:finished event', () => {
       expect(setupFinished).toHaveBeenCalledWith(scan.scanner.name);
+    });
+
+    describe('with an invalid configuration', () => {
+      let error;
+      const emitter = new Emitter();
+      const setupErrored = jest.fn();
+      const scan = new Scan(emitter, {
+        ...scanner,
+        runConfiguration: {
+          test: {
+            required: true,
+          },
+        },
+      }, configuration);
+      emitter.on('scanner:setup:error', setupErrored);
+
+      beforeAll(async () => {
+        await scan.setup().catch(e => error = e);
+      });
+
+      test('emits the scanner:setup:error event', () => {
+        expect(setupErrored).toHaveBeenCalledWith('@continuous-security/scanner-npm-audit', 'Property with.test is required');
+      });
+
+      test('raises an error', () => {
+        expect(error).toEqual(new ValidationError('Property with.test is required'));
+      });
     });
   });
 

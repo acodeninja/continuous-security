@@ -51,7 +51,7 @@ export class Orchestrator {
         .then(s => {
           this.report.addScanReport(s.report);
           this.emitter.emit('scanner:report:collected', s.scanner.name);
-        })
+        }),
       ),
     ).then(() => {
       this.emitter.emit('scan:finished', '');

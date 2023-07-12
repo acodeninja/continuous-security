@@ -1,5 +1,9 @@
 import {buildImage, makeTemporaryFolder, destroyTemporaryFolder, runImage} from './Helpers';
 
+export class ValidationError extends Error {
+
+}
+
 export class Scan {
   private readonly configuration: ScannerConfiguration;
   private readonly emitter: EventEmitter;
@@ -17,7 +21,16 @@ export class Scan {
   async setup() {
     this.emitter.emit('scanner:setup:started', this.scanner.name);
 
-    if (this.scanner.validate) await this.scanner.validate(this.configuration);
+    if (this.scanner.runConfiguration) {
+      Object.entries(this.scanner.runConfiguration).forEach(([name, validation]) => {
+        if (validation.required) {
+          if (!this.configuration?.with?.[name]) {
+            this.emitter.emit('scanner:setup:error', this.scanner.name, `Property with.${name} is required`);
+            throw new ValidationError(`Property with.${name} is required`);
+          }
+        }
+      });
+    }
 
     this.imageHash = await buildImage(this.scanner.buildConfiguration);
     this.output = await makeTemporaryFolder(`${this.scanner.slug}-`);
@@ -36,6 +49,7 @@ export class Scan {
     if (!this.output) throw new Error('output directory not found');
 
     await runImage({
+      configuration: this.configuration.with,
       imageHash: this.imageHash,
       host: {
         output: this.output,
