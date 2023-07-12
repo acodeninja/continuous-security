@@ -105,5 +105,10 @@ jobs:
         run: npm test
         working-directory: scanners/${{ matrix.scanner }}/
       - name: integration test
-        run: npm run test:integration --if-present
+        run: |
+          # Handle internal network addresses
+          export BRIDGE_NETWORK_ID=$(docker network ls --filter "driver=bridge" --format '{{ .ID }}')
+          export BRIDGE_HOST_IP=$(docker network inspect --format '{{range .IPAM.Config}}{{.Gateway}}{{end}}' $BRIDGE_NETWORK_ID)
+          
+          npm run test:integration --if-present
         working-directory: scanners/${{ matrix.scanner }}/

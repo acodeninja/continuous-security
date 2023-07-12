@@ -1,6 +1,9 @@
 import scanner from '../src/main';
 import {setupIntegrationTests} from '../../_base/test/integration';
 
+const targetHost = process.env.BRIDGE_HOST_IP ?? '172.17.0.1';
+const targetUrl = `http://${targetHost}:3000`;
+
 setupIntegrationTests(
   {afterAll, beforeAll, describe, expect, jest, test},
   scanner,
@@ -17,11 +20,11 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: [{
         request: {
-          target: 'http://172.17.0.1:3000',
+          target: `${targetUrl}`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -40,13 +43,13 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/?words=ZAP',
+          target: `${targetUrl}/?words=ZAP`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
-            referer: 'http://172.17.0.1:3000',
+            referer: `${targetUrl}`,
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
         },
@@ -72,11 +75,11 @@ setupIntegrationTests(
       severity: 'low',
       requests: [{
         request: {
-          target: 'http://172.17.0.1:3000',
+          target: `${targetUrl}`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -95,13 +98,13 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/?words=ZAP',
+          target: `${targetUrl}/?words=ZAP`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
-            referer: 'http://172.17.0.1:3000',
+            referer: `${targetUrl}`,
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
         },
@@ -127,11 +130,11 @@ setupIntegrationTests(
       severity: 'low',
       requests: [{
         request: {
-          target: 'http://172.17.0.1:3000',
+          target: `${targetUrl}`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -150,13 +153,13 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/?words=ZAP',
+          target: `${targetUrl}/?words=ZAP`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
-            referer: 'http://172.17.0.1:3000',
+            referer: `${targetUrl}`,
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
         },
@@ -174,11 +177,11 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/robots.txt',
+          target: `${targetUrl}/robots.txt`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -198,11 +201,11 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/sitemap.xml',
+          target: `${targetUrl}/sitemap.xml`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -230,11 +233,11 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: [{
         request: {
-          target: 'http://172.17.0.1:3000',
+          target: `${targetUrl}`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -253,13 +256,13 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/?words=ZAP',
+          target: `${targetUrl}/?words=ZAP`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
-            referer: 'http://172.17.0.1:3000',
+            referer: `${targetUrl}`,
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
         },
@@ -285,11 +288,11 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: [{
         request: {
-          target: 'http://172.17.0.1:3000/robots.txt',
+          target: `${targetUrl}/robots.txt`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -309,11 +312,11 @@ setupIntegrationTests(
         },
       }, {
         request: {
-          target: 'http://172.17.0.1:3000/sitemap.xml',
+          target: `${targetUrl}/sitemap.xml`,
           method: 'GET',
           headers: {
             'cache-control': 'no-cache',
-            host: '172.17.0.1:3000',
+            host: `${targetHost}:3000`,
             pragma: 'no-cache',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
@@ -334,7 +337,5 @@ setupIntegrationTests(
       }],
     }],
   },
-  {
-    target: 'http://172.17.0.1:3000',
-  },
+  {target: targetUrl},
 );

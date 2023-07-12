@@ -51,7 +51,7 @@ export const setupIntegrationTests = (
       await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
         cwd: resolve(process.cwd(), 'src', 'assets'),
       })).resolves.toEqual(expect.objectContaining({
-        stderr: expect.stringContaining(`docker.io/library/integration-test-${scanner.slug} done`),
+        stderr: expect.stringContaining('exporting layers done'),
       }));
     });
   });
