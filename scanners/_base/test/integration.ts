@@ -48,10 +48,12 @@ export const setupIntegrationTests = (
 
   describe('building the docker image', () => {
     test('successfully builds the image', async () => {
+      const matchingString = `docker.io/library/integration-test-${scanner.slug} (\\d+\\.\\d+s )?done`;
+
       await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
         cwd: resolve(process.cwd(), 'src', 'assets'),
       })).resolves.toEqual(expect.objectContaining({
-        stderr: expect.stringContaining('exporting layers done'),
+        stderr: expect.stringMatching(new RegExp(matchingString)),
       }));
     });
   });
