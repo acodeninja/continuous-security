@@ -69,7 +69,7 @@ export const setupIntegrationTests = (
       temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
 
       const runCommand = [
-        'docker run --rm',
+        'docker run --rm --network host',
         `-v ${resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)}:/target`,
         `-v ${temporaryDirectory}:/output`,
       ];
