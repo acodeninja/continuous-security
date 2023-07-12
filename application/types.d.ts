@@ -30,7 +30,7 @@ type ReportOutput = {
 type ReportOutputIssue = {
   title: string;
   description: string;
-  type: 'dependency' | 'code smell';
+  type: 'dependency' | 'code smell' | 'web request';
   foundBy: string;
   package?: {
     name: string;
