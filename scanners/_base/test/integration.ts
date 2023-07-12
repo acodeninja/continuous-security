@@ -67,7 +67,7 @@ export const setupIntegrationTests = (
       temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
 
       const runCommand = [
-        'docker run',
+        'docker run --rm',
         `-v ${resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)}:/target`,
         `-v ${temporaryDirectory}:/output`,
       ];
@@ -103,8 +103,6 @@ export const setupIntegrationTests = (
       `grep "integration-test-${scanner.slug}"`,
       "cut -d' ' -f2",
     ].join(' | '));
-
-    await promisify(exec)(`docker rm ${containers.split('\n').join(' ')}`);
 
     const {stdout: images} = await promisify(exec)([
       'docker images --format="{{.Repository}} {{.ID}}"',
