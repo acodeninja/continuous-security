@@ -6,7 +6,7 @@ export class ConfigurationLoadError extends Error {
   override message = 'Failed to load configuration file: ';
   constructor(message) {
     super();
-    this.message += message
+    this.message += message;
   }
 }
 
