@@ -29,7 +29,7 @@ type ScannerBuildConfiguration = {
 type ScanReportIssue = {
   title: string;
   description: string;
-  type: 'dependency' | 'code smell';
+  type: 'dependency' | 'code smell' | 'web request';
   package?: {
     name: string;
     version?: string;
@@ -41,6 +41,17 @@ type ScanReportIssue = {
     lines: Array<string>;
     path: string;
     language?: string;
+  }>;
+  requests?: Array<{
+    request: {
+      target: string;
+      method: string;
+      headers: Record<string, string>;
+    };
+    response: {
+      statusCode: number;
+      headers: Record<string, string>;
+    };
   }>;
 }
 
