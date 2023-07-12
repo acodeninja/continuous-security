@@ -50,11 +50,13 @@ export const setupIntegrationTests = (
     test('successfully builds the image', async () => {
       const matchingString = `docker.io/library/integration-test-${scanner.slug} (\\d+\\.\\d+s )?done`;
 
-      await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
+      const { stdout, stderr } = await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
         cwd: resolve(process.cwd(), 'src', 'assets'),
       })).resolves.toEqual(expect.objectContaining({
         stderr: expect.stringMatching(new RegExp(matchingString)),
       }));
+
+      console.log(stdout, stderr);
     });
   });
 
