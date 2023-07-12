@@ -78,10 +78,12 @@ export const setupIntegrationTests = (
         runCommand.push(`--env "CONFIG_${name.toUpperCase()}=${value}"`);
       });
 
-      await promisify(exec)(
+      const { stdout, stderr } = await promisify(exec)(
         runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
         {cwd: resolve(process.cwd())},
       );
+
+      console.log(stdout, stderr);
     });
 
     afterAll(async () => {
