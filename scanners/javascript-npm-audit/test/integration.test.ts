@@ -11,7 +11,16 @@ setupIntegrationTests(
     issues: [
       {
         description: 'semver vulnerable to Regular Expression Denial of Service',
-        fix: 'Upgrade to version above <7.5.2',
+        fix: 'Upgrade to version above <5.7.2',
+        package: {name: 'semver'},
+        references: ['CWE-1333', 'GHSA-c2qf-rxjj-qqgw'],
+        severity: 'moderate',
+        title: 'Vulnerable Third-Party Library `semver`',
+        type: 'dependency',
+      },
+      {
+        description: 'semver vulnerable to Regular Expression Denial of Service',
+        fix: 'Upgrade to version above >=6.0.0 <6.3.1',
         package: {name: 'semver'},
         references: ['CWE-1333', 'GHSA-c2qf-rxjj-qqgw'],
         severity: 'moderate',
