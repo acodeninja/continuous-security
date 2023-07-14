@@ -62,11 +62,9 @@ export const setupIntegrationTests = (
     let temporaryDirectory;
 
     beforeAll(async () => {
-      console.log(
-        await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
-          cwd: resolve(process.cwd(), 'src', 'assets'),
-        })
-      );
+      await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
+        cwd: resolve(process.cwd(), 'src', 'assets'),
+      });
 
       temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
 
@@ -82,11 +80,9 @@ export const setupIntegrationTests = (
         runCommand.push(`--env "CONFIG_${name.toUpperCase()}=${value}"`);
       });
 
-      console.log(
-        await promisify(exec)(
-          runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
-          {cwd: resolve(process.cwd())},
-        )
+      await promisify(exec)(
+        runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
+        {cwd: resolve(process.cwd())},
       );
     });
 
