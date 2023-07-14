@@ -7,11 +7,12 @@ readdir(resolve(process.cwd(), '..', 'scanners'))
   .then(l => l.filter(i => i !== '_base'))
   .then(l => Promise.all(l.map(async (name) => {
     const path = resolve(process.cwd(), '..', 'scanners', name, 'package.json');
-    const {description} = require(path);
+    const {description, continuousSecurityScanner} = require(path);
 
     return {
       name,
       description,
+      runConfiguration: continuousSecurityScanner?.runConfiguration,
       package: `@continuous-security/${name}`,
     };
   })))
