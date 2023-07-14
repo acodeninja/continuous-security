@@ -1,7 +1,7 @@
 import {exec, spawn} from 'child_process';
 import {resolve} from 'path';
 import {promisify} from 'util';
-import {mkdtemp, readdir} from 'fs/promises';
+import {chmod, mkdtemp, readdir} from 'fs/promises';
 import {join} from 'path';
 import {tmpdir} from 'os';
 
@@ -69,6 +69,8 @@ export const setupIntegrationTests = (
       );
 
       temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
+
+      await chmod(temporaryDirectory, 0o777);
 
       const runCommand = [
         'docker run --rm --network host',
