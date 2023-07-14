@@ -66,6 +66,8 @@ jobs:
         working-directory: application/
       - run: npm test
         working-directory: application/
+      - run: npm run build
+        working-directory: application/
 
   enumerate-scanners:
     name: scanner / enumerate
@@ -111,4 +113,6 @@ jobs:
           export BRIDGE_HOST_IP=$(docker network inspect --format '{{range .IPAM.Config}}{{.Gateway}}{{end}}' $BRIDGE_NETWORK_ID)
           
           npm run test:integration --if-present
+        working-directory: scanners/${{ matrix.scanner }}/
+      - run: npm run build
         working-directory: scanners/${{ matrix.scanner }}/
