@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 const {createWriteStream} = require('fs');
 const {get} = require('https');
 const {Parse} = require('unzip-stream');
 const {minifyStream} = require('minify-xml');
+/* eslint-enable */
 
 const url = 'https://cwe.mitre.org/data/xml/cwec_latest.xml.zip';
 new Promise((resolve, reject) => {

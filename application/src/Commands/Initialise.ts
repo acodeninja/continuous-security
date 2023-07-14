@@ -31,18 +31,27 @@ export const InitialiseCommand = (program: Command) => {
         choices,
       });
 
-      if (!chosenScanners || chosenScanners.length === 0) throw new InvalidArgumentError('To initialise a project, you must select at least one scanner.');
+      if (!chosenScanners || chosenScanners.length === 0) {
+        throw new InvalidArgumentError(
+          'To initialise a project, you must select at least one scanner.',
+        );
+      }
 
-      const configurationNeeded = chosenScanners.map(s => availableScanners.scanners.find(e => e.name === s))
+      const configurationNeeded = chosenScanners
+        .map(s => availableScanners.scanners.find(e => e.name === s))
         .filter(s => s.runConfiguration);
 
-      console.log(`The following scanners require additional configuration ${configurationNeeded.map(s => s.name)}`);
+      console.log('The following scanners require additional configuration' +
+        `${configurationNeeded.map(s => s.name)}`);
 
-      const configuration: ConfigurationFile = {scanners: chosenScanners.map(a => `@continuous-security/scanner-${a}`)};
+      const configuration: ConfigurationFile = {
+        scanners: chosenScanners.map(a => `@continuous-security/scanner-${a}`),
+      };
 
       for (const c of configurationNeeded) {
         console.log(`Configuring ${c.name}`);
-        const configIndex = configuration.scanners.findIndex(s => s === `@continuous-security/scanner-${c.name}`);
+        const configIndex = configuration.scanners
+          .findIndex(s => s === `@continuous-security/scanner-${c.name}`);
 
         configuration.scanners[configIndex] = {
           name: `@continuous-security/scanner-${c.name}`,
@@ -50,7 +59,8 @@ export const InitialiseCommand = (program: Command) => {
         };
 
         for (const [propName, _propInfo] of Object.entries(c.runConfiguration)) {
-          (configuration.scanners[configIndex] as ScannerConfiguration).with[propName] = await input({message: `Enter value for ${propName}`});
+          (configuration.scanners[configIndex] as ScannerConfiguration).with[propName] =
+            await input({message: `Enter value for ${propName}`});
         }
       }
 

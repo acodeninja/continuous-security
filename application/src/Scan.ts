@@ -25,7 +25,11 @@ export class Scan {
       Object.entries(this.scanner.runConfiguration).forEach(([name, validation]) => {
         if (validation.required) {
           if (!this.configuration?.with?.[name]) {
-            this.emitter.emit('scanner:setup:error', this.scanner.name, `Property with.${name} is required`);
+            this.emitter.emit(
+              'scanner:setup:error',
+              this.scanner.name,
+              `Property with.${name} is required`,
+            );
             throw new ValidationError(`Property with.${name} is required`);
           }
         }
@@ -35,7 +39,9 @@ export class Scan {
     this.imageHash = await buildImage(this.scanner.buildConfiguration);
     this.output = await makeTemporaryFolder(`${this.scanner.slug}-`);
 
-    if (process.env.DEBUG) this.emitter.emit('debug', `${this.scanner.name} output at ${this.output}`);
+    if (process.env.DEBUG) {
+      this.emitter.emit('debug', `${this.scanner.name} output at ${this.output}`);
+    }
 
     this.emitter.emit('scanner:setup:finished', this.scanner.name);
 

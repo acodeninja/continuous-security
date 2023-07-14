@@ -54,7 +54,9 @@ describe('Configuration', () => {
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(JSONConfigurationWithExtraConfig));
+          (readFile as jest.Mock).mockResolvedValueOnce(
+            Buffer.from(JSONConfigurationWithExtraConfig),
+          );
 
           configuration = await Configuration.load('/test');
         });
@@ -114,7 +116,9 @@ describe('Configuration', () => {
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(YAMLConfigurationWithExtraConfig));
+          (readFile as jest.Mock).mockResolvedValueOnce(
+            Buffer.from(YAMLConfigurationWithExtraConfig),
+          );
 
           configuration = await Configuration.load('/test');
         });

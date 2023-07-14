@@ -5,12 +5,13 @@ import {loadScannerModule} from './Helpers';
 import {TestScanner} from '../tests/fixtures/Scanner';
 import {JSONConfiguration} from '../tests/fixtures/Configuration';
 import {TestScanExpectation} from '../tests/fixtures/Scan';
+import {NpmAuditReport} from '../tests/fixtures/NpmAuditReport';
 
 jest.mock('fs/promises', () => ({
   access: jest.fn().mockResolvedValue(null),
   readFile: jest.fn().mockImplementation((file: string) => {
     if (file.indexOf('report') !== -1) {
-      return '{"auditReportVersion":2,"vulnerabilities":{"squirrelly":{"name":"squirrelly","severity":"high","isDirect":true,"via":[{"source":1086152,"name":"squirrelly","dependency":"squirrelly","title":"Insecure template handling in Squirrelly","url":"https://github.com/advisories/GHSA-q8j6-pwqx-pm96","severity":"high","cwe":["CWE-200"],"cvss":{"score":8,"vectorString":"CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:H/A:N"},"range":"<=8.0.8"}],"effects":[],"range":"*","nodes":["node_modules/squirrelly"],"fixAvailable":false}},"metadata":{"vulnerabilities":{"info":0,"low":0,"moderate":0,"high":1,"critical":0,"total":1},"dependencies":{"prod":2,"dev":0,"optional":0,"peer":0,"peerOptional":0,"total":1}}}';
+      return NpmAuditReport;
     }
     return JSONConfiguration;
   }),
@@ -64,7 +65,9 @@ describe('Orchestrator', () => {
     });
 
     test('installs scanner modules', () => {
-      expect(exec).toHaveBeenCalledWith('npm install -g test-scanner', {cwd: process.cwd()}, expect.any(Function));
+      expect(exec).toHaveBeenCalledWith('npm install -g test-scanner', {
+        cwd: process.cwd(),
+      }, expect.any(Function));
       expect(scannerInstalled).toHaveBeenCalledWith('test-scanner');
     });
 
@@ -80,7 +83,10 @@ describe('Orchestrator', () => {
 
     test('runs test scanner', () => {
       expect(scanRunStarted).toHaveBeenCalledWith(TestScanExpectation.scanner.name);
-      expect(scanRunFinished).toHaveBeenCalledWith(TestScanExpectation.scanner.name, expect.anything());
+      expect(scanRunFinished).toHaveBeenCalledWith(
+        TestScanExpectation.scanner.name,
+        expect.anything(),
+      );
     });
   });
 });

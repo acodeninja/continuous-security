@@ -12,10 +12,11 @@ export class CWEDoesNotExist extends Error {
 
 export class CWE {
   private data = (new DOMParser({
-    // eslint-disable-next-line  @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
     errorHandler: (level: string, msg: any) => {
       return {};
     },
+    /* eslint-enable */
   })).parseFromString(CWEDataset);
 
   getById(id: string): ReportOutputIssueReference {
@@ -41,8 +42,12 @@ export class CWE {
         directLink: `https://cwe.mitre.org/data/definitions/${parsedId}.html`,
         dataSourceSpecific: {
           cwe: {
-            extendedDescription: this.expandCWELinks(tidyString(queryable.find('Extended_Description').first().text())),
-            background: this.expandCWELinks(tidyString(queryable.find('Background_Detail').first().text())),
+            extendedDescription: this.expandCWELinks(
+              tidyString(queryable.find('Extended_Description').first().text()),
+            ),
+            background: this.expandCWELinks(
+              tidyString(queryable.find('Background_Detail').first().text()),
+            ),
             consequences: this.expandConsequences(queryable.find('Consequence')),
             mitigations: this.expandMitigations(queryable.find('Mitigation')),
           },
@@ -53,7 +58,8 @@ export class CWE {
     throw new CWEDoesNotExist();
   }
 
-  private expandConsequences(consequencesNodes): ReportOutputIssueReference['dataSourceSpecific']['cwe']['consequences'] {
+  private expandConsequences(consequencesNodes):
+    ReportOutputIssueReference['dataSourceSpecific']['cwe']['consequences'] {
     const consequences = [];
 
     consequencesNodes.each(node => {

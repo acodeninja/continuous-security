@@ -35,14 +35,16 @@ export class Orchestrator {
       this.emitter.emit('scanner:installed', configuration.name);
     });
 
-    await Promise.all(this.configuration.scanners.map(configuration => new Promise<void>(resolve => {
-      loadScannerModule(configuration.name)
-        .then(scanner => {
-          this.scans.push(new Scan(this.emitter, scanner, configuration));
-          this.emitter.emit('scanner:loaded', scanner.name);
-          resolve();
-        });
-    })));
+    await Promise.all(
+      this.configuration.scanners.map(configuration => new Promise<void>(resolve => {
+        loadScannerModule(configuration.name)
+          .then(scanner => {
+            this.scans.push(new Scan(this.emitter, scanner, configuration));
+            this.emitter.emit('scanner:loaded', scanner.name);
+            resolve();
+          });
+      })),
+    );
 
     await Promise.all(
       this.scans.map(scan => scan.setup()

@@ -1,6 +1,6 @@
 type EventEmitter = {
   on(event: string, listener: () => void): void;
-  emit(event: string, ...values: Array<any>): void;
+  emit(event: string, ...values: Array<unknown>): void;
 }
 
 type ConfigurationFile = {

@@ -27,7 +27,8 @@ export class OSV {
         dataSourceSpecific: {
           osv: {
             aliases,
-            severity: osvData.database_specific?.severity?.toLowerCase() as ReportOutputIssueReference['dataSourceSpecific']['osv']['severity'] ?? 'unknown',
+            severity: osvData.database_specific?.severity?.toLowerCase() as
+              ReportOutputIssueReference['dataSourceSpecific']['osv']['severity'] ?? 'unknown',
           },
         },
       };

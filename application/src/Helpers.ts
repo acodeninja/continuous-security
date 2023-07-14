@@ -20,7 +20,8 @@ export const packFiles = async (files: ScannerBuildConfiguration['files']) => {
   return tarPack.pipe(createGzip());
 };
 
-export const buildImage = async (buildConfiguration: ScannerBuildConfiguration): Promise<string> => {
+export const buildImage = async (buildConfiguration: ScannerBuildConfiguration):
+  Promise<string> => {
   const packedFiles = await packFiles(buildConfiguration.files);
 
   const docker = new Docker();

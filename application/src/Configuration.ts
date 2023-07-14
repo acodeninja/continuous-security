@@ -14,7 +14,8 @@ export class Configuration {
   public readonly scanners: Array<ScannerConfiguration>;
 
   constructor({scanners}: ConfigurationFile) {
-    this.scanners = scanners.map(scanner => typeof scanner === 'string' ? {name: scanner} : scanner);
+    this.scanners = scanners.map(scanner =>
+      typeof scanner === 'string' ? {name: scanner} : scanner);
   }
 
   /**
