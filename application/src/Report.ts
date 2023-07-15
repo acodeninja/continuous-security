@@ -6,6 +6,7 @@ import {CVE} from './DataSources/CVE';
 import {CWE} from './DataSources/CWE';
 import {OSV} from './DataSources/OSV';
 import {Emitter} from './Emitter';
+import {translate} from "./DataSources/Translations";
 
 export class Report {
   private readonly template: TemplateExecutor;
@@ -118,7 +119,7 @@ export class Report {
 
     const severities = issues.map(i => i.severity);
 
-    return {
+    return JSON.parse(translate(JSON.stringify({
       title: `Security Report for ${basename(process.cwd())}`,
       date: new Date(),
       summaryImpacts: Object.entries(summaryImpacts).map(([scope, impacts]) => ({scope, impacts})),
@@ -133,7 +134,14 @@ export class Report {
         unknown: severities.filter(s => s === 'unknown').length,
         total: severities.length,
       },
-    };
+    })), (key, value) => {
+      if (
+        String(value).length === 24 &&
+        String(value).match(/\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}.\d{3}Z/)
+      ) return new Date(value);
+
+      return value;
+    });
   }
 
   async toJSON(): Promise<[string, Buffer]> {

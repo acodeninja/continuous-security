@@ -97,7 +97,7 @@ exports[`producing a report in json matches snapshot 1`] = `
   "issues": [
     {
       "title": "test-issue-title",
-      "description": "test-issue-description",
+      "description": "test-issue-description with excluding term: block list",
       "type": "dependency",
       "references": [
         {
@@ -408,7 +408,7 @@ For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.
 
 **Severity**: [Critical](#Critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
-test-issue-description
+test-issue-description with excluding term: block list
 
 
 ##### References
