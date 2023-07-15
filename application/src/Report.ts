@@ -140,7 +140,7 @@ export class Report {
         String(value).match(/\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}.\d{3}Z/)
       ) return new Date(value);
 
-      if (key === 'code') return value;
+      if (key === 'code' || key === 'target' || key === 'name') return value;
 
       return typeof value === 'string' ? translate(value) : value;
     });
