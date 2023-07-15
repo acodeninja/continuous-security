@@ -12,13 +12,15 @@ export const terms: Record<string, string> = {
   cripple: 'degrade',
   disable: 'deactivate',
   he: 'they',
+  her: 'they',
+  him: 'they',
+  man: 'person',
   master: 'main',
   segregate: 'separate',
   she: 'they',
-  man: 'person',
-  woman: 'person',
   slave: 'subordinate',
   tribe: 'team',
+  woman: 'person',
 };
 
 export const getAllTerms = (): Array<Array<string>> => Object.entries(terms)
