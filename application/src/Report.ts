@@ -17,13 +17,14 @@ export class Report {
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
   private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
     groupBy: (list: Array<unknown>, grouping: string) => {
-      const groupedIssues = [{}, ...list].reduce((group: Record<string, Array<unknown>> = {}, item) => {
-        if (item) {
-          group[item[grouping]] = group[item[grouping]] ?? [];
-          group[item[grouping]].push(item);
-        }
-        return group;
-      });
+      const groupedIssues =
+        [{}, ...list].reduce((group: Record<string, Array<unknown>> = {}, item) => {
+          if (item) {
+            group[item[grouping]] = group[item[grouping]] ?? [];
+            group[item[grouping]].push(item);
+          }
+          return group;
+        });
 
       const asEntries = Object.entries(groupedIssues);
 
@@ -31,7 +32,10 @@ export class Report {
 
       return Object.fromEntries(asEntries);
     },
-    capitalise: (words: string) => words.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    capitalise: (words: string) =>
+      words.split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' '),
   };
 
   constructor(emitter: Emitter) {
@@ -43,12 +47,15 @@ export class Report {
     this.reports.push(report);
   }
 
-  private async expandReferences(references: Array<string>): Promise<Array<ReportOutputIssueReference>> {
+  private async expandReferences(references: Array<string>):
+    Promise<Array<ReportOutputIssueReference>> {
     const expandedReferences: Record<string, ReportOutputIssueReference> = {};
     const referencesToProcess = Array.from(references);
 
-    while (referencesToProcess.filter(r => !Object.keys(expandedReferences).includes(r)).length > 0) {
-      for (const ref of referencesToProcess.filter(r => !Object.keys(expandedReferences).includes(r))) {
+    while (referencesToProcess
+      .filter(r => !Object.keys(expandedReferences).includes(r)).length > 0) {
+      for (const ref of referencesToProcess
+        .filter(r => !Object.keys(expandedReferences).includes(r))) {
         const slug = ref.toLowerCase();
         this.emitter.emit('report:reference', `fetching details for ${ref}`);
 
@@ -61,12 +68,16 @@ export class Report {
             expandedReferences[ref] = await this.osvDataset.getById(ref);
           }
         } catch (e) {
-          this.emitter.emit('report:reference:failure', `Failed to fetch vulnerability reference ${ref}`);
+          this.emitter.emit(
+            'report:reference:failure',
+            `Failed to fetch vulnerability reference ${ref}`,
+          );
           referencesToProcess.splice(referencesToProcess.indexOf(ref), 1);
         }
 
         if (expandedReferences[ref]?.dataSourceSpecific?.osv?.aliases) {
-          expandedReferences[ref].dataSourceSpecific.osv.aliases.forEach(a => referencesToProcess.push(a));
+          expandedReferences[ref].dataSourceSpecific.osv.aliases
+            .forEach(a => referencesToProcess.push(a));
         }
       }
     }
@@ -177,7 +188,9 @@ export class Report {
           const code = (await readFile(extract.path)).toString().split('\n');
           const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
           const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
-          const lines = new Array(code.slice(start, end).length).fill(null).map((_, i) => start + i + 1);
+          const lines = new Array(code.slice(start, end).length)
+            .fill(null)
+            .map((_, i) => start + i + 1);
 
           return {
             ...extract,

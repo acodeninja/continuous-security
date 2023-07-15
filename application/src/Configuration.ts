@@ -3,14 +3,19 @@ import {resolve} from 'path';
 import {parse as YamlParse} from 'yaml';
 
 export class ConfigurationLoadError extends Error {
-  override message = 'Failed to load configuration file.';
+  override message = 'Failed to load configuration file: ';
+  constructor(message) {
+    super();
+    this.message += message;
+  }
 }
 
 export class Configuration {
   public readonly scanners: Array<ScannerConfiguration>;
 
   constructor({scanners}: ConfigurationFile) {
-    this.scanners = scanners.map(scanner => typeof scanner === 'string' ? {name: scanner} : scanner);
+    this.scanners = scanners.map(scanner =>
+      typeof scanner === 'string' ? {name: scanner} : scanner);
   }
 
   /**
@@ -21,7 +26,7 @@ export class Configuration {
     const filePath = (await Promise.all(
       ['json', 'yaml', 'yml']
         .map(ext => resolve(path, '.continuous-security.' + ext))
-        .map(file => access(file).then(() => file).catch(() => null))
+        .map(file => access(file).then(() => file).catch(() => null)),
     )).find(file => !!file);
 
     try {
@@ -34,7 +39,7 @@ export class Configuration {
         return new Configuration(YamlParse(fileContents));
 
     } catch (e) {
-      throw new ConfigurationLoadError();
+      throw new ConfigurationLoadError(e.message);
     }
   }
 }

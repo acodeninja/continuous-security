@@ -8,7 +8,6 @@ export const TestScanner: Scanner = {
       'scan.sh': 'echo \'{"ran": "yes"}\' >> /output/report.json',
     },
   },
-  validate: jest.fn(),
   report: jest.fn().mockResolvedValue({
     issues: [],
     counts: {

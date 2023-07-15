@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const {BannerPlugin} = require('webpack');
 const {chmod} = require('fs/promises');
 const {resolve} = require('path');
+/* eslint-enable */
 
 module.exports = [{
   mode: 'production',
@@ -29,8 +31,8 @@ module.exports = [{
         use: {
           loader: 'ts-loader',
           options: {
-            allowTsInNodeModules: true
-          }
+            allowTsInNodeModules: true,
+          },
         },
       },
       {
@@ -47,6 +49,6 @@ module.exports = [{
           dataUrl: content => content.toString(),
         },
       },
-    ]
+    ],
   },
 }];

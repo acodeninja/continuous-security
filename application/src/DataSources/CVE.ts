@@ -27,7 +27,8 @@ export class CVE {
         dataSourceSpecific: {
           cve: {
             aliases,
-            severity: cveData.metrics?.cvssMetricV31?.[0]?.cvssData?.baseSeverity?.toLowerCase() as ReportOutputIssueReference['dataSourceSpecific']['osv']['severity'] ?? 'unknown',
+            severity: cveData.metrics?.cvssMetricV31?.[0]?.cvssData?.baseSeverity?.toLowerCase() as
+              ReportOutputIssueReference['dataSourceSpecific']['osv']['severity'] ?? 'unknown',
           },
         },
       };

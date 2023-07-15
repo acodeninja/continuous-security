@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`a GitHub security advisory has the correct description 1`] = `
+"### Impact
+
+Mautic allows you to track open rates by using tracking pixels. 
+The tracking information is stored together with extra metadata of the tracking request.
+
+The output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.
+
+### Patches
+
+Please upgrade to 4.3.0
+
+### Workarounds
+None.
+
+### References
+* Internally tracked under MST-38
+
+### For more information
+If you have any questions or comments about this advisory:
+* Email us at [security@mautic.org](mailto:security@mautic.org)
+"
+`;

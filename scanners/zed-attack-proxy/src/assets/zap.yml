@@ -1,0 +1,46 @@
+env:
+  contexts:
+    - name: test-context
+      urls:
+        - $CONFIG_TARGET
+  parameters:
+    failOnError: true
+    failOnWarning: true
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+      scanOnlyInScope: true
+
+  - type: spider
+    parameters:
+      context: test-context
+
+  - type: activeScan
+    parameters:
+      context: test-context
+    policyDefinition:
+      defaultStrength: Low
+      defaultThreshold: 'Off'
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 1
+
+  - type: report
+    parameters:
+      template: sarif-json
+      reportDir: /output
+      reportFile: report.json
+    risks:
+      - high
+      - medium
+      - low
+      - info
+    confidences:
+      - high
+      - medium
+      - low
+      - falsepositive

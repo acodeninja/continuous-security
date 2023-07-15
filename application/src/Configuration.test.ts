@@ -1,6 +1,11 @@
 import {access, readFile} from 'fs/promises';
 import {Configuration, ConfigurationLoadError} from './Configuration';
-import {JSONConfiguration, YAMLConfiguration} from '../tests/fixtures/Configuration';
+import {
+  JSONConfiguration,
+  JSONConfigurationWithExtraConfig,
+  YAMLConfiguration,
+  YAMLConfigurationWithExtraConfig,
+} from '../tests/fixtures/Configuration';
 
 jest.mock('fs/promises', () => ({
   access: jest.fn(),
@@ -10,62 +15,130 @@ jest.mock('fs/promises', () => ({
 describe('Configuration', () => {
   describe('Configuration.load', () => {
     describe('JSON configuration file', () => {
-      let configuration: Configuration;
+      describe('with only scanner names', function () {
+        let configuration: Configuration;
 
-      beforeAll(async () => {
-        (access as jest.Mock).mockImplementation(async file => {
-          if (file.endsWith('.json')) return null;
-          throw new Error('file does not exist');
+        beforeAll(async () => {
+          (access as jest.Mock).mockImplementation(async file => {
+            if (file.endsWith('.json')) return null;
+            throw new Error('file does not exist');
+          });
+
+          (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(JSONConfiguration));
+
+          configuration = await Configuration.load('/test');
         });
 
-        (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(JSONConfiguration));
+        afterAll(() => {
+          (access as jest.Mock).mockReset();
+        });
 
-        configuration = await Configuration.load('/test');
+        test('attempts to read from .continuous-security.json', () => {
+          expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
+          expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
+        });
+
+        test('loads a list of scanners', () => {
+          expect(configuration).toHaveProperty('scanners', [
+            {name: 'test-scanner'},
+          ]);
+        });
       });
 
-      afterAll(() => {
-        (access as jest.Mock).mockReset();
-      });
+      describe('with additional scanner config', () => {
+        let configuration: Configuration;
 
-      test('attempts to read from .continuous-security.json', () => {
-        expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
-        expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
-      });
+        beforeAll(async () => {
+          (access as jest.Mock).mockImplementation(async file => {
+            if (file.endsWith('.json')) return null;
+            throw new Error('file does not exist');
+          });
 
-      test('loads a list of scanners', () => {
-        expect(configuration).toHaveProperty('scanners', [
-          {name: 'test-scanner'},
-        ]);
+          (readFile as jest.Mock).mockResolvedValueOnce(
+            Buffer.from(JSONConfigurationWithExtraConfig),
+          );
+
+          configuration = await Configuration.load('/test');
+        });
+
+        afterAll(() => {
+          (access as jest.Mock).mockReset();
+        });
+
+        test('attempts to read from .continuous-security.json', () => {
+          expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
+          expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
+        });
+
+        test('loads a list of scanners', () => {
+          expect(configuration).toHaveProperty('scanners', [
+            {name: 'test-scanner', with: {property: 'value'}},
+          ]);
+        });
       });
     });
-    describe('YAML configuration file', () => {
-      let configuration: Configuration;
 
-      beforeAll(async () => {
-        (access as jest.Mock).mockImplementation(async file => {
-          if (file.endsWith('.yaml')) return null;
-          throw new Error('file does not exist');
+    describe('YAML configuration file', () => {
+      describe('with only scanner names', () => {
+        let configuration: Configuration;
+        beforeAll(async () => {
+          (access as jest.Mock).mockImplementation(async file => {
+            if (file.endsWith('.yaml')) return null;
+            throw new Error('file does not exist');
+          });
+
+          (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(YAMLConfiguration));
+
+          configuration = await Configuration.load('/test');
         });
 
-        (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(YAMLConfiguration));
+        afterAll(() => {
+          (access as jest.Mock).mockReset();
+        });
 
-        configuration = await Configuration.load('/test');
+        test('attempts to read from .continuous-security.yaml', () => {
+          expect(access).toHaveBeenCalledWith('/test/.continuous-security.yaml');
+          expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.yaml');
+        });
+
+        test('loads a list of scanners', () => {
+          expect(configuration).toHaveProperty('scanners', [
+            {name: 'test-scanner'},
+          ]);
+        });
       });
 
-      afterAll(() => {
-        (access as jest.Mock).mockReset();
+      describe('with additional scanner config', () => {
+        let configuration: Configuration;
+        beforeAll(async () => {
+          (access as jest.Mock).mockImplementation(async file => {
+            if (file.endsWith('.yaml')) return null;
+            throw new Error('file does not exist');
+          });
+
+          (readFile as jest.Mock).mockResolvedValueOnce(
+            Buffer.from(YAMLConfigurationWithExtraConfig),
+          );
+
+          configuration = await Configuration.load('/test');
+        });
+
+        afterAll(() => {
+          (access as jest.Mock).mockReset();
+        });
+
+        test('attempts to read from .continuous-security.yaml', () => {
+          expect(access).toHaveBeenCalledWith('/test/.continuous-security.yaml');
+          expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.yaml');
+        });
+
+        test('loads a list of scanners', () => {
+          expect(configuration).toHaveProperty('scanners', [
+            {name: 'test-scanner', with: {property: 'value'}},
+          ]);
+        });
       });
 
-      test('attempts to read from .continuous-security.yaml', () => {
-        expect(access).toHaveBeenCalledWith('/test/.continuous-security.yaml');
-        expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.yaml');
-      });
-
-      test('loads a list of scanners', () => {
-        expect(configuration).toHaveProperty('scanners', [
-          {name: 'test-scanner'},
-        ]);
-      });
     });
 
     describe('a non-existent configuration file', () => {
