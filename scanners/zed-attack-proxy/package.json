@@ -32,6 +32,11 @@
   "private": false,
   "author": "Lawrence <lawrence@acode.ninja>",
   "license": "MPL-2.0",
+  "continuousSecurityScanner": {
+    "runConfiguration": {
+      "target": {"required": true}
+    }
+  },
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/node": "^18.11.18",
