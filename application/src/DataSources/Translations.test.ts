@@ -15,10 +15,19 @@ describe('a string with one excluding term', () => {
 });
 
 describe('a string with every excluding term', () => {
-  test('correctly replaces', () => {
+  test('replaced with inclusive terms', () => {
     const input = Object.keys(terms).map(t => `${t}\n${t}`).join('\n');
     const expected = Object.values(terms).map(t => `${t}\n${t}`).join('\n');
 
     expect(translate(input)).toEqual(expected);
-  })
+  });
+});
+
+describe('a string with mixed case excluding terms', () => {
+  test('replaced with inclusive terms', () => {
+    const input = Object.keys(terms).map(t => `${t[0].toUpperCase() + t.slice(1)}`).join('\n');
+    const expected = Object.values(terms).map(t => `${t[0].toUpperCase() + t.slice(1)}`).join('\n');
+
+    expect(translate(input)).toEqual(expected);
+  });
 });
