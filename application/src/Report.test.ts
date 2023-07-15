@@ -29,7 +29,7 @@ describe('producing a report', () => {
   report.addScanReport({
     issues: [{
       title: 'test-issue-title',
-      description: 'test-issue-description',
+      description: 'test-issue-description with excluding term: blacklist',
       type: 'dependency',
       references: ['GHSA-f9xv-q969-pqx4', 'CWE-1004'],
       package: {
