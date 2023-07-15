@@ -6,7 +6,7 @@ import {CVE} from './DataSources/CVE';
 import {CWE} from './DataSources/CWE';
 import {OSV} from './DataSources/OSV';
 import {Emitter} from './Emitter';
-import {translate} from "./DataSources/Translations";
+import {translate} from './DataSources/Translations';
 
 export class Report {
   private readonly template: TemplateExecutor;

@@ -1,7 +1,7 @@
-import {terms, translate} from "./Translations";
+import {terms, translate} from './Translations';
 
 describe('a string without any excluding terms', () => {
-  const input = "this sentence is completely inclusive";
+  const input = 'this sentence is completely inclusive';
 
   test('is unchanged by translation', () => {
     expect(translate(input)).toEqual(input);
