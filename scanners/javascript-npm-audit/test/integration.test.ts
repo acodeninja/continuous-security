@@ -15,7 +15,7 @@ setupIntegrationTests(
       package: {name: 'squirrelly'},
       references: ['CWE-200', 'GHSA-q8j6-pwqx-pm96'],
       severity: 'high',
-      fix: 'Upgrade to version above <=8.0.8'
-    }]
+      fix: 'Upgrade to version above <=8.0.8',
+    }],
   },
 );
