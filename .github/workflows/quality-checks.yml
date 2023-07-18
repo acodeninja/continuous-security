@@ -52,6 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -88,12 +90,17 @@ jobs:
         scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
       - name: install
         run: npm ci
         working-directory: scanners/${{ matrix.scanner }}/

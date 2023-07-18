@@ -5,7 +5,7 @@ setupIntegrationTests(
   {afterAll, beforeAll, describe, expect, jest, test},
   scanner,
   process,
-  'nodejs',
+  'javascript',
   {
     scanner: '@continuous-security/scanner-javascript-njsscan',
     issues: [
@@ -16,13 +16,11 @@ setupIntegrationTests(
         references: ['CWE-79'],
         severity: 'unknown',
         type: 'code smell',
-        extracts: [
-          {
-            language: 'javascript',
-            lines: ['6', '6'],
-            path: 'app.js',
-          },
-        ],
+        extracts: [{
+          language: 'javascript',
+          lines: ['84'],
+          path: 'app.js',
+        }],
       },
       {
         title: 'Use of a Broken or Risky Cryptographic Algorithm',
@@ -31,13 +29,11 @@ setupIntegrationTests(
         references: ['CWE-327'],
         severity: 'unknown',
         type: 'code smell',
-        extracts: [
-          {
-            lines: ['2', '3'],
-            path: 'main.js',
-            language: 'javascript',
-          },
-        ],
+        extracts: [{
+          lines: ['13'],
+          path: 'app.js',
+          language: 'javascript',
+        }],
       },
     ],
   },

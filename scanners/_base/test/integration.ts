@@ -1,9 +1,10 @@
 import {exec, spawn} from 'child_process';
 import {resolve} from 'path';
 import {promisify} from 'util';
-import {chmod, mkdtemp, readdir} from 'fs/promises';
+import {chmod, mkdtemp, readdir, readFile, writeFile} from 'fs/promises';
 import {join} from 'path';
 import {tmpdir} from 'os';
+import {lstatSync} from "fs";
 
 export const setupIntegrationTests = (
   {afterAll, beforeAll, describe, expect, jest, test},
@@ -16,34 +17,36 @@ export const setupIntegrationTests = (
 ) => {
   jest.setTimeout(120 * 1000);
   const runningCommands = [];
+  let codebasePath;
 
   beforeAll(async () => {
-    const installCommands = {nodejs: 'npm ci'};
-    const runCommands = {
-      nodejs: {
-        command: 'node',
-        args: ['app.js'],
-      },
-    };
+    const fixturesPath = resolve(__dirname, '..', '..', '..', 'examples', 'codebases');
 
-    if (installCommands[exampleCodebase])
-      await promisify(exec)(
-        installCommands[exampleCodebase],
-        {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
-      );
+    const codebaseFixtures = await readdir(fixturesPath)
+      .then(files => files.map(f => resolve(fixturesPath, f)))
+      .then(files => files.filter(f => lstatSync(f).isDirectory()))
+      .then(files => files.map(path => {
+        const config = require(resolve(path, 'config.json'));
 
-    if (runCommands[exampleCodebase]) {
-      const runningCommand = spawn(
-        runCommands[exampleCodebase].command,
-        runCommands[exampleCodebase].args,
-        {cwd: resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)},
-      );
-      runningCommands.push(runningCommand);
+        return [config.language, {path, ...config}];
+      }))
+      .then(fixtures => Object.fromEntries(fixtures));
+
+    if (codebaseFixtures[exampleCodebase]) {
+      const fixture = codebaseFixtures[exampleCodebase];
+      codebasePath = fixture.path;
+
+      if (fixture.commands?.init)
+        await promisify(exec)(fixture.commands?.init.flat(2).join(' '), {cwd: fixture.path});
+
+      if (fixture.commands?.start)
+        runningCommands.push(spawn(
+          fixture.commands?.start[0],
+          fixture.commands?.start[1],
+          {cwd: fixture.path},
+        ));
+
     }
-  });
-
-  afterAll(async () => {
-    runningCommands.forEach(c => c.kill());
   });
 
   describe('building the docker image', () => {
@@ -72,7 +75,7 @@ export const setupIntegrationTests = (
 
       const runCommand = [
         'docker run --rm --network host',
-        `-v ${resolve(process.cwd(), '..', '..', 'examples', exampleCodebase)}:/target`,
+        `-v ${codebasePath}:/target`,
         `-v ${temporaryDirectory}:/output`,
       ];
 
@@ -96,12 +99,16 @@ export const setupIntegrationTests = (
     });
 
     test('the output report can be parsed by the report function', async () => {
+      await writeFile('output.json', JSON.stringify(await scanner.report(temporaryDirectory), null, 2));
+      await writeFile('expected.json', JSON.stringify(reportFormat, null, 2));
       await expect(scanner.report(temporaryDirectory))
         .resolves.toEqual(reportFormat);
     });
   });
 
   afterAll(async () => {
+    runningCommands.forEach(c => c.kill());
+
     const {stdout: containers} = await promisify(exec)([
       'docker ps -a --format="{{.Image}} {{.ID}}"',
       `grep "integration-test-${scanner.slug}"`,

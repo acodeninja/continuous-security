@@ -23,7 +23,7 @@ jobs:
       context: test-context
     policyDefinition:
       defaultStrength: Low
-      defaultThreshold: 'Off'
+      defaultThreshold: Low
 
   - type: passiveScan-wait
     parameters:

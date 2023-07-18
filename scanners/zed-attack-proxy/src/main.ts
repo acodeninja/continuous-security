@@ -11,6 +11,7 @@ const mapZapSeverityToScanSeverity = (zapSeverity: string): ScanReportIssue['sev
     none: 'info',
     note: 'low',
     warning: 'moderate',
+    error: 'high',
   };
 
   return map[zapSeverity];

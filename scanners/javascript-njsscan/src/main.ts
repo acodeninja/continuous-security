@@ -25,7 +25,7 @@ export default {
             fix: 'Unknown',
             extracts: files.map(({file_path, match_lines}) => ({
               path: file_path.replace('/target/', ''),
-              lines: match_lines.map(line => line.toString()),
+              lines: Array.from(new Set(match_lines.map(line => line.toString()))),
               language: 'javascript',
             })),
           };
