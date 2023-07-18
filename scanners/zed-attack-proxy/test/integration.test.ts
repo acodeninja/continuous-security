@@ -36,6 +36,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -67,6 +68,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -98,6 +100,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -129,6 +132,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -161,6 +165,7 @@ setupIntegrationTests(
             'X-Content-Type-Options': 'nosniff',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -192,6 +197,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -223,6 +229,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -255,6 +262,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {
@@ -277,6 +285,7 @@ setupIntegrationTests(
             referer: expect.stringContaining('http://localhost:3000'),
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
           },
+          body: "words=ZAP"
         },
         response: {
           statusCode: 200,
@@ -289,6 +298,7 @@ setupIntegrationTests(
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: expect.stringContaining('<html lang="en">'),
         },
       }]),
     }, {

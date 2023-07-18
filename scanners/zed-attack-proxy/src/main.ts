@@ -17,6 +17,12 @@ const mapZapSeverityToScanSeverity = (zapSeverity: string): ScanReportIssue['sev
   return map[zapSeverity];
 };
 
+const parseBody = (body: {binary?: string; text?: string}): string | undefined => {
+  if (body.binary) return atob(body.binary);
+  if (body.text) return body.text;
+  return undefined;
+};
+
 const groupBy = (list: Array<unknown>, grouping: string) => {
   const groupedIssues = [{}, ...list].reduce((group: Record<string, ZapSarifReportGroupedResult> = {}, item: ZapSarifReportResult) => {
     if (item) {
@@ -25,10 +31,12 @@ const groupBy = (list: Array<unknown>, grouping: string) => {
           target: item.webRequest.target,
           method: item.webRequest.method,
           headers: item.webRequest.headers,
+          body: parseBody(item.webRequest.body),
         },
         response: {
           statusCode: item.webResponse.statusCode,
           headers: item.webResponse.headers,
+          body: parseBody(item.webResponse.body),
         },
       };
 
