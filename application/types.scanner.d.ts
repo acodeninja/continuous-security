@@ -45,6 +45,7 @@ type ScanReportIssue = {
     lines: Array<string>;
     path: string;
     language?: string;
+    code?: string;
   }>;
   requests?: Array<{
     request: {
