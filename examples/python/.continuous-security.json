@@ -1,6 +1,0 @@
-{
-  "scanners": [
-    "@continuous-security/scanner-python-bandit",
-    "@continuous-security/scanner-python-pip-audit"
-  ]
-}
