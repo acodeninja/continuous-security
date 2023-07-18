@@ -98,6 +98,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
       - name: install
         run: npm ci
         working-directory: scanners/${{ matrix.scanner }}/
