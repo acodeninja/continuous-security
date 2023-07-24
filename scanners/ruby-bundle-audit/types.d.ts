@@ -45,16 +45,19 @@ type ScanReportIssue = {
     lines: Array<string>;
     path: string;
     language?: string;
+    code?: string;
   }>;
   requests?: Array<{
     request: {
       target: string;
       method: string;
       headers: Record<string, string>;
+      body?: string;
     };
     response: {
       statusCode: number;
       headers: Record<string, string>;
+      body?: string;
     };
   }>;
 }

@@ -24,5 +24,7 @@ readdir(resolve(process.cwd(), '..', 'scanners'))
   .then(scannerData => writeFile(
     resolve(process.cwd(), 'src', 'scanners.json'),
     JSON.stringify(scannerData, null, 2),
-  ))
+  ).then(() => {
+    console.log(`Updated scanner list with ${scannerData.scanners.length} scanners`);
+  }))
   .catch(console.error);

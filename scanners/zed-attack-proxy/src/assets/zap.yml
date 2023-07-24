@@ -11,7 +11,7 @@ env:
 jobs:
   - type: passiveScan-config
     parameters:
-      maxAlertsPerRule: 10
+      maxAlertsPerRule: 2
       scanOnlyInScope: true
 
   - type: spider

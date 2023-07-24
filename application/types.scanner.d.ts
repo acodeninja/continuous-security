@@ -52,10 +52,12 @@ type ScanReportIssue = {
       target: string;
       method: string;
       headers: Record<string, string>;
+      body?: string;
     };
     response: {
       statusCode: number;
       headers: Record<string, string>;
+      body?: string;
     };
   }>;
 }

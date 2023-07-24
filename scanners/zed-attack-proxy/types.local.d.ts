@@ -45,6 +45,10 @@ interface ZapSarifReportResult {
     target: string;
     method: string;
     headers: Record<string, string>;
+    body: {
+      binary?: string;
+      text?: string;
+    };
   };
   webResponse: {
     protocol: string;
@@ -53,6 +57,10 @@ interface ZapSarifReportResult {
     method: string;
     statusCode: number,
     headers: Record<string, string>;
+    body: {
+      binary?: string;
+      text?: string;
+    };
   };
 }
 

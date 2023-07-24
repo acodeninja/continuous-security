@@ -1,0 +1,905 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`zed-attack-proxy scanner generating a report returns the expected issues 1`] = `
+[
+  {
+    "description": "The response does not include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options to protect against 'ClickJacking' attacks.",
+    "fix": "Unknown",
+    "references": [
+      "CWE-1021",
+    ],
+    "requests": [
+      {
+        "request": {
+          "body": "words=%3C%2Fli%3E%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E%3Cli%3E",
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "475695",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": ""3147526947+ident"",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 17 Oct 2019 07:18:26 GMT",
+            "Server": "ECS (nyb/1D2E)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "HIT",
+          },
+          "statusCode": 200,
+        },
+      },
+    ],
+    "severity": "moderate",
+    "title": "Missing Anti-clickjacking Header",
+    "type": "web request",
+  },
+  {
+    "description": "The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.",
+    "fix": "Unknown",
+    "references": [
+      "CWE-693",
+    ],
+    "requests": [
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "475695",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": ""3147526947+ident"",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 17 Oct 2019 07:18:26 GMT",
+            "Server": "ECS (nyb/1D2E)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "HIT",
+          },
+          "statusCode": 200,
+        },
+      },
+    ],
+    "severity": "low",
+    "title": "X-Content-Type-Options Header Missing",
+    "type": "web request",
+  },
+  {
+    "description": "The web/application server is leaking version information via the "Server" HTTP response header. Access to such information may facilitate attackers identifying other vulnerabilities your web/application server is subject to.",
+    "fix": "Unknown",
+    "references": [
+      "CWE-200",
+    ],
+    "requests": [
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "475695",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": ""3147526947+ident"",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 17 Oct 2019 07:18:26 GMT",
+            "Server": "ECS (nyb/1D2E)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "HIT",
+          },
+          "statusCode": 200,
+        },
+      },
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/robots.txt",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "524722",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 29 Jun 2023 10:03:54 GMT",
+            "Server": "ECS (nyb/1D18)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "404-HIT",
+          },
+          "statusCode": 404,
+        },
+      },
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/sitemap.xml",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "87049",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Tue, 04 Jul 2023 11:38:27 GMT",
+            "Server": "ECS (nyb/1D04)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "404-HIT",
+          },
+          "statusCode": 404,
+        },
+      },
+    ],
+    "severity": "low",
+    "title": "Server Leaks Version Information via "Server" HTTP Response Header Field",
+    "type": "web request",
+  },
+  {
+    "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
+    "fix": "Unknown",
+    "references": [
+      "CWE-693",
+    ],
+    "requests": [
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "475695",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": ""3147526947+ident"",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 17 Oct 2019 07:18:26 GMT",
+            "Server": "ECS (nyb/1D2E)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "HIT",
+          },
+          "statusCode": 200,
+        },
+      },
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/robots.txt",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "524722",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 29 Jun 2023 10:03:54 GMT",
+            "Server": "ECS (nyb/1D18)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "404-HIT",
+          },
+          "statusCode": 404,
+        },
+      },
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/sitemap.xml",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "87049",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Tue, 04 Jul 2023 11:38:27 GMT",
+            "Server": "ECS (nyb/1D04)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "404-HIT",
+          },
+          "statusCode": 404,
+        },
+      },
+    ],
+    "severity": "moderate",
+    "title": "Content Security Policy (CSP) Header Not Set",
+    "type": "web request",
+  },
+  {
+    "description": "The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as "proxy" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance. ",
+    "fix": "Unknown",
+    "references": [],
+    "requests": [
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "475695",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": ""3147526947+ident"",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 17 Oct 2019 07:18:26 GMT",
+            "Server": "ECS (nyb/1D2E)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "HIT",
+          },
+          "statusCode": 200,
+        },
+      },
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/robots.txt",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "524722",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Thu, 29 Jun 2023 10:03:54 GMT",
+            "Server": "ECS (nyb/1D18)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "404-HIT",
+          },
+          "statusCode": 404,
+        },
+      },
+      {
+        "request": {
+          "body": undefined,
+          "headers": {
+            "Cache-Control": "no-cache",
+            "Host": "example.com",
+            "Pragma": "no-cache",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+          },
+          "method": "GET",
+          "target": "http://example.com/sitemap.xml",
+        },
+        "response": {
+          "body": "<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    </style>    
+</head>
+
+<body>
+<div>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.</p>
+    <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>
+",
+          "headers": {
+            "Age": "87049",
+            "Cache-Control": "max-age=604800",
+            "Connection": "keep-alive",
+            "Content-Length": "1256",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "Expires": "Wed, 12 Jul 2023 11:49:16 GMT",
+            "Last-Modified": "Tue, 04 Jul 2023 11:38:27 GMT",
+            "Server": "ECS (nyb/1D04)",
+            "Vary": "Accept-Encoding",
+            "X-Cache": "404-HIT",
+          },
+          "statusCode": 404,
+        },
+      },
+    ],
+    "severity": "info",
+    "title": "Retrieved from Cache",
+    "type": "web request",
+  },
+]
+`;

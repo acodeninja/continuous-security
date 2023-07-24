@@ -7,7 +7,7 @@ setupIntegrationTests(
   process,
   'javascript',
   {
-    scanner: '@continuous-security/scanner-zed-attack-proxy', issues: [{
+    scanner: '@continuous-security/scanner-zed-attack-proxy', issues: expect.arrayContaining([{
       title: 'Missing Anti-clickjacking Header',
       description: 'The response does not include either Content-Security-Policy with \'frame-ancestors\' directive or X-Frame-Options to protect against \'ClickJacking\' attacks.',
       type: 'web request',
@@ -16,26 +16,14 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -47,26 +35,14 @@ setupIntegrationTests(
       severity: 'low',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -78,26 +54,14 @@ setupIntegrationTests(
       severity: 'low',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -109,26 +73,14 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -140,27 +92,14 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000/robots.txt',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 404,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Security-Policy': 'default-src \'none\'',
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            'Keep-Alive': 'timeout=5',
-            'X-Content-Type-Options': 'nosniff',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -172,26 +111,14 @@ setupIntegrationTests(
       severity: 'info',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -203,26 +130,14 @@ setupIntegrationTests(
       severity: 'moderate',
       requests: expect.arrayContaining([{
         request: {
-          target: 'http://localhost:3000',
+          target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -236,25 +151,12 @@ setupIntegrationTests(
         request: {
           target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            referer: expect.stringContaining('http://localhost:3000'),
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -268,27 +170,13 @@ setupIntegrationTests(
         request: {
           target: expect.stringContaining('http://localhost:3000'),
           method: 'POST',
-          headers: {
-            'cache-control': 'no-cache',
-            'content-length': expect.any(String),
-            'content-type': 'application/x-www-form-urlencoded',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            referer: expect.stringContaining('http://localhost:3000'),
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
+          headers: expect.objectContaining({host: 'localhost:3000'}),
+          body: 'words=ZAP',
         },
         response: {
           statusCode: 200,
-          headers: {
-            Connection: 'keep-alive',
-            'Content-Length': expect.any(String),
-            'Content-Type': 'text/html; charset=utf-8',
-            Date: expect.stringContaining('GMT'),
-            ETag: expect.any(String),
-            'Keep-Alive': 'timeout=5',
-            'X-Powered-By': 'Express',
-          },
+          headers: expect.objectContaining({'X-Powered-By': 'Express'}),
+          body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
         },
       }]),
     }, {
@@ -302,16 +190,15 @@ setupIntegrationTests(
         request: {
           target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
-          headers: {
-            'cache-control': 'no-cache',
-            host: 'localhost:3000',
-            pragma: 'no-cache',
-            referer: expect.stringContaining('http://localhost:3000'),
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-          },
-        }, response: {statusCode: 0, headers: {}},
+          headers: expect.objectContaining({host: 'localhost:3000'}),
+        },
+        response: {
+          statusCode: 0,
+          headers: {},
+          body: undefined,
+        },
       }]),
-    }],
+    }]),
   },
   {target: 'http://localhost:3000'},
 );

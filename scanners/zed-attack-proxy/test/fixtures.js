@@ -34,7 +34,9 @@ module.exports = {
             Pragma: 'no-cache',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0',
           },
-          body: {},
+          body: {
+            binary: 'd29yZHM9JTNDJTJGbGklM0UlM0NzY3JJcHQlM0VhbGVydCUyODElMjklM0IlM0MlMkZzY1JpcHQlM0UlM0NsaSUzRQ==',
+          },
         },
         webResponse: {
           statusCode: 200,
