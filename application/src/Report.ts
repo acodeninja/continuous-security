@@ -14,6 +14,7 @@ export class Report {
   private cveDataset: CVE = new CVE();
   private cweDataset: CWE = new CWE();
   private osvDataset: OSV = new OSV();
+  private cached: ReportOutput;
   private emitter: Emitter;
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
   private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
@@ -92,6 +93,8 @@ export class Report {
   }
 
   async toObject(): Promise<ReportOutput> {
+    if (this.cached) return this.cached;
+
     const issues = await this.getIssues();
 
     const overviewOfIssues = issues.map(i => i.references).flat()
@@ -119,7 +122,7 @@ export class Report {
 
     const severities = issues.map(i => i.severity);
 
-    return JSON.parse(JSON.stringify({
+    this.cached = JSON.parse(JSON.stringify({
       title: `Security Report for ${basename(process.cwd())}`,
       date: new Date(),
       summaryImpacts: Object.entries(summaryImpacts).map(([scope, impacts]) => ({scope, impacts})),
@@ -144,6 +147,8 @@ export class Report {
 
       return typeof value === 'string' ? translate(value) : value;
     });
+
+    return this.cached;
   }
 
   async toJSON(): Promise<[string, Buffer]> {

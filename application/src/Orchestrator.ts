@@ -64,4 +64,10 @@ export class Orchestrator {
     const [extension, report] = await this.report.getReport(type);
     await writeFile(resolve(path, `report.${extension}`), report);
   }
+
+  async getIssueCount(): Promise<number> {
+    const report = await this.report.toObject();
+
+    return report.issues.length;
+  }
 }

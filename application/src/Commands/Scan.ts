@@ -19,5 +19,12 @@ export const ScanCommand = (program: Command) => {
 
       await orchestrator.run();
       await orchestrator.writeReport(process.cwd(), options.report);
+
+      const issueCount = await orchestrator.getIssueCount();
+
+      if (issueCount > 0) {
+        console.log(`Scan found ${issueCount} issues, please check the report.`);
+        process.exit(1);
+      }
     });
 };
