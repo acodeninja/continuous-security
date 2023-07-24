@@ -60,7 +60,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 <%= issue.description || issue.references?.[0]?.description %>
 
-<% if (issue.extracts?.length > 0) { %>##### Instances
+<% if (issue.extracts?.length > 0 || issue.requests?.length > 0) { %>##### Evidence
 
 The following examples were found in the application.
 <% issue.extracts?.forEach(extract => { %>
@@ -68,13 +68,47 @@ The following examples were found in the application.
 ```<%= extract.language %>
 <%= extract.code %>
 ```
+<% }) %>
+<% issue.requests?.forEach((r, i) => { %>
+<details><summary>Example <%= i + 1 %></summary>
+
+* **Request**
+    * **Target**: `<%= r.request.target %>`
+    * **Method**: `<%= r.request.method %>`
+    * **Headers**:
+      ```json
+<%= JSON.stringify(r.request.headers, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
+      ```<% if (r.request.body) { %>
+    * **Body**:
+      ```json
+<%= JSON.stringify(r.request.body, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
+      ```<% } %>
+    * **Curl**:
+      ```shell
+      curl -o - -i \
+        -X <%= r.request.method %> \<% if (r.request.body) { %>
+        --data '<%= r.request.body %>' \<% } %><% if (r.request.headers) { %>
+        <%= Object.entries(r.request.headers).filter(([name, value]) => name !== 'content-length').map(([name, value]) => `-H "${name}: ${value}" \\`).join('\n        ') %><% } %>
+        "<%= r.request.target %>"
+      ```
+* **Response**
+    * **Status Code**: `<%= r.response.statusCode %>`
+    * **Headers**:
+      ```json
+<%= JSON.stringify(r.response.headers, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
+      ```
+<% if (r.response.body) { %>    * **Body**:
+      ```<%= r.response.body.indexOf('<!doctype html>') !== -1 ? 'html' : 'json' %>
+<%= r.response.body?.split('\n').map(l => `      ${l}`).join('\n') %>
+      ```<% } %>
+
+</details>
 <% }) %><% } %>
 <% if (issue.references?.length > 0) { %>##### References
 
 <%= issue.references?.map(r => r.label.startsWith('CWE') ? `[${r.label}](#${r.label})` : `[${r.label}](${r.directLink})`).join(' | ') %>
 
-<% } %>
-<% }) %><% }) %>
+<% } %><% }) %><% }) %>
 
 ## Additional Information
 

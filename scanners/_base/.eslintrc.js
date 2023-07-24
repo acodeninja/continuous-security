@@ -38,6 +38,10 @@ module.exports = {
       'error',
       'always-multiline',
     ],
+    'quote-props': [
+      "error",
+      "as-needed",
+    ],
     '@typescript-eslint/no-unused-vars': [
       'error',
       {varsIgnorePattern: '^_'},

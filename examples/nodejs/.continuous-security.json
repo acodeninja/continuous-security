@@ -1,7 +1,0 @@
-{
-  "scanners": [
-    "@continuous-security/scanner-npm-audit",
-    "@continuous-security/scanner-njsscan",
-    "@continuous-security/scanner-js-x-ray"
-  ]
-}

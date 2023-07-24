@@ -24,10 +24,12 @@ describe('a CVE security advisory', () => {
   });
 
   test('has the correct description', () => {
-    expect(reference.description).toEqual('Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There\'s no fix yet.');
+    expect(reference.description).toMatchSnapshot();
   });
 
   test('has the correct url', () => {
-    expect(reference.directLink).toEqual('https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-1010218');
+    expect(reference.directLink).toEqual(
+      'https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-1010218',
+    );
   });
 });

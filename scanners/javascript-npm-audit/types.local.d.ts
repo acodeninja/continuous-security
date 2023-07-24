@@ -8,7 +8,7 @@ interface NpmAudit {
       range: string;
       nodes: Array<string>;
       fixAvailable: boolean;
-      via: Array<{
+      via: Array<string | {
         source: number;
         title: string;
         name: string;

@@ -1,38 +1,56 @@
 module.exports = {
-  'env': {
-    'es2021': true,
-    'node': true
+  env: {
+    es2021: true,
+    node: true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
   ],
-  'overrides': [
-  ],
-  'parser': '@typescript-eslint/parser',
-  'parserOptions': {
-    'ecmaVersion': 'latest',
-    'sourceType': 'module'
+  overrides: [],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-  'plugins': [
-    '@typescript-eslint'
+  plugins: [
+    '@typescript-eslint',
   ],
-  'rules': {
-    'indent': [
+  ignorePatterns: [
+    'tests/fixtures/*',
+  ],
+  rules: {
+    indent: [
       'error',
-      2
+      2,
     ],
     'linebreak-style': [
       'error',
-      'unix'
+      'unix',
     ],
-    'quotes': [
+    quotes: [
       'error',
-      'single'
+      'single',
     ],
-    'semi': [
+    semi: [
       'error',
-      'always'
-    ]
-  }
+      'always',
+    ],
+    'comma-dangle': [
+      'error',
+      'always-multiline',
+    ],
+    'quote-props': [
+      'error',
+      'as-needed',
+    ],
+    'max-len': [
+      'error',
+      {code: 100},
+    ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {varsIgnorePattern: '^_'},
+    ],
+  },
 };

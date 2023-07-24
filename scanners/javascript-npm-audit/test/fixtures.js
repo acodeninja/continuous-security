@@ -1,6 +1,68 @@
 const npmAuditReport = {
   auditReportVersion: 2,
   vulnerabilities: {
+    sane: {
+      name: 'sane',
+      severity: 'moderate',
+      isDirect: false,
+      via: [
+        'execa',
+      ],
+      effects: [
+        'jest-haste-map',
+      ],
+      range: '3.1.0 - 4.1.0',
+      nodes: [
+        'node_modules/sane',
+      ],
+      fixAvailable: {
+        name: 'jest',
+        version: '25.0.0',
+        isSemVerMajor: true,
+      },
+    },
+    semver: {
+      name: 'semver',
+      severity: 'moderate',
+      isDirect: false,
+      via: [
+        {
+          source: 1092310,
+          name: 'semver',
+          dependency: 'semver',
+          title: 'semver vulnerable to Regular Expression Denial of Service',
+          url: 'https://github.com/advisories/GHSA-c2qf-rxjj-qqgw',
+          severity: 'moderate',
+          cwe: [
+            'CWE-1333',
+          ],
+          cvss: {
+            score: 5.3,
+            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L',
+          },
+          range: '<7.5.2',
+        },
+      ],
+      effects: [
+        '@babel/core',
+        '@babel/helper-compilation-targets',
+        'cross-spawn',
+        'istanbul-lib-instrument',
+        'make-dir',
+        'normalize-package-data',
+      ],
+      range: '<7.5.2',
+      nodes: [
+        'node_modules/normalize-package-data/node_modules/semver',
+        'node_modules/sane/node_modules/semver',
+        'node_modules/semver',
+      ],
+      fixAvailable: {
+        name: 'jest',
+        version: '25.0.0',
+        isSemVerMajor: true,
+      },
+    },
     squirrelly: {
       name: 'squirrelly',
       severity: 'high',

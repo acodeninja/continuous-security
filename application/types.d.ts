@@ -1,6 +1,6 @@
 type EventEmitter = {
   on(event: string, listener: () => void): void;
-  emit(event: string, ...values: Array<any>): void;
+  emit(event: string, ...values: Array<unknown>): void;
 }
 
 type ConfigurationFile = {
@@ -30,7 +30,7 @@ type ReportOutput = {
 type ReportOutputIssue = {
   title: string;
   description: string;
-  type: 'dependency' | 'code smell';
+  type: 'dependency' | 'code smell' | 'web request';
   foundBy: string;
   package?: {
     name: string;
