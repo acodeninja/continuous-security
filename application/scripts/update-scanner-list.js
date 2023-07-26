@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-const {readdir, writeFile} = require('fs/promises');
+const {readdir, writeFile, readFile} = require('fs/promises');
 const {resolve} = require('path');
 /* eslint-enable */
 
@@ -9,9 +9,7 @@ readdir(resolve(process.cwd(), '..', 'scanners'))
   .then(l => l.filter(i => i !== '_base'))
   .then(l => Promise.all(l.map(async (name) => {
     const path = resolve(process.cwd(), '..', 'scanners', name, 'package.json');
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    const {description, continuousSecurityScanner} = require(path);
-    /* eslint-enable */
+    const {description, continuousSecurityScanner} = JSON.parse((await readFile(path)).toString());
 
     return {
       name,
