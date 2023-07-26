@@ -70,6 +70,10 @@ jobs:
         working-directory: application/
       - run: npm run build
         working-directory: application/
+      - run: |
+          npm i -g @continuous-security/application
+          continuous-security scan
+        working-directory: application/
 
   enumerate-scanners:
     name: scanner / enumerate
@@ -117,4 +121,8 @@ jobs:
         run: npm run test:integration --if-present
         working-directory: scanners/${{ matrix.scanner }}/
       - run: npm run build
+        working-directory: scanners/${{ matrix.scanner }}/
+      - run: |
+          npm i -g @continuous-security/application
+          continuous-security scan
         working-directory: scanners/${{ matrix.scanner }}/
