@@ -1,3 +1,5 @@
+name: publish documentation
+
 on:
   push:
     branches:
