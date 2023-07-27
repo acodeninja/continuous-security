@@ -47,7 +47,7 @@ jobs:
           if-no-files-found: error
 
   deploy-documentation:
-    needs: build
+    needs: build-documentation
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     permissions:
