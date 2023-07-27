@@ -1,0 +1,98 @@
+site_name: Continuous Security
+repo_url: https://github.com/acodeninja/continuous-security
+repo_name: acodeninja/continuous-security
+edit_uri: edit/main/documentation/docs/
+
+theme:
+  name: material
+  custom_dir: overrides
+  logo: assets/images/logo.svg
+  logo_alt: Logo of the Continuous Security Scanning tool
+  features:
+    - announce.dismiss
+    - announce.prototype
+    - content.action.edit
+    - content.code.copy
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - navigation.indexes
+    - toc.integrate
+
+plugins:
+  - git-revision-date-localized:
+      enabled: true
+      enable_creation_date: true
+      type: timeago
+  - search:
+      lang: en
+  - tags
+
+extra_css:
+  - assets/stylesheets/theme.css
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - tables
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      clickable_checkbox: false
+  - toc:
+      title: On this page
+
+copyright: |
+  <a href="#__consent">Change cookie settings</a>
+
+extra:
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+    actions:
+      - accept
+      - manage
+      - reject
+  analytics:
+    provider: google
+    property: !ENV
+      - GOOGLE_ANALYTICS_TAG
+      - null
+    consent:
+      title: Cookie consent
+      description: >-
+        We use cookies to recognize your repeated visits and preferences, as
+        well as to measure the effectiveness of our documentation and whether
+        users find what they're searching for. With your consent, you're helping
+        us to make our documentation better.
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/thumb-up-outline
+          name: This page was helpful
+          data: 1
+          note: Thanks for your feedback!
+
+        - icon: material/thumb-down-outline
+          name: This page could be improved
+          data: 0
+          note: Thanks for your feedback!
