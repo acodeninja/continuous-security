@@ -354,7 +354,7 @@ exports[`producing a report in json matches snapshot 1`] = `
 exports[`producing a report in markdown matches snapshot 1`] = `
 "# Security Report for application
 
-## Summary
+# Summary
 
 This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
 A total of 3 issue(s) were found, 2 of which may require immediate attention.
@@ -365,7 +365,7 @@ The following technical impacts may arise if an adversary successfully exploits 
 * **Integrity**: Gain Privileges or Assume Identity
 * **Availability**: DoS: Crash, Exit, or Restart
 
-### Contents
+## Contents
 
 * [Issue Statistics](#statistics)
 * [Overview of Issues](#overview-of-issues)
@@ -373,7 +373,7 @@ The following technical impacts may arise if an adversary successfully exploits 
 * [Additional Information](#additional-information)
   * [What are severity levels?](#what-are-severity-levels)
 
-## Statistics
+# Statistics
 
 This report found issues with the following severities.
 
@@ -381,10 +381,10 @@ This report found issues with the following severities.
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
-## Overview of Issues
+# Overview of Issues
 
 <a id="CWE-248"></a>
-### Uncaught Exception
+## Uncaught Exception
 
 An exception is thrown from a function, but it is not caught.
 
@@ -392,7 +392,7 @@ An exception is thrown from a function, but it is not caught.
 When an exception is not caught, it may cause the program to crash or expose sensitive information.
 
 
-#### Consequences
+### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
@@ -405,7 +405,7 @@ Using a vulnerability of this type an attacker may be able to affect the system 
 For more information see [CWE-248](https://cwe.mitre.org/data/definitions/248.html).
 
 <a id="CWE-1004"></a>
-### Sensitive Cookie Without 'HttpOnly' Flag
+## Sensitive Cookie Without 'HttpOnly' Flag
 
 The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.
 
@@ -414,7 +414,7 @@ An HTTP cookie is a small piece of data attributed to a specific website and sto
 The HttpOnly flag directs compatible browsers to prevent client-side script from accessing cookies. Including the HttpOnly flag in the Set-Cookie HTTP response header helps mitigate the risk associated with Cross-Site Scripting (XSS) where an attacker's script code might attempt to read the contents of a cookie and exfiltrate information obtained. When set, browsers that support the flag will not reveal the contents of the cookie to a third party via client-side script executed via XSS.
 
 
-#### Consequences
+### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
@@ -430,17 +430,17 @@ Using a vulnerability of this type an attacker may be able to affect the system 
 For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html).
 
 
-## Vulnerabilities
+# Vulnerabilities
 
-### Critical Severity
+## Critical Severity
 
-#### test-issue-title (version 1.3.24)
+### test-issue-title (version 1.3.24)
 
 **Severity**: [Critical](#Critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description with excluding term: block list
 
-##### Evidence
+#### Evidence
 
 The following examples were found in the application.
 
@@ -501,13 +501,13 @@ The following examples were found in the application.
 
 [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
-#### test-issue-title 
+### test-issue-title 
 
 **Severity**: [Critical](#Critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
-##### Evidence
+#### Evidence
 
 The following examples were found in the application.
 
@@ -525,9 +525,9 @@ The following examples were found in the application.
 
 [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
-### Unknown Severity
+## Unknown Severity
 
-#### test-issue-title 
+### test-issue-title 
 
 **Severity**: [Unknown](#Unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
@@ -540,47 +540,47 @@ test-issue-description
 
 
 
-## Additional Information
+# Additional Information
 
-### What are severity levels?
+## What are severity levels?
 
 Issue severity is scored using the [Common Vulnerability Scoring System](https://www.first.org/cvss/) (CVSS) where
 such data is available. Severity levels do not represent the risk associated with an issue as risk depends on your
 specific context. Severity scoring does however give an indication of the ease of exploitation and potential scope of an
 attacks effect on an application.
 
-#### Critical
+### Critical
 
 Exploitation will likely lead to an attacker gaining administrative access to the application and infrastructure that
 supports it. Exploiting critical vulnerabilities is usually trivial and will generally not require prior access to the
 application. **A development team should aim to resolve these issues immediately by mitigating or directly resolving the
 issue**.
 
-#### High
+### High
 
 Exploitation could lead to an attacker gaining elevated access to the application and the infrastructure that supports
 it. It is likely that an attacker will not find exploitation trivial. Such exploitation could lead to significant data
 loss or downtime.
 
-#### Medium
+### Medium
 
 Exploitation could lead to an attacker gaining limited access to the application. Exploiting vulnerabilities may require
 an attacker to manipulate users to gain access to their credentials. Such exploitation could lead to limited data loss
 or downtime.
 
-#### Low
+### Low
 
 Exploitation will likely have very little impact on the application, and it is unlikely that an attacker will gain any
 meaningful access to the application. Exploiting an issue of this severity will potentially require physical access to
 the infrastructure that supports the application.
 
-#### Informational
+### Informational
 
 While not part of the CVSS scoring specification, several security analysis tools use this severity level to indicate
 that an issue is a matter of best practice. It is extremely unlikely that issues with this severity will lead to an
 attacker gaining access to any application components.
 
-#### Unknown
+### Unknown
 
 This severity level is used when the analysis tool used to perform a scan of the application does not associate any kind
 of severity level with the issues or vulnerabilities it finds. Issues with an unknown severity should be investigated by
