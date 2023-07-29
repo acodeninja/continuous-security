@@ -12,10 +12,12 @@ The following technical impacts may arise if an adversary successfully exploits 
 ## Contents
 
 * [Issue Statistics](#statistics)
-* [Overview of Issues](#overview-of-issues)
-* [Vulnerabilities](#vulnerabilities)
+* [Overview of Issues](#overview-of-issues)<% overviewOfIssues.forEach(o => { %>
+    * [<%= o.title %>](#<%= o.label %>)<% }) %>
+* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>
+    * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>-severity)<% }) %>
 * [Additional Information](#additional-information)
-  * [What are severity levels?](#what-are-severity-levels)
+    * [What are severity levels?](#what-are-severity-levels)
 
 # Statistics
 
