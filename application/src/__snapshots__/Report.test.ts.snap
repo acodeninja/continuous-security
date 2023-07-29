@@ -449,57 +449,56 @@ test-issue-description with excluding term: block list
 The following examples were found in the application.
 
 
-<details><summary>Example 1</summary>
+??? example "Web Request 1"
 
-* **Request**
-    * **Target**: \`http://localhost:3000\`
-    * **Method**: \`POST\`
-    * **Headers**:
-      \`\`\`json
-      {
-        "cache-control": "no-cache",
-        "content-length": "302",
-        "content-type": "application/x-www-form-urlencoded",
-        "host": "localhost:3000",
-        "pragma": "no-cache",
-        "referer": "http://localhost:3000",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-      }
-      \`\`\`
-    * **Body**:
-      \`\`\`json
-      "words=ZAP"
-      \`\`\`
-    * **Curl**:
-      \`\`\`shell
-      curl -o - -i \\
-        -X POST \\
-        --data 'words=ZAP' \\
-        -H "cache-control: no-cache" \\
-        -H "content-type: application/x-www-form-urlencoded" \\
-        -H "host: localhost:3000" \\
-        -H "pragma: no-cache" \\
-        -H "referer: http://localhost:3000" \\
-        -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \\
-        "http://localhost:3000"
-      \`\`\`
-* **Response**
-    * **Status Code**: \`200\`
-    * **Headers**:
-      \`\`\`json
-      {
-        "Connection": "keep-alive",
-        "Content-Length": "939",
-        "Content-Type": "text/html; charset=utf-8",
-        "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
-        "ETag": "\\"3147526947+ident\\"",
-        "Keep-Alive": "timeout=5",
-        "X-Powered-By": "Express"
-      }
-      \`\`\`
+    * **Request**
+        * **Target**: \`http://localhost:3000\`
+        * **Method**: \`POST\`
+        * **Headers**:
+          \`\`\`json
+          {
+            "cache-control": "no-cache",
+            "content-length": "302",
+            "content-type": "application/x-www-form-urlencoded",
+            "host": "localhost:3000",
+            "pragma": "no-cache",
+            "referer": "http://localhost:3000",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+          }
+          \`\`\`
+        * **Body**:
+          \`\`\`json
+          "words=ZAP"
+          \`\`\`
+        * **Curl**:
+          \`\`\`shell
+          curl -o - -i \\
+            -X POST \\
+            --data 'words=ZAP' \\
+            -H "cache-control: no-cache" \\
+            -H "content-type: application/x-www-form-urlencoded" \\
+            -H "host: localhost:3000" \\
+            -H "pragma: no-cache" \\
+            -H "referer: http://localhost:3000" \\
+            -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \\
+            "http://localhost:3000"
+          \`\`\`
+    * **Response**
+        * **Status Code**: \`200\`
+        * **Headers**:
+          \`\`\`json
+          {
+            "Connection": "keep-alive",
+            "Content-Length": "939",
+            "Content-Type": "text/html; charset=utf-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": "\\"3147526947+ident\\"",
+            "Keep-Alive": "timeout=5",
+            "X-Powered-By": "Express"
+          }
+          \`\`\`
+    
 
-
-</details>
 
 ##### References
 
