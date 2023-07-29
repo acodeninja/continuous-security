@@ -446,7 +446,7 @@ test-issue-description with excluding term: block list
 
 #### Evidence
 
-The following examples were found in the application.
+The following evidence of this vulnerability was found in the application.
 
 
 ??? example "Web Request 1"
@@ -512,7 +512,7 @@ test-issue-description
 
 #### Evidence
 
-The following examples were found in the application.
+The following evidence of this vulnerability was found in the application.
 
 \`scripts/update-cwe.js\` (starting on line: 5)
 \`\`\`javascript

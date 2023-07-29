@@ -64,7 +64,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 <% if (issue.extracts?.length > 0 || issue.requests?.length > 0) { %>#### Evidence
 
-The following examples were found in the application.
+The following evidence of this vulnerability was found in the application.
 <% issue.extracts?.forEach(extract => { %>
 `<%= extract.path %>` (starting on line: <%= extract.lines[0] %>)
 ```<%= extract.language %>
