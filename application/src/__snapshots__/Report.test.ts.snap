@@ -436,7 +436,7 @@ For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.
 
 ### test-issue-title (version 1.3.24)
 
-**Severity**: [Critical](#Critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Critical](#critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description with excluding term: block list
 
@@ -503,7 +503,7 @@ The following examples were found in the application.
 
 ### test-issue-title 
 
-**Severity**: [Critical](#Critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Critical](#critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
@@ -529,7 +529,7 @@ The following examples were found in the application.
 
 ### test-issue-title 
 
-**Severity**: [Unknown](#Unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Unknown](#unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 

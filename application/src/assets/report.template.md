@@ -56,7 +56,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 <% issues.forEach(issue => { %>### <%= issue.title %> <% if (issue.package) { %>(version <%= issue.package.version %>)<% } %>
 
-**Severity**: [<%= functions.capitalise(issue.severity) %>](#<%= functions.capitalise(issue.severity) %>) | **Type**: <%= issue.type %> | **Fix**: <%= issue.fix %> | **Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
+**Severity**: [<%= functions.capitalise(issue.severity) %>](#<%= issue.severity %>) | **Type**: <%= issue.type %> | **Fix**: <%= issue.fix %> | **Found By**: [<%= issue.foundBy %>](https://www.npmjs.com/package/<%= issue.foundBy %>)
 
 <%= issue.description || issue.references?.[0]?.description %>
 
