@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-python-pip-audit",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Run pip-audit against your python codebase.",
   "main": "build/main.js",
   "scripts": {
