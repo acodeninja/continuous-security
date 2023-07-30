@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {OSV} from './OSV';
-import {Github} from '../../tests/fixtures/OSVResponse';
+import {Github} from '../../../tests/fixtures/OSVResponse';
 
 jest.mock('axios', () => ({
   get: jest.fn(),

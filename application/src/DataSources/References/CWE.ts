@@ -2,9 +2,9 @@ import {DOMParser} from '@xmldom/xmldom';
 import XmlReader from 'xml-reader';
 import XmlQuery from 'xml-query';
 import {select} from 'xpath';
-import {tidyString} from '../Helpers';
+import {tidyString} from '../../Helpers';
 
-import CWEDataset from '../assets/cwe.xml';
+import CWEDataset from '../../assets/cwe.xml';
 
 export class CWEDoesNotExist extends Error {
   message = 'Could not find CWE';

@@ -2,21 +2,16 @@ import {template, TemplateExecutor} from 'lodash';
 import {basename} from 'path';
 import {readFile} from 'fs/promises';
 import BaseTemplate from './assets/report.template.md';
-import {CVE} from './DataSources/CVE';
-import {CWE} from './DataSources/CWE';
-import {OSV} from './DataSources/OSV';
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
+import {References} from "./DataSources/References";
 
 export class Report {
   private readonly template: TemplateExecutor;
   private reports: Array<ScanReport> = [];
-  private cveDataset: CVE = new CVE();
-  private cweDataset: CWE = new CWE();
-  private osvDataset: OSV = new OSV();
-  private cachedReferences: Record<string, ReportOutputIssueReference>;
   private cached: ReportOutput;
   private emitter: Emitter;
+  private references: References;
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
   private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
     groupBy: (list: Array<unknown>, grouping: string) => {
@@ -42,65 +37,13 @@ export class Report {
   };
 
   constructor(emitter: Emitter) {
-    this.template = template(BaseTemplate);
     this.emitter = emitter;
+    this.references = new References(emitter);
+    this.template = template(BaseTemplate);
   }
 
   addScanReport(report: ScanReport): void {
     this.reports.push(report);
-  }
-
-  private async expandReferences(references: Array<string>):
-    Promise<Array<ReportOutputIssueReference>> {
-    const expandedReferences: Record<string, ReportOutputIssueReference> = {...this.cachedReferences};
-    const referencesToProcess = Array.from(references);
-    const processedReferences = [];
-
-    while (referencesToProcess.length > 0) {
-      const ref = referencesToProcess.pop();
-
-      if (!ref) continue;
-
-      processedReferences.push(ref);
-
-      if (!!expandedReferences[ref]) continue;
-
-      const slug = ref.toLowerCase();
-      this.emitter.emit('report:reference', `fetching details for ${ref}`);
-
-      try {
-        if (slug.indexOf('cwe') === 0) {
-          expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
-        } else if (slug.indexOf('cve') === 0) {
-          expandedReferences[ref] = await this.cveDataset.getById(ref.toUpperCase());
-        } else {
-          expandedReferences[ref] = await this.osvDataset.getById(ref);
-        }
-      } catch (e) {
-        this.emitter.emit(
-          'report:reference:failure',
-          `Failed to fetch vulnerability reference ${ref}`,
-        );
-      }
-
-      if (expandedReferences[ref]?.dataSourceSpecific?.osv?.aliases) {
-        expandedReferences[ref].dataSourceSpecific.osv.aliases
-          .forEach(a => {
-            if (!expandedReferences[ref]) referencesToProcess.push(a);
-            if (!processedReferences.includes(a)) referencesToProcess.push(a);
-          });
-      }
-    }
-
-    this.cachedReferences = expandedReferences;
-
-    const outputReferences = Object.values(this.cachedReferences)
-      .filter(r => processedReferences.includes(r.label));
-
-    outputReferences.sort((a, b) =>
-      (a.label < b.label) ? -1 : ((a.label > b.label) ? 1 : 0));
-
-    return outputReferences;
   }
 
   async toObject(): Promise<ReportOutput> {
@@ -197,7 +140,7 @@ export class Report {
     for (const issue of withFoundBy) {
       withExpandedReferences.push({
         ...issue,
-        references: issue.references ? await this.expandReferences(issue.references) : [],
+        references: issue.references ? await this.references.getAll(issue.references) : [],
       });
     }
 
