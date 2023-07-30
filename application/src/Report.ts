@@ -181,10 +181,14 @@ export class Report {
       foundBy: r.scanner,
     }))).flat();
 
-    const withExpandedReferences = await Promise.all(withFoundBy.map(async (issue) => ({
-      ...issue,
-      references: issue.references ? await this.expandReferences(issue.references) : [],
-    })));
+    const withExpandedReferences = [];
+
+    for (const issue of withFoundBy) {
+      withExpandedReferences.push({
+        ...issue,
+        references: issue.references ? await this.expandReferences(issue.references) : [],
+      });
+    }
 
     const withHighestSeverities = withExpandedReferences.map(i => {
       const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
