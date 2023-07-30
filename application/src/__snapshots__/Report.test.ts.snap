@@ -156,6 +156,34 @@ exports[`producing a report in json matches snapshot 1`] = `
           }
         },
         {
+          "label": "CWE-248",
+          "title": "Uncaught Exception",
+          "description": "An exception is thrown from a function, but it is not caught.",
+          "directLink": "https://cwe.mitre.org/data/definitions/248.html",
+          "dataSourceSpecific": {
+            "cwe": {
+              "extendedDescription": "When an exception is not caught, it may cause the program to crash or expose sensitive information.",
+              "background": "",
+              "consequences": [
+                {
+                  "scopeImpacts": [
+                    {
+                      "scope": "Availability",
+                      "impact": "DoS: Crash, Exit, or Restart"
+                    },
+                    {
+                      "scope": "Confidentiality",
+                      "impact": "Read Application Data"
+                    }
+                  ],
+                  "note": "An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors."
+                }
+              ],
+              "mitigations": []
+            }
+          }
+        },
+        {
           "label": "GHSA-f9xv-q969-pqx4",
           "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
           "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
@@ -164,7 +192,7 @@ exports[`producing a report in json matches snapshot 1`] = `
             "osv": {
               "aliases": [
                 "CVE-2022-25772",
-                "CWE-79"
+                "CWE-248"
               ],
               "severity": "critical"
             }
@@ -226,21 +254,6 @@ exports[`producing a report in json matches snapshot 1`] = `
       ],
       "references": [
         {
-          "label": "CVE-2022-25772",
-          "title": "CVE-2022-25772",
-          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
-          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
-          "dataSourceSpecific": {
-            "cve": {
-              "aliases": [
-                "CWE-787",
-                "CWE-120"
-              ],
-              "severity": "high"
-            }
-          }
-        },
-        {
           "label": "CWE-1004",
           "title": "Sensitive Cookie Without 'HttpOnly' Flag",
           "description": "The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.",
@@ -289,7 +302,7 @@ exports[`producing a report in json matches snapshot 1`] = `
             "osv": {
               "aliases": [
                 "CVE-2022-25772",
-                "CWE-79"
+                "CWE-248"
               ],
               "severity": "critical"
             }
@@ -354,10 +367,13 @@ exports[`producing a report in json matches snapshot 1`] = `
 exports[`producing a report in markdown matches snapshot 1`] = `
 "# Security Report for application
 
-## Summary
+# Summary
 
 This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
 A total of 3 issue(s) were found, 2 of which may require immediate attention.
+
+This report is produced by running automated security scanning tools, which will likely not detect
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**. 
 
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 
@@ -365,15 +381,19 @@ The following technical impacts may arise if an adversary successfully exploits 
 * **Integrity**: Gain Privileges or Assume Identity
 * **Availability**: DoS: Crash, Exit, or Restart
 
-### Contents
+## Contents
 
 * [Issue Statistics](#statistics)
 * [Overview of Issues](#overview-of-issues)
+    * [Uncaught Exception](#CWE-248)
+    * [Sensitive Cookie Without 'HttpOnly' Flag](#CWE-1004)
 * [Vulnerabilities](#vulnerabilities)
+    * [Critical (2)](#critical-severity)
+    * [Unknown (1)](#unknown-severity)
 * [Additional Information](#additional-information)
-  * [What are severity levels?](#what-are-severity-levels)
+    * [What are severity levels?](#what-are-severity-levels)
 
-## Statistics
+# Statistics
 
 This report found issues with the following severities.
 
@@ -381,10 +401,10 @@ This report found issues with the following severities.
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
-## Overview of Issues
+# Overview of Issues
 
 <a id="CWE-248"></a>
-### Uncaught Exception
+## Uncaught Exception
 
 An exception is thrown from a function, but it is not caught.
 
@@ -392,7 +412,7 @@ An exception is thrown from a function, but it is not caught.
 When an exception is not caught, it may cause the program to crash or expose sensitive information.
 
 
-#### Consequences
+### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
@@ -405,7 +425,7 @@ Using a vulnerability of this type an attacker may be able to affect the system 
 For more information see [CWE-248](https://cwe.mitre.org/data/definitions/248.html).
 
 <a id="CWE-1004"></a>
-### Sensitive Cookie Without 'HttpOnly' Flag
+## Sensitive Cookie Without 'HttpOnly' Flag
 
 The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.
 
@@ -414,7 +434,7 @@ An HTTP cookie is a small piece of data attributed to a specific website and sto
 The HttpOnly flag directs compatible browsers to prevent client-side script from accessing cookies. Including the HttpOnly flag in the Set-Cookie HTTP response header helps mitigate the risk associated with Cross-Site Scripting (XSS) where an attacker's script code might attempt to read the contents of a cookie and exfiltrate information obtained. When set, browsers that support the flag will not reveal the contents of the cookie to a third party via client-side script executed via XSS.
 
 
-#### Consequences
+### Consequences
 
 Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
 
@@ -430,86 +450,85 @@ Using a vulnerability of this type an attacker may be able to affect the system 
 For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html).
 
 
-## Vulnerabilities
+# Vulnerabilities
 
-### Critical Severity
+## Critical Severity
 
-#### test-issue-title (version 1.3.24)
+### test-issue-title (version 1.3.24)
 
-**Severity**: [Critical](#Critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Critical](#critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description with excluding term: block list
 
-##### Evidence
+#### Evidence
 
-The following examples were found in the application.
-
-
-<details><summary>Example 1</summary>
-
-* **Request**
-    * **Target**: \`http://localhost:3000\`
-    * **Method**: \`POST\`
-    * **Headers**:
-      \`\`\`json
-      {
-        "cache-control": "no-cache",
-        "content-length": "302",
-        "content-type": "application/x-www-form-urlencoded",
-        "host": "localhost:3000",
-        "pragma": "no-cache",
-        "referer": "http://localhost:3000",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-      }
-      \`\`\`
-    * **Body**:
-      \`\`\`json
-      "words=ZAP"
-      \`\`\`
-    * **Curl**:
-      \`\`\`shell
-      curl -o - -i \\
-        -X POST \\
-        --data 'words=ZAP' \\
-        -H "cache-control: no-cache" \\
-        -H "content-type: application/x-www-form-urlencoded" \\
-        -H "host: localhost:3000" \\
-        -H "pragma: no-cache" \\
-        -H "referer: http://localhost:3000" \\
-        -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \\
-        "http://localhost:3000"
-      \`\`\`
-* **Response**
-    * **Status Code**: \`200\`
-    * **Headers**:
-      \`\`\`json
-      {
-        "Connection": "keep-alive",
-        "Content-Length": "939",
-        "Content-Type": "text/html; charset=utf-8",
-        "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
-        "ETag": "\\"3147526947+ident\\"",
-        "Keep-Alive": "timeout=5",
-        "X-Powered-By": "Express"
-      }
-      \`\`\`
+The following evidence of this vulnerability was found in the application.
 
 
-</details>
+??? example "Web Request 1"
+
+    * **Request**
+        * **Target**: \`http://localhost:3000\`
+        * **Method**: \`POST\`
+        * **Headers**:
+          \`\`\`json
+          {
+            "cache-control": "no-cache",
+            "content-length": "302",
+            "content-type": "application/x-www-form-urlencoded",
+            "host": "localhost:3000",
+            "pragma": "no-cache",
+            "referer": "http://localhost:3000",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+          }
+          \`\`\`
+        * **Body**:
+          \`\`\`json
+          "words=ZAP"
+          \`\`\`
+        * **Curl**:
+          \`\`\`shell
+          curl -o - -i \\
+            -X POST \\
+            --data 'words=ZAP' \\
+            -H "cache-control: no-cache" \\
+            -H "content-type: application/x-www-form-urlencoded" \\
+            -H "host: localhost:3000" \\
+            -H "pragma: no-cache" \\
+            -H "referer: http://localhost:3000" \\
+            -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \\
+            "http://localhost:3000"
+          \`\`\`
+    * **Response**
+        * **Status Code**: \`200\`
+        * **Headers**:
+          \`\`\`json
+          {
+            "Connection": "keep-alive",
+            "Content-Length": "939",
+            "Content-Type": "text/html; charset=utf-8",
+            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+            "ETag": "\\"3147526947+ident\\"",
+            "Keep-Alive": "timeout=5",
+            "X-Powered-By": "Express"
+          }
+          \`\`\`
+    
+
 
 ##### References
 
-[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
+[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [CWE-248](#CWE-248) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
-#### test-issue-title 
+### test-issue-title 
 
-**Severity**: [Critical](#Critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Critical](#critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
-##### Evidence
+#### Evidence
 
-The following examples were found in the application.
+The following evidence of this vulnerability was found in the application.
 
 \`scripts/update-cwe.js\` (starting on line: 5)
 \`\`\`javascript
@@ -523,13 +542,13 @@ The following examples were found in the application.
 
 ##### References
 
-[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
+[CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
-### Unknown Severity
+## Unknown Severity
 
-#### test-issue-title 
+### test-issue-title 
 
-**Severity**: [Unknown](#Unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+**Severity**: [Unknown](#unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
 test-issue-description
 
@@ -540,47 +559,47 @@ test-issue-description
 
 
 
-## Additional Information
+# Additional Information
 
-### What are severity levels?
+## What are severity levels?
 
 Issue severity is scored using the [Common Vulnerability Scoring System](https://www.first.org/cvss/) (CVSS) where
 such data is available. Severity levels do not represent the risk associated with an issue as risk depends on your
 specific context. Severity scoring does however give an indication of the ease of exploitation and potential scope of an
 attacks effect on an application.
 
-#### Critical
+### Critical
 
 Exploitation will likely lead to an attacker gaining administrative access to the application and infrastructure that
 supports it. Exploiting critical vulnerabilities is usually trivial and will generally not require prior access to the
 application. **A development team should aim to resolve these issues immediately by mitigating or directly resolving the
 issue**.
 
-#### High
+### High
 
 Exploitation could lead to an attacker gaining elevated access to the application and the infrastructure that supports
 it. It is likely that an attacker will not find exploitation trivial. Such exploitation could lead to significant data
 loss or downtime.
 
-#### Medium
+### Medium
 
 Exploitation could lead to an attacker gaining limited access to the application. Exploiting vulnerabilities may require
 an attacker to manipulate users to gain access to their credentials. Such exploitation could lead to limited data loss
 or downtime.
 
-#### Low
+### Low
 
 Exploitation will likely have very little impact on the application, and it is unlikely that an attacker will gain any
 meaningful access to the application. Exploiting an issue of this severity will potentially require physical access to
 the infrastructure that supports the application.
 
-#### Informational
+### Informational
 
 While not part of the CVSS scoring specification, several security analysis tools use this severity level to indicate
 that an issue is a matter of best practice. It is extremely unlikely that issues with this severity will lead to an
 attacker gaining access to any application components.
 
-#### Unknown
+### Unknown
 
 This severity level is used when the analysis tool used to perform a scan of the application does not associate any kind
 of severity level with the issues or vulnerabilities it finds. Issues with an unknown severity should be investigated by

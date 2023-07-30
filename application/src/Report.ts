@@ -2,19 +2,16 @@ import {template, TemplateExecutor} from 'lodash';
 import {basename} from 'path';
 import {readFile} from 'fs/promises';
 import BaseTemplate from './assets/report.template.md';
-import {CVE} from './DataSources/CVE';
-import {CWE} from './DataSources/CWE';
-import {OSV} from './DataSources/OSV';
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
+import {References} from './DataSources/References';
 
 export class Report {
   private readonly template: TemplateExecutor;
   private reports: Array<ScanReport> = [];
-  private cveDataset: CVE = new CVE();
-  private cweDataset: CWE = new CWE();
-  private osvDataset: OSV = new OSV();
+  private cached: ReportOutput;
   private emitter: Emitter;
+  private references: References;
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
   private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
     groupBy: (list: Array<unknown>, grouping: string) => {
@@ -40,58 +37,18 @@ export class Report {
   };
 
   constructor(emitter: Emitter) {
-    this.template = template(BaseTemplate);
     this.emitter = emitter;
+    this.references = new References(emitter);
+    this.template = template(BaseTemplate);
   }
 
   addScanReport(report: ScanReport): void {
     this.reports.push(report);
   }
 
-  private async expandReferences(references: Array<string>):
-    Promise<Array<ReportOutputIssueReference>> {
-    const expandedReferences: Record<string, ReportOutputIssueReference> = {};
-    const referencesToProcess = Array.from(references);
-
-    while (referencesToProcess
-      .filter(r => !Object.keys(expandedReferences).includes(r)).length > 0) {
-      for (const ref of referencesToProcess
-        .filter(r => !Object.keys(expandedReferences).includes(r))) {
-        const slug = ref.toLowerCase();
-        this.emitter.emit('report:reference', `fetching details for ${ref}`);
-
-        try {
-          if (slug.indexOf('cwe') === 0) {
-            expandedReferences[ref] = this.cweDataset.getById(ref.toUpperCase());
-          } else if (slug.indexOf('cve') === 0) {
-            expandedReferences[ref] = await this.cveDataset.getById(ref.toUpperCase());
-          } else {
-            expandedReferences[ref] = await this.osvDataset.getById(ref);
-          }
-        } catch (e) {
-          this.emitter.emit(
-            'report:reference:failure',
-            `Failed to fetch vulnerability reference ${ref}`,
-          );
-          referencesToProcess.splice(referencesToProcess.indexOf(ref), 1);
-        }
-
-        if (expandedReferences[ref]?.dataSourceSpecific?.osv?.aliases) {
-          expandedReferences[ref].dataSourceSpecific.osv.aliases
-            .forEach(a => referencesToProcess.push(a));
-        }
-      }
-    }
-
-    const outputReferences = Object.values(expandedReferences);
-
-    outputReferences.sort((a, b) =>
-      (a.label < b.label) ? -1 : ((a.label > b.label) ? 1 : 0));
-
-    return outputReferences;
-  }
-
   async toObject(): Promise<ReportOutput> {
+    if (this.cached) return this.cached;
+
     const issues = await this.getIssues();
 
     const overviewOfIssues = issues.map(i => i.references).flat()
@@ -119,7 +76,7 @@ export class Report {
 
     const severities = issues.map(i => i.severity);
 
-    return JSON.parse(JSON.stringify({
+    this.cached = JSON.parse(JSON.stringify({
       title: `Security Report for ${basename(process.cwd())}`,
       date: new Date(),
       summaryImpacts: Object.entries(summaryImpacts).map(([scope, impacts]) => ({scope, impacts})),
@@ -144,6 +101,8 @@ export class Report {
 
       return typeof value === 'string' ? translate(value) : value;
     });
+
+    return this.cached;
   }
 
   async toJSON(): Promise<[string, Buffer]> {
@@ -176,15 +135,20 @@ export class Report {
       foundBy: r.scanner,
     }))).flat();
 
-    const withExpandedReferences = await Promise.all(withFoundBy.map(async (issue) => ({
-      ...issue,
-      references: issue.references ? await this.expandReferences(issue.references) : [],
-    })));
+    const withExpandedReferences = [];
+
+    for (const issue of withFoundBy) {
+      withExpandedReferences.push({
+        ...issue,
+        references: issue.references ? await this.references.getAll(issue.references) : [],
+      });
+    }
 
     const withHighestSeverities = withExpandedReferences.map(i => {
-      const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
+      const severities = i.references
+        .map((r: ReportOutputIssueReference) => r.dataSourceSpecific?.osv?.severity)
         .concat(i.severity)
-        .filter(s => !!s);
+        .filter((s: ReportOutputIssue['severity'] | undefined) => !!s);
 
       severities.sort((a, b) => this.severityOrder.indexOf(a) - this.severityOrder.indexOf(b));
 

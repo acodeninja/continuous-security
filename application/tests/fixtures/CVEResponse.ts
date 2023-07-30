@@ -7,7 +7,7 @@ export const CVEResponse = {
   timestamp: '2023-06-30T23:34:19.163',
   vulnerabilities: [{
     cve: {
-      id: 'CVE-2019-1010218',
+      id: 'CVE-2022-25772',
       sourceIdentifier: 'josh@bress.net',
       published: '2019-07-22T18:15:10.917',
       lastModified: '2020-09-30T13:40:18.163',
