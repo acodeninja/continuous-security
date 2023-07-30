@@ -23,3 +23,29 @@ describe('ci logger', () => {
     expect(console.log).toHaveBeenCalledWith('[event] name');
   });
 });
+
+describe('tty logger', () => {
+  const emitter = new Emitter();
+  new Logger(emitter, 'tty');
+
+  beforeAll(() => {
+    emitter.emit('event', 'name');
+  });
+
+  test('logs a triggered event', () => {
+    expect(console.log).toHaveBeenCalledWith('[event] name');
+  });
+});
+
+describe('no logger', () => {
+  const emitter = new Emitter();
+  new Logger(emitter);
+
+  beforeAll(() => {
+    emitter.emit('event', 'name');
+  });
+
+  test('logs a triggered event', () => {
+    expect(console.log).toHaveBeenCalledWith('[event] name');
+  });
+});
