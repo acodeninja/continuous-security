@@ -14,8 +14,11 @@ repository.
 
 # Summary
 
-This security report was conducted on 30/07/2023 at 09:28:28 (UTC+1).
+This security report was conducted on 30/07/2023 at 14:46:44 (UTC+1).
 A total of 16 issue(s) were found, 0 of which may require immediate attention.
+
+This report is produced by running automated security scanning tools, which will likely not detect
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**. 
 
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 
@@ -267,7 +270,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "280",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:55 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:18 GMT",
             "ETag": "W/\"118-loogVhyb1pYQmHO2I7wK+JD3Xdg\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -333,7 +336,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "423",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:55 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:18 GMT",
             "ETag": "W/\"1a7-u+24W1nkENntvxWP3gR7+2yGUIk\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -423,7 +426,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "378",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:55 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:18 GMT",
             "ETag": "W/\"17a-tm9nTJUgqCrvgLpGInPydbmkbQw\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -574,6 +577,49 @@ The following evidence of this vulnerability was found in the application.
     
 
 
+??? example "Web Request 4"
+
+    * **Request**
+        * **Target**: `http://localhost:3000/`
+        * **Method**: `POST`
+        * **Headers**:
+          ```json
+          {
+            "cache-control": "no-cache",
+            "content-length": "9",
+            "content-type": "application/x-www-form-urlencoded",
+            "host": "localhost:3000",
+            "pragma": "no-cache",
+            "referer": "http://localhost:3000",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+          }
+          ```
+        * **Body**:
+          ```json
+          "words=ZAP"
+          ```
+        * **Curl**:
+          ```shell
+          curl -o - -i \
+            -X POST \
+            --data 'words=ZAP' \
+            -H "cache-control: no-cache" \
+            -H "content-type: application/x-www-form-urlencoded" \
+            -H "host: localhost:3000" \
+            -H "pragma: no-cache" \
+            -H "referer: http://localhost:3000" \
+            -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" \
+            "http://localhost:3000/"
+          ```
+    * **Response**
+        * **Status Code**: `0`
+        * **Headers**:
+          ```json
+          {}
+          ```
+    
+
+
 ##### References
 
 [CWE-79](#CWE-79)
@@ -663,7 +709,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "290",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"122-ft0x3wV1ncb6xFuzYSWv48AKzOo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -722,7 +768,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "256",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"100-umWhjcs63IQxOlKNJgIczWf6qpI\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -780,7 +826,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "250",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"fa-fXSsb1x71X7AbWyeF4o1UXNqRwo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -851,7 +897,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "290",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"122-ft0x3wV1ncb6xFuzYSWv48AKzOo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -910,7 +956,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "256",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"100-umWhjcs63IQxOlKNJgIczWf6qpI\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -937,36 +983,28 @@ The following evidence of this vulnerability was found in the application.
 ??? example "Web Request 3"
 
     * **Request**
-        * **Target**: `http://localhost:3000/`
-        * **Method**: `POST`
+        * **Target**: `http://localhost:3000/search?q=ZAP`
+        * **Method**: `GET`
         * **Headers**:
           ```json
           {
             "cache-control": "no-cache",
-            "content-length": "9",
-            "content-type": "application/x-www-form-urlencoded",
             "host": "localhost:3000",
             "pragma": "no-cache",
-            "referer": "http://localhost:3000",
+            "referer": "http://localhost:3000/search",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
           }
-          ```
-        * **Body**:
-          ```json
-          "words=ZAP"
           ```
         * **Curl**:
           ```shell
           curl -o - -i \
-            -X POST \
-            --data 'words=ZAP' \
+            -X GET \
             -H "cache-control: no-cache" \
-            -H "content-type: application/x-www-form-urlencoded" \
             -H "host: localhost:3000" \
             -H "pragma: no-cache" \
-            -H "referer: http://localhost:3000" \
+            -H "referer: http://localhost:3000/search" \
             -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" \
-            "http://localhost:3000/"
+            "http://localhost:3000/search?q=ZAP"
           ```
     * **Response**
         * **Status Code**: `200`
@@ -974,10 +1012,10 @@ The following evidence of this vulnerability was found in the application.
           ```json
           {
             "Connection": "keep-alive",
-            "Content-Length": "302",
+            "Content-Length": "250",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
-            "ETag": "W/\"12e-m/zVVldtTYmKwX4+aWOBL201b2o\"",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
+            "ETag": "W/\"fa-fXSsb1x71X7AbWyeF4o1UXNqRwo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
           }
@@ -987,14 +1025,13 @@ The following evidence of this vulnerability was found in the application.
           <!doctype html>
           <html lang="en">
           <body>
-          <a href="/search">Search</a>
-          <form method="post" action="/">
-            <label for="words">Enter some words</label>
-            <input name="words" id="words" />
+          <form action="/search">
+            <label for="q">Search</label>
+            <input name="q" id="q" />
             <button type="submit">Submit</button>
           </form>
           4886dd3a836ffca9ab4ab39c70871e53
-          <ul><li>ZAP</li></ul>
+          <p>You searched for: ZAP</p>
           </body>
           </html>
           
@@ -1049,7 +1086,7 @@ The following evidence of this vulnerability was found in the application.
             "Content-Length": "149",
             "Content-Security-Policy": "default-src 'none'",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "Keep-Alive": "timeout=5",
             "X-Content-Type-Options": "nosniff",
             "X-Powered-By": "Express"
@@ -1104,7 +1141,7 @@ The following evidence of this vulnerability was found in the application.
             "Content-Length": "150",
             "Content-Security-Policy": "default-src 'none'",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "Keep-Alive": "timeout=5",
             "X-Content-Type-Options": "nosniff",
             "X-Powered-By": "Express"
@@ -1181,7 +1218,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "290",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"122-ft0x3wV1ncb6xFuzYSWv48AKzOo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -1240,7 +1277,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "256",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"100-umWhjcs63IQxOlKNJgIczWf6qpI\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -1265,6 +1302,64 @@ The following evidence of this vulnerability was found in the application.
 
 
 ??? example "Web Request 3"
+
+    * **Request**
+        * **Target**: `http://localhost:3000/search?q=ZAP`
+        * **Method**: `GET`
+        * **Headers**:
+          ```json
+          {
+            "cache-control": "no-cache",
+            "host": "localhost:3000",
+            "pragma": "no-cache",
+            "referer": "http://localhost:3000/search",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+          }
+          ```
+        * **Curl**:
+          ```shell
+          curl -o - -i \
+            -X GET \
+            -H "cache-control: no-cache" \
+            -H "host: localhost:3000" \
+            -H "pragma: no-cache" \
+            -H "referer: http://localhost:3000/search" \
+            -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" \
+            "http://localhost:3000/search?q=ZAP"
+          ```
+    * **Response**
+        * **Status Code**: `200`
+        * **Headers**:
+          ```json
+          {
+            "Connection": "keep-alive",
+            "Content-Length": "250",
+            "Content-Type": "text/html; charset=utf-8",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
+            "ETag": "W/\"fa-fXSsb1x71X7AbWyeF4o1UXNqRwo\"",
+            "Keep-Alive": "timeout=5",
+            "X-Powered-By": "Express"
+          }
+          ```
+        * **Body**:
+          ```html
+          <!doctype html>
+          <html lang="en">
+          <body>
+          <form action="/search">
+            <label for="q">Search</label>
+            <input name="q" id="q" />
+            <button type="submit">Submit</button>
+          </form>
+          4886dd3a836ffca9ab4ab39c70871e53
+          <p>You searched for: ZAP</p>
+          </body>
+          </html>
+          
+          ```
+
+
+??? example "Web Request 4"
 
     * **Request**
         * **Target**: `http://localhost:3000/`
@@ -1306,7 +1401,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "302",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"12e-m/zVVldtTYmKwX4+aWOBL201b2o\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -1380,7 +1475,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "290",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"122-ft0x3wV1ncb6xFuzYSWv48AKzOo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -1439,7 +1534,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "256",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"100-umWhjcs63IQxOlKNJgIczWf6qpI\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -1466,36 +1561,28 @@ The following evidence of this vulnerability was found in the application.
 ??? example "Web Request 3"
 
     * **Request**
-        * **Target**: `http://localhost:3000/`
-        * **Method**: `POST`
+        * **Target**: `http://localhost:3000/search?q=ZAP`
+        * **Method**: `GET`
         * **Headers**:
           ```json
           {
             "cache-control": "no-cache",
-            "content-length": "9",
-            "content-type": "application/x-www-form-urlencoded",
             "host": "localhost:3000",
             "pragma": "no-cache",
-            "referer": "http://localhost:3000",
+            "referer": "http://localhost:3000/search",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
           }
-          ```
-        * **Body**:
-          ```json
-          "words=ZAP"
           ```
         * **Curl**:
           ```shell
           curl -o - -i \
-            -X POST \
-            --data 'words=ZAP' \
+            -X GET \
             -H "cache-control: no-cache" \
-            -H "content-type: application/x-www-form-urlencoded" \
             -H "host: localhost:3000" \
             -H "pragma: no-cache" \
-            -H "referer: http://localhost:3000" \
+            -H "referer: http://localhost:3000/search" \
             -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" \
-            "http://localhost:3000/"
+            "http://localhost:3000/search?q=ZAP"
           ```
     * **Response**
         * **Status Code**: `200`
@@ -1503,10 +1590,10 @@ The following evidence of this vulnerability was found in the application.
           ```json
           {
             "Connection": "keep-alive",
-            "Content-Length": "302",
+            "Content-Length": "250",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
-            "ETag": "W/\"12e-m/zVVldtTYmKwX4+aWOBL201b2o\"",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
+            "ETag": "W/\"fa-fXSsb1x71X7AbWyeF4o1UXNqRwo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
           }
@@ -1516,14 +1603,13 @@ The following evidence of this vulnerability was found in the application.
           <!doctype html>
           <html lang="en">
           <body>
-          <a href="/search">Search</a>
-          <form method="post" action="/">
-            <label for="words">Enter some words</label>
-            <input name="words" id="words" />
+          <form action="/search">
+            <label for="q">Search</label>
+            <input name="q" id="q" />
             <button type="submit">Submit</button>
           </form>
           4886dd3a836ffca9ab4ab39c70871e53
-          <ul><li>ZAP</li></ul>
+          <p>You searched for: ZAP</p>
           </body>
           </html>
           
@@ -1577,7 +1663,7 @@ The following evidence of this vulnerability was found in the application.
             "Connection": "keep-alive",
             "Content-Length": "290",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "ETag": "W/\"122-ft0x3wV1ncb6xFuzYSWv48AKzOo\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
@@ -1635,7 +1721,7 @@ The following evidence of this vulnerability was found in the application.
             "Content-Length": "149",
             "Content-Security-Policy": "default-src 'none'",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "Keep-Alive": "timeout=5",
             "X-Content-Type-Options": "nosniff",
             "X-Powered-By": "Express"
@@ -1660,7 +1746,7 @@ The following evidence of this vulnerability was found in the application.
 ??? example "Web Request 3"
 
     * **Request**
-        * **Target**: `http://localhost:3000/search`
+        * **Target**: `http://localhost:3000/sitemap.xml`
         * **Method**: `GET`
         * **Headers**:
           ```json
@@ -1668,7 +1754,6 @@ The following evidence of this vulnerability was found in the application.
             "cache-control": "no-cache",
             "host": "localhost:3000",
             "pragma": "no-cache",
-            "referer": "http://localhost:3000",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
           }
           ```
@@ -1679,36 +1764,34 @@ The following evidence of this vulnerability was found in the application.
             -H "cache-control: no-cache" \
             -H "host: localhost:3000" \
             -H "pragma: no-cache" \
-            -H "referer: http://localhost:3000" \
             -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" \
-            "http://localhost:3000/search"
+            "http://localhost:3000/sitemap.xml"
           ```
     * **Response**
-        * **Status Code**: `200`
+        * **Status Code**: `404`
         * **Headers**:
           ```json
           {
             "Connection": "keep-alive",
-            "Content-Length": "256",
+            "Content-Length": "150",
+            "Content-Security-Policy": "default-src 'none'",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:27:54 GMT",
-            "ETag": "W/\"100-umWhjcs63IQxOlKNJgIczWf6qpI\"",
+            "Date": "Sun, 30 Jul 2023 13:46:17 GMT",
             "Keep-Alive": "timeout=5",
+            "X-Content-Type-Options": "nosniff",
             "X-Powered-By": "Express"
           }
           ```
         * **Body**:
-          ```html
-          <!doctype html>
+          ```json
+          <!DOCTYPE html>
           <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <title>Error</title>
+          </head>
           <body>
-          <form action="/search">
-            <label for="q">Search</label>
-            <input name="q" id="q" />
-            <button type="submit">Submit</button>
-          </form>
-          4886dd3a836ffca9ab4ab39c70871e53
-          <p>You searched for: undefined</p>
+          <pre>Cannot GET /sitemap.xml</pre>
           </body>
           </html>
           
@@ -1762,10 +1845,10 @@ The following evidence of this vulnerability was found in the application.
           ```json
           {
             "Connection": "keep-alive",
-            "Content-Length": "520",
+            "Content-Length": "394",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:28:06 GMT",
-            "ETag": "W/\"208-JUrRH6T38h/8fZLvtfTsOjw9pkU\"",
+            "Date": "Sun, 30 Jul 2023 13:46:29 GMT",
+            "ETag": "W/\"18a-Ufw9jzdgFqn6H36wj+7Pz4FaaeI\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
           }
@@ -1782,9 +1865,8 @@ The following evidence of this vulnerability was found in the application.
             <button type="submit">Submit</button>
           </form>
           4886dd3a836ffca9ab4ab39c70871e53
-          <ul><li>"/><xsl:value-of select="system-property('xsl:vendor')"/><!--</li>
-          <li><xsl:value-of select="system-property('xsl:vendor')"/><!--</li>
-          <li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <ul><li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <li>ZAP</li>
           <li>ZAP</li>
           <li>ZAP</li></ul>
           </body>
@@ -1823,10 +1905,10 @@ The following evidence of this vulnerability was found in the application.
           ```json
           {
             "Connection": "keep-alive",
-            "Content-Length": "507",
+            "Content-Length": "381",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:28:06 GMT",
-            "ETag": "W/\"1fb-AjdJZG895WRoAoNFkYaYiq2KyPg\"",
+            "Date": "Sun, 30 Jul 2023 13:46:29 GMT",
+            "ETag": "W/\"17d-YzvdpkEx0x/MN5fnFHoc3QdaXtE\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
           }
@@ -1843,9 +1925,8 @@ The following evidence of this vulnerability was found in the application.
             <button type="submit">Submit</button>
           </form>
           4886dd3a836ffca9ab4ab39c70871e53
-          <ul><li>"/><xsl:value-of select="system-property('xsl:vendor')"/><!--</li>
-          <li><xsl:value-of select="system-property('xsl:vendor')"/><!--</li>
-          <li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <ul><li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <li>ZAP</li>
           <li>ZAP</li></ul>
           </body>
           </html>
@@ -1883,10 +1964,10 @@ The following evidence of this vulnerability was found in the application.
           ```json
           {
             "Connection": "keep-alive",
-            "Content-Length": "507",
+            "Content-Length": "368",
             "Content-Type": "text/html; charset=utf-8",
-            "Date": "Sun, 30 Jul 2023 08:28:06 GMT",
-            "ETag": "W/\"1fb-AjdJZG895WRoAoNFkYaYiq2KyPg\"",
+            "Date": "Sun, 30 Jul 2023 13:46:29 GMT",
+            "ETag": "W/\"170-IkuR3Dd4r70icbuaLFduo+97gnE\"",
             "Keep-Alive": "timeout=5",
             "X-Powered-By": "Express"
           }
@@ -1903,9 +1984,68 @@ The following evidence of this vulnerability was found in the application.
             <button type="submit">Submit</button>
           </form>
           4886dd3a836ffca9ab4ab39c70871e53
-          <ul><li>"/><xsl:value-of select="system-property('xsl:vendor')"/><!--</li>
-          <li><xsl:value-of select="system-property('xsl:vendor')"/><!--</li>
-          <li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <ul><li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <li>ZAP</li></ul>
+          </body>
+          </html>
+          
+          ```
+
+
+??? example "Web Request 4"
+
+    * **Request**
+        * **Target**: `http://localhost:3000`
+        * **Method**: `GET`
+        * **Headers**:
+          ```json
+          {
+            "cache-control": "no-cache",
+            "host": "localhost:3000",
+            "pragma": "no-cache",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Trident/7.0; rv:11.0) like Gecko"
+          }
+          ```
+        * **Curl**:
+          ```shell
+          curl -o - -i \
+            -X GET \
+            -H "cache-control: no-cache" \
+            -H "host: localhost:3000" \
+            -H "pragma: no-cache" \
+            -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Trident/7.0; rv:11.0) like Gecko" \
+            "http://localhost:3000"
+          ```
+    * **Response**
+        * **Status Code**: `200`
+        * **Headers**:
+          ```json
+          {
+            "Connection": "keep-alive",
+            "Content-Length": "407",
+            "Content-Type": "text/html; charset=utf-8",
+            "Date": "Sun, 30 Jul 2023 13:46:29 GMT",
+            "ETag": "W/\"197-5xQ/Jf87WhqcH7X7ylNPOM/uwPI\"",
+            "Keep-Alive": "timeout=5",
+            "X-Powered-By": "Express"
+          }
+          ```
+        * **Body**:
+          ```html
+          <!doctype html>
+          <html lang="en">
+          <body>
+          <a href="/search">Search</a>
+          <form method="post" action="/">
+            <label for="words">Enter some words</label>
+            <input name="words" id="words" />
+            <button type="submit">Submit</button>
+          </form>
+          4886dd3a836ffca9ab4ab39c70871e53
+          <ul><li><xsl:value-of select="document('http://localhost:22')"/></li>
+          <li>ZAP</li>
+          <li>ZAP</li>
+          <li>ZAP</li>
           <li>ZAP</li></ul>
           </body>
           </html>
