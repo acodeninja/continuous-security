@@ -156,6 +156,34 @@ exports[`producing a report in json matches snapshot 1`] = `
           }
         },
         {
+          "label": "CWE-248",
+          "title": "Uncaught Exception",
+          "description": "An exception is thrown from a function, but it is not caught.",
+          "directLink": "https://cwe.mitre.org/data/definitions/248.html",
+          "dataSourceSpecific": {
+            "cwe": {
+              "extendedDescription": "When an exception is not caught, it may cause the program to crash or expose sensitive information.",
+              "background": "",
+              "consequences": [
+                {
+                  "scopeImpacts": [
+                    {
+                      "scope": "Availability",
+                      "impact": "DoS: Crash, Exit, or Restart"
+                    },
+                    {
+                      "scope": "Confidentiality",
+                      "impact": "Read Application Data"
+                    }
+                  ],
+                  "note": "An uncaught exception could cause the system to be placed in a state that could lead to a crash, exposure of sensitive information or other unintended behaviors."
+                }
+              ],
+              "mitigations": []
+            }
+          }
+        },
+        {
           "label": "GHSA-f9xv-q969-pqx4",
           "title": "Cross-site Scripting vulnerability in Mautic's tracking pixel functionality",
           "description": "### Impact\\n\\nMautic allows you to track open rates by using tracking pixels. \\nThe tracking information is stored together with extra metadata of the tracking request.\\n\\nThe output isn't sufficiently filtered when showing the metadata of the tracking information, which may lead to a vulnerable situation.\\n\\n### Patches\\n\\nPlease upgrade to 4.3.0\\n\\n### Workarounds\\nNone.\\n\\n### References\\n* Internally tracked under MST-38\\n\\n### For more information\\nIf you have any questions or comments about this advisory:\\n* Email us at [security@mautic.org](mailto:security@mautic.org)\\n",
@@ -164,7 +192,7 @@ exports[`producing a report in json matches snapshot 1`] = `
             "osv": {
               "aliases": [
                 "CVE-2022-25772",
-                "CWE-79"
+                "CWE-248"
               ],
               "severity": "critical"
             }
@@ -226,21 +254,6 @@ exports[`producing a report in json matches snapshot 1`] = `
       ],
       "references": [
         {
-          "label": "CVE-2022-25772",
-          "title": "CVE-2022-25772",
-          "description": "Cherokee Webserver Latest Cherokee Web server Upto Version 1.2.103 (Current stable) is affected by: Buffer Overflow - CWE-120. The impact is: Crash. The component is: Main cherokee command. The attack vector is: Overwrite argv[0] to an insane length with execl. The fixed version is: There's no fix yet.",
-          "directLink": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772",
-          "dataSourceSpecific": {
-            "cve": {
-              "aliases": [
-                "CWE-787",
-                "CWE-120"
-              ],
-              "severity": "high"
-            }
-          }
-        },
-        {
           "label": "CWE-1004",
           "title": "Sensitive Cookie Without 'HttpOnly' Flag",
           "description": "The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.",
@@ -289,7 +302,7 @@ exports[`producing a report in json matches snapshot 1`] = `
             "osv": {
               "aliases": [
                 "CVE-2022-25772",
-                "CWE-79"
+                "CWE-248"
               ],
               "severity": "critical"
             }
@@ -502,7 +515,7 @@ The following evidence of this vulnerability was found in the application.
 
 ##### References
 
-[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
+[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [CWE-248](#CWE-248) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
 ### test-issue-title 
 
@@ -526,7 +539,7 @@ The following evidence of this vulnerability was found in the application.
 
 ##### References
 
-[CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
+[CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
 ## Unknown Severity
 
