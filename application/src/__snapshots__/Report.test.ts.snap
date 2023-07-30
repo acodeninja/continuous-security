@@ -372,6 +372,9 @@ exports[`producing a report in markdown matches snapshot 1`] = `
 This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
 A total of 3 issue(s) were found, 2 of which may require immediate attention.
 
+This report is produced by running automated security scanning tools, which will likely not detect 
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**. 
+
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 
 * **Confidentiality**: Read Application Data

@@ -4,6 +4,9 @@
 
 This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %> (UTC<%= (date.getTimezoneOffset()/-60 >= 0 ? '+' : '') + date.getTimezoneOffset()/-60 %>).
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
+
+This report is produced by running automated security scanning tools, which will likely not detect
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**. 
 <% if (summaryImpacts) { %>
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 <% summaryImpacts.forEach(({scope, impacts}) => { %>
