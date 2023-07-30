@@ -12,7 +12,7 @@ export const Github = {
     github_reviewed: true,
     severity: 'CRITICAL',
     cwe_ids: [
-      'CWE-79'
+      'CWE-248'
     ],
     nvd_published_at: '2022-06-20T13:15:00Z'
   },

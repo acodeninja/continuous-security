@@ -23,6 +23,45 @@ afterAll(() => {
   jest.useRealTimers();
 });
 
+describe('fetching vulnerability data', () => {
+  const report = new Report(new Emitter());
+  report.addScanReport({
+    issues: [{
+      title: 'test-issue-title',
+      description: 'test-issue-description',
+      type: 'code smell',
+      references: ['CWE-248', 'CVE-2022-25772'],
+      fix: 'Unknown',
+      severity: 'unknown',
+    }, {
+      title: 'test-issue-title',
+      description: 'test-issue-description',
+      type: 'code smell',
+      references: ['CWE-248', 'GHSA-f9xv-q969-pqx4'],
+      fix: 'Unknown',
+      severity: 'unknown',
+    }],
+    scanner: 'test-scanner',
+  });
+
+  beforeAll(async () => {
+    await report.toObject();
+  });
+
+  test('calls the api for each vulnerability', () => {
+    expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('GHSA-f9xv-q969-pqx4'));
+    expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('?cveId=CVE-2022-25772'));
+  });
+
+  test('does not fetch the same vulnerability twice', () => {
+    expect((axios.get as jest.Mock).mock.calls
+      .filter(u => u[0].indexOf('CVE-2022-25772') !== -1))
+      .toHaveLength(1);
+    expect((axios.get as jest.Mock).mock.calls
+      .filter(u => u[0].indexOf('GHSA-f9xv-q969-pqx4') !== -1))
+      .toHaveLength(1);
+  });
+});
 describe('producing a report', () => {
   const report = new Report(new Emitter());
 

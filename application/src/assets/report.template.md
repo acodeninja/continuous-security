@@ -71,7 +71,7 @@ The following evidence of this vulnerability was found in the application.
 <%= extract.code %>
 ```
 <% }) %>
-<% issue.requests?.slice(0, 3).forEach((r, i) => { %>
+<% issue.requests?.slice(0, 4).forEach((r, i) => { %>
 ??? example "Web Request <%= i + 1 %>"
 
     * **Request**

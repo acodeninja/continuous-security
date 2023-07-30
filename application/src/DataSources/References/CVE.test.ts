@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {CVE} from './CVE';
-import {CVEResponse} from '../../tests/fixtures/CVEResponse';
+import {CVEResponse} from '../../../tests/fixtures/CVEResponse';
 
 jest.mock('axios', () => ({
   get: jest.fn(),
