@@ -23,6 +23,10 @@ jest.mock('child_process', () => ({
   }),
 }));
 
+jest.mock('../package.json', () => ({
+  version: '1.2.3',
+}));
+
 jest.mock('./Helpers', () => ({
   makeTemporaryFolder: jest.fn().mockResolvedValue('/tmp/prefix-random'),
   destroyTemporaryFolder: jest.fn(),
@@ -65,7 +69,7 @@ describe('Orchestrator', () => {
     });
 
     test('installs scanner modules', () => {
-      expect(exec).toHaveBeenCalledWith('npm install -g test-scanner', {
+      expect(exec).toHaveBeenCalledWith('npm install -g test-scanner@1.2.3', {
         cwd: process.cwd(),
       }, expect.any(Function));
       expect(scannerInstalled).toHaveBeenCalledWith('test-scanner');

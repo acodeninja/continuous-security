@@ -1,12 +1,14 @@
-import {promisify} from 'util';
 import {exec} from 'child_process';
-import {Emitter} from './Emitter';
-import {Scan} from './Scan';
+import {writeFile} from 'fs/promises';
+import {resolve} from 'path';
+import {promisify} from 'util';
+
 import {Configuration} from './Configuration';
+import {Emitter} from './Emitter';
 import {loadScannerModule} from './Helpers';
 import {Report} from './Report';
-import {resolve} from 'path';
-import {writeFile} from 'fs/promises';
+import {Scan} from './Scan';
+import {version} from '../package.json';
 
 export class Orchestrator {
   public readonly emitter: Emitter;
@@ -25,11 +27,15 @@ export class Orchestrator {
     this.emitter.emit('scan:started', '');
     this.configuration = await Configuration.load(this.projectRoot);
 
-    if (!process.env.DEBUG)
+    if (!process.env.DEBUG) {
+      const installs = this.configuration.scanners
+        .map(scanner => `${scanner.name}@${version}`).join(' ');
+
       await promisify(exec)(
-        `npm install -g ${this.configuration.scanners.map(scanner => scanner.name).join(' ')}`,
+        `npm install -g ${installs}`,
         {cwd: process.cwd()},
       );
+    }
 
     this.configuration.scanners.forEach(configuration => {
       this.emitter.emit('scanner:installed', configuration.name);
