@@ -1,7 +1,7 @@
-import {CVE} from "./References/CVE";
-import {CWE} from "./References/CWE";
-import {OSV} from "./References/OSV";
-import {Emitter} from "../Emitter";
+import {CVE} from './References/CVE';
+import {CWE} from './References/CWE';
+import {OSV} from './References/OSV';
+import {Emitter} from '../Emitter';
 
 export class References {
   private cveDataset: CVE = new CVE();
@@ -16,7 +16,9 @@ export class References {
 
   async getAll(references: Array<string>):
     Promise<Array<ReportOutputIssueReference>> {
-    const expandedReferences: Record<string, ReportOutputIssueReference> = {...this.cachedReferences};
+    const expandedReferences: Record<string, ReportOutputIssueReference> = {
+      ...this.cachedReferences,
+    };
     const referencesToProcess = Array.from(references);
     const processedReferences = [];
 
@@ -27,7 +29,7 @@ export class References {
 
       processedReferences.push(ref);
 
-      if (!!expandedReferences[ref]) continue;
+      if (expandedReferences[ref]) continue;
 
       const slug = ref.toLowerCase();
       this.emitter.emit('report:reference', `fetching details for ${ref}`);

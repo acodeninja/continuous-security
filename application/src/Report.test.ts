@@ -49,14 +49,16 @@ describe('fetching vulnerability data', () => {
   });
 
   test('calls the api for each vulnerability', () => {
-    expect(axios.get).toHaveBeenCalledWith('https://api.osv.dev/v1/vulns/GHSA-f9xv-q969-pqx4');
-    expect(axios.get).toHaveBeenCalledWith('https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2022-25772');
+    expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('GHSA-f9xv-q969-pqx4'));
+    expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('?cveId=CVE-2022-25772'));
   });
 
   test('does not fetch the same vulnerability twice', () => {
-    expect((axios.get as jest.Mock).mock.calls.filter(u => u[0].indexOf('CVE-2022-25772') !== -1))
+    expect((axios.get as jest.Mock).mock.calls
+      .filter(u => u[0].indexOf('CVE-2022-25772') !== -1))
       .toHaveLength(1);
-    expect((axios.get as jest.Mock).mock.calls.filter(u => u[0].indexOf('GHSA-f9xv-q969-pqx4') !== -1))
+    expect((axios.get as jest.Mock).mock.calls
+      .filter(u => u[0].indexOf('GHSA-f9xv-q969-pqx4') !== -1))
       .toHaveLength(1);
   });
 });

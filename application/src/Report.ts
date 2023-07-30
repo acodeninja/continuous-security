@@ -4,7 +4,7 @@ import {readFile} from 'fs/promises';
 import BaseTemplate from './assets/report.template.md';
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
-import {References} from "./DataSources/References";
+import {References} from './DataSources/References';
 
 export class Report {
   private readonly template: TemplateExecutor;
@@ -145,7 +145,8 @@ export class Report {
     }
 
     const withHighestSeverities = withExpandedReferences.map(i => {
-      const severities = i.references.map((r: ReportOutputIssueReference) => r.dataSourceSpecific?.osv?.severity)
+      const severities = i.references
+        .map((r: ReportOutputIssueReference) => r.dataSourceSpecific?.osv?.severity)
         .concat(i.severity)
         .filter((s: ReportOutputIssue['severity'] | undefined) => !!s);
 
