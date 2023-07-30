@@ -4,7 +4,8 @@ type EventEmitter = {
 }
 
 type ConfigurationFile = {
-  scanners: Array<ScannerConfiguration | string>
+  scanners: Array<ScannerConfiguration | string>;
+  ignore: Array<string>;
 }
 
 type ReportOutput = {
