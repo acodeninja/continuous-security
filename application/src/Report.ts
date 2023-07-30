@@ -202,9 +202,9 @@ export class Report {
     }
 
     const withHighestSeverities = withExpandedReferences.map(i => {
-      const severities = i.references.map(r => r.dataSourceSpecific?.osv?.severity)
+      const severities = i.references.map((r: ReportOutputIssueReference) => r.dataSourceSpecific?.osv?.severity)
         .concat(i.severity)
-        .filter(s => !!s);
+        .filter((s: ReportOutputIssue['severity'] | undefined) => !!s);
 
       severities.sort((a, b) => this.severityOrder.indexOf(a) - this.severityOrder.indexOf(b));
 
