@@ -8,7 +8,8 @@ import {Emitter} from './Emitter';
 import {loadScannerModule} from './Helpers';
 import {Report} from './Report';
 import {Scan} from './Scan';
-import {version} from '../package.json';
+
+import packageJson from '../package.json';
 
 export class Orchestrator {
   public readonly emitter: Emitter;
@@ -29,7 +30,7 @@ export class Orchestrator {
 
     if (!process.env.DEBUG) {
       const installs = this.configuration.scanners
-        .map(scanner => `${scanner.name}@${version}`).join(' ');
+        .map(scanner => `${scanner.name}@${packageJson.version}`).join(' ');
 
       await promisify(exec)(
         `npm install -g ${installs}`,
