@@ -80,3 +80,10 @@ declare module '../assets/*' {
   const content: string;
   export default content;
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+declare module '../../assets/*' {
+  const content: string;
+  export default content;
+}
