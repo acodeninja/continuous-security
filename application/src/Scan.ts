@@ -56,6 +56,7 @@ export class Scan {
 
     await runImage({
       configuration: this.configuration.with,
+      ignore: this.configuration.ignore,
       imageHash: this.imageHash,
       host: {
         output: this.output,
