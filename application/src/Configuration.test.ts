@@ -75,6 +75,10 @@ describe('Configuration', () => {
             {name: 'test-scanner', with: {property: 'value'}},
           ]);
         });
+
+        test('loads a list of ignored directories', () => {
+          expect(configuration).toHaveProperty('ignore', ['build/']);
+        });
       });
     });
 
@@ -137,8 +141,11 @@ describe('Configuration', () => {
             {name: 'test-scanner', with: {property: 'value'}},
           ]);
         });
-      });
 
+        test('loads a list of ignored directories', () => {
+          expect(configuration).toHaveProperty('ignore', ['build/']);
+        });
+      });
     });
 
     describe('a non-existent configuration file', () => {

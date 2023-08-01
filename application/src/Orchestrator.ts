@@ -46,7 +46,14 @@ export class Orchestrator {
       this.configuration.scanners.map(configuration => new Promise<void>(resolve => {
         loadScannerModule(configuration.name)
           .then(scanner => {
-            this.scans.push(new Scan(this.emitter, scanner, configuration));
+            this.scans.push(new Scan(
+              this.emitter,
+              scanner,
+              {
+                ...configuration,
+                ignore: (configuration.ignore || []).concat(this.configuration.ignore || []),
+              },
+            ));
             this.emitter.emit('scanner:loaded', scanner.name);
             resolve();
           });

@@ -49,6 +49,10 @@ export const runImage = async (runConfiguration: ScannerRunConfiguration) => {
 
   if (!isURL(runConfiguration.host.target)) binds.push(`${runConfiguration.host.target}:/target`);
 
+  runConfiguration.ignore.forEach(i => {
+    binds.push(`/target/${i}`);
+  });
+
   await docker.run(runConfiguration.imageHash, [], [log, log], {
     Tty: false,
     HostConfig: {

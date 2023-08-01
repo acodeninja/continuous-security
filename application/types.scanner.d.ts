@@ -12,10 +12,12 @@ type Scanner = {
 type ScannerConfiguration = {
   name: string;
   with?: Record<string, string>;
+  ignore?: Array<string>;
 }
 
 type ScannerRunConfiguration = {
   configuration: Record<string, string>;
+  ignore: Array<string>;
   imageHash: string;
   host: {
     target: string;
