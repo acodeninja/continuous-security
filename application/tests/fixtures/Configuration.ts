@@ -3,7 +3,7 @@ export const JSONConfiguration = Buffer.from(JSON.stringify({
 }));
 
 export const JSONConfigurationWithExtraConfig = Buffer.from(JSON.stringify({
-  ignore: ['build/**'],
+  ignore: ['build/'],
   scanners: [{name: 'test-scanner', with: {property: 'value'}}],
 }));
 
@@ -14,7 +14,7 @@ scanners:
 
 export const YAMLConfigurationWithExtraConfig = Buffer.from(`
 ignore:
-  - build/**
+  - build/
 scanners:
   - name: test-scanner
     with:

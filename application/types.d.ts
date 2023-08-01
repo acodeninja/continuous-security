@@ -5,7 +5,7 @@ type EventEmitter = {
 
 type ConfigurationFile = {
   scanners: Array<ScannerConfiguration | string>;
-  ignore: Array<string>;
+  ignore?: Array<string>;
 }
 
 type ReportOutput = {
