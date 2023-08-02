@@ -28,6 +28,10 @@ describe('isURL', () => {
   test('returns false for a windows filesystem path', () => {
     expect(isURL('C:\\Path\\To\\File')).toBeFalsy();
   });
+
+  test('returns false for null input', () => {
+    expect(isURL(undefined)).toBeFalsy();
+  });
 });
 
 describe('makeTemporaryFolder', () => {
