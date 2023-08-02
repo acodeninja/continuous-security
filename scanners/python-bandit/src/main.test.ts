@@ -1,4 +1,4 @@
-import scanner from './main';
+import scanner, {translateSeverity} from './main';
 import {pythonBanditReport} from '../test/fixtures';
 import {readFile} from 'fs/promises';
 
@@ -81,6 +81,21 @@ describe('python-bandit scanner', () => {
           ],
         },
       ]));
+    });
+  });
+
+  describe('translating issue severity', () => {
+    test('LOW translates to low', () => {
+      expect(translateSeverity('LOW')).toEqual('low');
+    });
+    test('MEDIUM translates to moderate', () => {
+      expect(translateSeverity('MEDIUM')).toEqual('moderate');
+    });
+    test('HIGH translates to high', () => {
+      expect(translateSeverity('HIGH')).toEqual('high');
+    });
+    test('UNDEFINED translates to unknown', () => {
+      expect(translateSeverity('UNDEFINED')).toEqual('unknown');
     });
   });
 });

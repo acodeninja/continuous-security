@@ -4,7 +4,7 @@ import Scan from './assets/scan.sh';
 import {readFile} from 'fs/promises';
 import {resolve} from 'path';
 
-const translateSeverity =
+export const translateSeverity =
   (severity: 'HIGH' | 'MEDIUM' | 'LOW' | 'UNDEFINED'): 'low' | 'moderate' | 'high' | 'unknown' => {
     switch (severity) {
     case 'LOW':
