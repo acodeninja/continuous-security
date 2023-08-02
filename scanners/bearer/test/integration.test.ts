@@ -74,6 +74,7 @@ setupIntegrationTests(
         type: 'code smell',
       },
       {
+        // eslint-disable-next-line no-useless-escape
         description: '## Description\n\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.\n\n## Remediations\n\n✅ Use Helmet middleware\n\n```javascript\nconst helmet = require(\"helmet\")\napp.use(helmet())\n```\n\n## Resources\n\n- [Express Security Best Practices: Use Helmet](https://expressjs.com/en/advanced/best-practice-security.html#use-helmet)\n',
         extracts: [
           {
