@@ -26,7 +26,7 @@ export default {
               fix: 'unknown',
               extracts: [{
                 lines: [i.source.start.toString(), i.source.end.toString()],
-                path: i.full_filename.replace('/target', ''),
+                path: i.full_filename.replace('/target/', ''),
                 language: i.id.split('_')[0],
               }],
             } as ScanReportIssue)),
