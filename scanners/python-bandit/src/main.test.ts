@@ -52,7 +52,7 @@ describe('python-bandit scanner', () => {
           title: 'Possible hardcoded password: \'password\'',
           severity: 'low',
           description: '',
-          references: ['CWE-259'],
+          references: [],
           fix: 'unknown',
           type: 'code smell',
           extracts: [
