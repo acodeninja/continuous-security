@@ -75,7 +75,7 @@ describe('Orchestrator', () => {
       expect(exec).toHaveBeenCalledWith(
         'npm install -g @continuous-security/scanner-test@1.2.3 @another-organisation/scanner-test',
         {cwd: process.cwd()},
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(scannerInstalled).toHaveBeenCalledWith('@continuous-security/scanner-test');
       expect(scannerInstalled).toHaveBeenCalledWith('@another-organisation/scanner-test');
