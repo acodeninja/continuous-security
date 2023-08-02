@@ -4,13 +4,17 @@ import {
   loadScannerModule,
   makeTemporaryFolder,
   packFiles,
+  runImage,
 } from './Helpers';
 import {tmpdir} from 'os';
 import {mkdtemp, rm} from 'fs/promises';
 import {Transform} from 'stream';
 import {exec} from 'child_process';
+import Docker from "dockerode";
+import {createWriteStream} from "fs";
 
 jest.mock('fs/promises');
+jest.mock('fs');
 jest.mock('child_process');
 jest.mock('os');
 
@@ -21,6 +25,83 @@ describe('packFiles', () => {
     expect(zip).toHaveProperty('bytesWritten', expect.any(Number));
     expect(zip).toHaveProperty('close', expect.any(Function));
     expect(zip).toHaveProperty('flush', expect.any(Function));
+  });
+});
+
+describe('runImage', () => {
+  const runMock = jest.spyOn(Docker.prototype, 'run');
+  runMock.mockImplementation(async (image, cmd, outputStream, createOptions, startOptions) => {
+
+  });
+
+  describe('without configuration', () => {
+    beforeAll(async () => {
+      await runImage({
+        ignore: ['ignored/'],
+        imageHash: 'test',
+        host: {
+          target: '/target',
+          output: '/output',
+        },
+      });
+    });
+
+    test('createWriteSteam call with output path', () => {
+      expect(createWriteStream).toHaveBeenCalledWith('/output/output.log');
+    });
+
+    test('Docker.run was called', () => {
+      expect(runMock).toHaveBeenCalledWith(
+        "test",
+        [],
+        [undefined, undefined],
+        {
+          Env: [],
+          HostConfig: {
+            AutoRemove: true,
+            Binds: ['/output:/output', '/target:/target', '/target/ignored/'],
+            NetworkMode: 'host',
+          },
+          Tty: false,
+        },
+      );
+    });
+  });
+  describe('with configuration', () => {
+    beforeAll(async () => {
+      await runImage({
+        configuration: {
+          input: 'test',
+        },
+        ignore: ['ignored/'],
+        imageHash: 'test',
+        host: {
+          target: '/target',
+          output: '/output',
+        },
+      });
+    });
+
+    test('createWriteSteam call with output path', () => {
+      expect(createWriteStream).toHaveBeenCalledWith('/output/output.log');
+    });
+
+    test('Docker.run was called', () => {
+      expect(runMock).toHaveBeenCalledWith(
+        "test",
+        [],
+        [undefined, undefined],
+        {
+          Env: ['CONFIG_INPUT=test'],
+          HostConfig: {
+            AutoRemove: true,
+            Binds: ['/output:/output', '/target:/target', '/target/ignored/'],
+            NetworkMode: 'host',
+          },
+          Tty: false,
+        },
+      );
+    });
   });
 });
 

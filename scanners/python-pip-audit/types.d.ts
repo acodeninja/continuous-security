@@ -15,7 +15,7 @@ type ScannerConfiguration = {
 }
 
 type ScannerRunConfiguration = {
-  configuration: Record<string, string>;
+  configuration?: Record<string, string>;
   imageHash: string;
   host: {
     target: string;
