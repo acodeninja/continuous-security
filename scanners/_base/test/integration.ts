@@ -99,7 +99,7 @@ export const setupIntegrationTests = (
     });
 
     test('the output report can be parsed by the report function', async () => {
-      console.log(JSON.stringify(await readFile(resolve(temporaryDirectory, 'report.json')), null, 2));
+      console.log(JSON.stringify((await readFile(resolve(temporaryDirectory, 'report.json'))).toString(), null, 2));
       await expect(scanner.report(temporaryDirectory))
         .resolves.toEqual(reportFormat);
     });
