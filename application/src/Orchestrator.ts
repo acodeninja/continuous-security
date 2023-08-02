@@ -30,7 +30,7 @@ export class Orchestrator {
 
     if (!process.env.DEBUG) {
       const installs = this.configuration.scanners
-        .map(scanner => `${scanner.name}@${packageJson.version}`).join(' ');
+        .map(scanner => `${scanner.name}`).join(' ');
 
       await promisify(exec)(
         `npm install -g ${installs}`,

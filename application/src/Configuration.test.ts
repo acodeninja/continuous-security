@@ -40,7 +40,8 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner'},
+            {name: '@continuous-security/scanner-test'},
+            {name: '@another-organisation/scanner-test'},
           ]);
         });
       });
@@ -72,7 +73,8 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner', with: {property: 'value'}},
+            {name: '@continuous-security/scanner-test', with: {property: 'value'}},
+            {name: '@another-organisation/scanner-test', with: {property: 'value'}},
           ]);
         });
 
@@ -107,7 +109,8 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner'},
+            {name: '@continuous-security/scanner-test'},
+            {name: '@another-organisation/scanner-test'},
           ]);
         });
       });
@@ -138,7 +141,8 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner', with: {property: 'value'}},
+            {name: '@continuous-security/scanner-test', with: {property: 'value'}},
+            {name: '@another-organisation/scanner-test', with: {property: 'value'}},
           ]);
         });
 

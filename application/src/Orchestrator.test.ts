@@ -65,18 +65,25 @@ describe('Orchestrator', () => {
     test('loads the configuration from the target project', () => {
       expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
       expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
-      expect(orchestrator.configuration).toHaveProperty('scanners', [{name: 'test-scanner'}]);
+      expect(orchestrator.configuration).toHaveProperty('scanners', [
+        {name: '@continuous-security/scanner-test'},
+        {name: '@another-organisation/scanner-test'},
+      ]);
     });
 
     test('installs scanner modules', () => {
-      expect(exec).toHaveBeenCalledWith('npm install -g test-scanner@1.2.3', {
-        cwd: process.cwd(),
-      }, expect.any(Function));
-      expect(scannerInstalled).toHaveBeenCalledWith('test-scanner');
+      expect(exec).toHaveBeenCalledWith(
+        'npm install -g @continuous-security/scanner-test @another-organisation/scanner-test',
+        {cwd: process.cwd()},
+        expect.any(Function)
+      );
+      expect(scannerInstalled).toHaveBeenCalledWith('@continuous-security/scanner-test');
+      expect(scannerInstalled).toHaveBeenCalledWith('@another-organisation/scanner-test');
     });
 
     test('loads scanner modules', () => {
-      expect(loadScannerModule).toHaveBeenCalledWith('test-scanner');
+      expect(loadScannerModule).toHaveBeenCalledWith('@continuous-security/scanner-test');
+      expect(loadScannerModule).toHaveBeenCalledWith('@another-organisation/scanner-test');
       expect(scannerLoaded).toHaveBeenCalledWith(TestScanner.name);
     });
 
