@@ -10,8 +10,8 @@ import {tmpdir} from 'os';
 import {mkdtemp, rm} from 'fs/promises';
 import {Transform} from 'stream';
 import {exec} from 'child_process';
-import Docker from "dockerode";
-import {createWriteStream} from "fs";
+import Docker from 'dockerode';
+import {createWriteStream} from 'fs';
 
 jest.mock('fs/promises');
 jest.mock('fs');
@@ -30,9 +30,7 @@ describe('packFiles', () => {
 
 describe('runImage', () => {
   const runMock = jest.spyOn(Docker.prototype, 'run');
-  runMock.mockImplementation(async (image, cmd, outputStream, createOptions, startOptions) => {
-
-  });
+  runMock.mockResolvedValue(null);
 
   describe('without configuration', () => {
     beforeAll(async () => {
@@ -52,7 +50,7 @@ describe('runImage', () => {
 
     test('Docker.run was called', () => {
       expect(runMock).toHaveBeenCalledWith(
-        "test",
+        'test',
         [],
         [undefined, undefined],
         {
@@ -88,7 +86,7 @@ describe('runImage', () => {
 
     test('Docker.run was called', () => {
       expect(runMock).toHaveBeenCalledWith(
-        "test",
+        'test',
         [],
         [undefined, undefined],
         {
