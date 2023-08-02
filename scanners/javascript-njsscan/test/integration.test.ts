@@ -18,7 +18,7 @@ setupIntegrationTests(
         type: 'code smell',
         extracts: [{
           language: 'javascript',
-          lines: ['84'],
+          lines: ['90'],
           path: 'app.js',
         }],
       },

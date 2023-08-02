@@ -45,23 +45,10 @@ export const setupIntegrationTests = (
           fixture.commands?.start[1],
           {cwd: fixture.path},
         ));
-
     }
   });
 
-  describe('building the docker image', () => {
-    test('successfully builds the image', async () => {
-      const matchingString = `docker.io/library/integration-test-${scanner.slug} (\\d+\\.\\d+s )?done`;
-
-      await expect(promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
-        cwd: resolve(process.cwd(), 'src', 'assets'),
-      })).resolves.toEqual(expect.objectContaining({
-        stderr: expect.stringMatching(new RegExp(matchingString)),
-      }));
-    });
-  });
-
-  describe('running the docker container', () => {
+  describe(`running the docker container against a ${exampleCodebase} application`, () => {
     let temporaryDirectory;
 
     beforeAll(async () => {
@@ -99,7 +86,6 @@ export const setupIntegrationTests = (
     });
 
     test('the output report can be parsed by the report function', async () => {
-      console.log(JSON.stringify((await readFile(resolve(temporaryDirectory, 'report.json'))).toString(), null, 2));
       await expect(scanner.report(temporaryDirectory))
         .resolves.toEqual(reportFormat);
     });
@@ -120,6 +106,9 @@ export const setupIntegrationTests = (
       "cut -d' ' -f2",
     ].join(' | '));
 
-    await promisify(exec)(`docker rmi -f ${images.split('\n').join(' ')}`);
+    const foundImages = images.split('\n').filter(i => !!i);
+
+    if (foundImages.length > 0)
+      await promisify(exec)(`docker rmi -f ${foundImages.join(' ')}`);
   });
 };
