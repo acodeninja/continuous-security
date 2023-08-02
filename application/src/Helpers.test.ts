@@ -1,6 +1,12 @@
-import {isURL, loadScannerModule, makeTemporaryFolder, packFiles} from './Helpers';
+import {
+  destroyTemporaryFolder,
+  isURL,
+  loadScannerModule,
+  makeTemporaryFolder,
+  packFiles,
+} from './Helpers';
 import {tmpdir} from 'os';
-import {mkdtemp} from 'fs/promises';
+import {mkdtemp, rm} from 'fs/promises';
 import {Transform} from 'stream';
 import {exec} from 'child_process';
 
@@ -74,6 +80,13 @@ describe('makeTemporaryFolder', () => {
     test('returns a temporary folder', () => {
       expect(temporaryFolder).toBe('/test-temp/prefix');
     });
+  });
+});
+
+describe('destroyTemporaryFolder', () => {
+  test('calls rm with the folder path', async () => {
+    await destroyTemporaryFolder('/test/folder');
+    expect(rm).toHaveBeenCalledWith('/test/folder', {force: true, recursive: true});
   });
 });
 
