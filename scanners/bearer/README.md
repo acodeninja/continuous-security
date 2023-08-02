@@ -1,4 +1,4 @@
-# Scanner: bearer
+# Bearer
 
 ## Usage
 

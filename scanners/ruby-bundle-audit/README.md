@@ -1,4 +1,4 @@
-# Scanner: ruby bundle-audit
+# bundle-audit
 
 ## Usage
 

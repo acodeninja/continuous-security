@@ -1,4 +1,4 @@
-# Scanner: python bandit
+# Python Bandit
 
 ## Usage
 
