@@ -1,9 +1,11 @@
-import {isURL, makeTemporaryFolder, packFiles} from './Helpers';
+import {isURL, loadScannerModule, makeTemporaryFolder, packFiles} from './Helpers';
 import {tmpdir} from 'os';
 import {mkdtemp} from 'fs/promises';
 import {Transform} from 'stream';
+import {exec} from 'child_process';
 
 jest.mock('fs/promises');
+jest.mock('child_process');
 jest.mock('os');
 
 describe('packFiles', () => {
@@ -72,5 +74,24 @@ describe('makeTemporaryFolder', () => {
     test('returns a temporary folder', () => {
       expect(temporaryFolder).toBe('/test-temp/prefix');
     });
+  });
+});
+
+describe('loadScannerModule', () => {
+  beforeAll(async () => {
+    (exec as unknown as jest.Mock).mockImplementation((command, options, callback) => {
+      callback(null, {stdout: ''});
+    });
+    await loadScannerModule('test');
+  });
+  test('runs npm root against the scanner module', () => {
+    expect(exec).toHaveBeenCalledWith(
+      'npm root -g',
+      {cwd: expect.stringContaining('continuous-security/application')},
+      expect.any(Function),
+    );
+  });
+  test('uses non-webpack require to load default module', () => {
+    expect(__non_webpack_require__).toHaveBeenCalledWith('/test/build/main.js');
   });
 });
