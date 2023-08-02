@@ -1,9 +1,20 @@
-import {isURL, makeTemporaryFolder} from './Helpers';
+import {isURL, makeTemporaryFolder, packFiles} from './Helpers';
 import {tmpdir} from 'os';
 import {mkdtemp} from 'fs/promises';
+import {Transform} from 'stream';
 
 jest.mock('fs/promises');
 jest.mock('os');
+
+describe('packFiles', () => {
+  test('packing files produces a Gzip', async () => {
+    const zip = await packFiles({Dockerfile: 'FROM alpine'});
+    expect(zip).toBeInstanceOf(Transform);
+    expect(zip).toHaveProperty('bytesWritten', expect.any(Number));
+    expect(zip).toHaveProperty('close', expect.any(Function));
+    expect(zip).toHaveProperty('flush', expect.any(Function));
+  });
+});
 
 describe('isURL', () => {
   test('returns true for an http url', () => {
