@@ -73,7 +73,7 @@ describe('Orchestrator', () => {
 
     test('installs scanner modules', () => {
       expect(exec).toHaveBeenCalledWith(
-        'npm install -g @continuous-security/scanner-test @another-organisation/scanner-test',
+        'npm install -g @continuous-security/scanner-test@1.2.3 @another-organisation/scanner-test',
         {cwd: process.cwd()},
         expect.any(Function)
       );
