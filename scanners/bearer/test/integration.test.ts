@@ -17,7 +17,7 @@ setupIntegrationTests(
         type: 'code smell',
         extracts: [{
           lines: ['4', '4'],
-          path: '/app.rb',
+          path: 'app.rb',
           language: 'ruby',
         }],
       },
