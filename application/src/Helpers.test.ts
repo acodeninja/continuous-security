@@ -32,6 +32,19 @@ describe('runImage', () => {
   const runMock = jest.spyOn(Docker.prototype, 'run');
   runMock.mockResolvedValue(null);
 
+  describe('without image hash', () => {
+    test('raises a "No image hash found." error', async () => {
+      await expect(runImage({
+        ignore: ['ignored/'],
+        imageHash: undefined,
+        host: {
+          target: '/target',
+          output: '/output',
+        },
+      })).rejects.toThrow('No image hash found.');
+    });
+  });
+
   describe('without configuration', () => {
     beforeAll(async () => {
       await runImage({
