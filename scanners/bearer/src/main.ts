@@ -1,6 +1,5 @@
 import packageJson from '../package.json';
 import Dockerfile from './assets/Dockerfile';
-import Scan from './assets/scan.sh';
 import {readFile} from 'fs/promises';
 import {resolve} from 'path';
 
@@ -8,7 +7,7 @@ export default {
   name: packageJson.name,
   version: packageJson.version,
   slug: 'bearer',
-  buildConfiguration: {files: {Dockerfile, 'scan.rb': Scan}},
+  buildConfiguration: {files: {Dockerfile}},
   report: async (location): Promise<ScanReport> =>
     readFile(resolve(location, 'report.json'))
       .then(r => r.toString('utf8'))
