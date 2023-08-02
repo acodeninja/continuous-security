@@ -19,7 +19,6 @@ describe('bearer scanner', () => {
   test('has the right build configuration', () => {
     expect(scanner.buildConfiguration).toHaveProperty('files', {
       Dockerfile: '',
-      'scan.rb': '',
     });
   });
 
