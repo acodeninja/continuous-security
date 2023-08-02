@@ -1,7 +1,7 @@
 import {exec, spawn} from 'child_process';
 import {resolve} from 'path';
 import {promisify} from 'util';
-import {chmod, mkdtemp, readdir} from 'fs/promises';
+import {chmod, mkdtemp, readdir, readFile} from 'fs/promises';
 import {join} from 'path';
 import {tmpdir} from 'os';
 import {lstatSync} from "fs";
@@ -99,6 +99,7 @@ export const setupIntegrationTests = (
     });
 
     test('the output report can be parsed by the report function', async () => {
+      console.log(JSON.stringify(await readFile(resolve(temporaryDirectory, 'report.json')), null, 2));
       await expect(scanner.report(temporaryDirectory))
         .resolves.toEqual(reportFormat);
     });
