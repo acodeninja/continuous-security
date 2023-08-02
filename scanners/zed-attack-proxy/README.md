@@ -1,4 +1,4 @@
-# Continuous Security Scanner: Zed Attack Proxy
+# Zed Attack Proxy
 
 ## Usage
 

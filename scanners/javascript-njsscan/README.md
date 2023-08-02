@@ -1,4 +1,4 @@
-# Scanner: njsscan
+# njsscan
 
 ## Usage
 
