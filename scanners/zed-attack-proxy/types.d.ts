@@ -12,10 +12,12 @@ type Scanner = {
 type ScannerConfiguration = {
   name: string;
   with?: Record<string, string>;
+  ignore?: Array<string>;
 }
 
 type ScannerRunConfiguration = {
   configuration?: Record<string, string>;
+  ignore: Array<string>;
   imageHash: string;
   host: {
     target: string;
@@ -77,6 +79,13 @@ declare module './assets/*' {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 declare module '../assets/*' {
+  const content: string;
+  export default content;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+declare module '../../assets/*' {
   const content: string;
   export default content;
 }

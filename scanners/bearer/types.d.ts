@@ -3,16 +3,21 @@ type Scanner = {
   slug: string;
   version: string;
   buildConfiguration: ScannerBuildConfiguration;
-  validate?: (configuration: ScannerConfiguration) => Promise<void>;
+  runConfiguration?: Record<string, {
+    required?: boolean;
+  }>;
   report: (location: string) => Promise<ScanReport>;
 }
 
 type ScannerConfiguration = {
   name: string;
+  with?: Record<string, string>;
+  ignore?: Array<string>;
 }
 
 type ScannerRunConfiguration = {
   configuration?: Record<string, string>;
+  ignore: Array<string>;
   imageHash: string;
   host: {
     target: string;
@@ -30,7 +35,7 @@ type ScannerBuildConfiguration = {
 type ScanReportIssue = {
   title: string;
   description: string;
-  type: 'dependency' | 'code smell';
+  type: 'dependency' | 'code smell' | 'web request';
   package?: {
     name: string;
     version?: string;
@@ -42,6 +47,20 @@ type ScanReportIssue = {
     lines: Array<string>;
     path: string;
     language?: string;
+    code?: string;
+  }>;
+  requests?: Array<{
+    request: {
+      target: string;
+      method: string;
+      headers: Record<string, string>;
+      body?: string;
+    };
+    response: {
+      statusCode: number;
+      headers: Record<string, string>;
+      body?: string;
+    };
   }>;
 }
 
@@ -60,6 +79,13 @@ declare module './assets/*' {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 declare module '../assets/*' {
+  const content: string;
+  export default content;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+declare module '../../assets/*' {
   const content: string;
   export default content;
 }
