@@ -30,7 +30,9 @@ export class Orchestrator {
 
     if (!process.env.DEBUG) {
       const installs = this.configuration.scanners
-        .map(scanner => `${scanner.name}@${packageJson.version}`).join(' ');
+        .map(scanner => `${scanner.name}`)
+        .map(s => s.indexOf('@continuous-security') === 0 ? `${s}@${packageJson.version}` : s)
+        .join(' ');
 
       await promisify(exec)(
         `npm install -g ${installs}`,
