@@ -1,5 +1,5 @@
 import {Orchestrator} from './Orchestrator';
-import {access, readFile} from 'fs/promises';
+import {access, readFile, writeFile} from 'fs/promises';
 import {exec} from 'child_process';
 import {loadScannerModule} from './Helpers';
 import {TestScanner} from '../tests/fixtures/Scanner';
@@ -15,6 +15,7 @@ jest.mock('fs/promises', () => ({
     }
     return JSONConfiguration;
   }),
+  writeFile: jest.fn(),
 }));
 
 jest.mock('child_process', () => ({
@@ -98,6 +99,28 @@ describe('Orchestrator', () => {
         TestScanExpectation.scanner.name,
         expect.anything(),
       );
+    });
+  });
+
+  describe('Orchestrator.writeReport', () => {
+    (writeFile as jest.Mock).mockResolvedValue(null);
+    const orchestrator = new Orchestrator('/test');
+
+    beforeAll(async () => {
+      await orchestrator.run();
+
+    });
+
+    test('json file', async () => {
+      await orchestrator.writeReport('/test/output', 'json');
+
+      expect(writeFile).toHaveBeenCalledWith('/test/output/report.json', expect.any(Buffer));
+    });
+
+    test('markdown file', async () => {
+      await orchestrator.writeReport('/test/output', 'markdown');
+
+      expect(writeFile).toHaveBeenCalledWith('/test/output/report.md', expect.any(Buffer));
     });
   });
 });
