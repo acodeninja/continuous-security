@@ -6,7 +6,7 @@ export const JSONConfiguration = Buffer.from(JSON.stringify({
 }));
 
 export const JSONConfigurationWithExtraConfig = Buffer.from(JSON.stringify({
-  ignore: ['build/'],
+  ignore: ['build/', 'does/not/exist/'],
   scanners: [
     {name: '@continuous-security/scanner-test', with: {property: 'value'}},
     {name: '@another-organisation/scanner-test', with: {property: 'value'}},

@@ -1,5 +1,5 @@
 import {Orchestrator} from './Orchestrator';
-import {access, readFile, writeFile} from 'fs/promises';
+import {access, cp, readFile, rm, writeFile} from 'fs/promises';
 import {exec} from 'child_process';
 import {loadScannerModule} from './Helpers';
 import {TestScanner} from '../tests/fixtures/Scanner';
@@ -16,7 +16,11 @@ jest.mock('fs/promises', () => ({
     }
     return JSONConfigurationWithExtraConfig;
   }),
-  rm: jest.fn().mockResolvedValue(null),
+  rm: jest.fn().mockImplementation(async (path: string) => {
+    if (path.endsWith('/build')) return null;
+
+    throw new Error('file does not exist');
+  }),
   writeFile: jest.fn(),
 }));
 
@@ -60,6 +64,8 @@ describe('Orchestrator', () => {
     orchestrator.emitter.on('scanner:teardown:started', scanTeardownStarted);
     const scanTeardownFinished = jest.fn();
     orchestrator.emitter.on('scanner:teardown:finished', scanTeardownFinished);
+    const scanError = jest.fn();
+    orchestrator.emitter.on('scan:error', scanError);
 
     beforeAll(async () => {
       await orchestrator.run();
@@ -68,6 +74,15 @@ describe('Orchestrator', () => {
     test('loads the configuration from the target project', () => {
       expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
       expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
+    });
+
+    test('handles ignored directories and files', () => {
+      expect(rm).toHaveBeenCalledWith('/tmp/prefix-random/build', {recursive: true});
+      expect(rm).toHaveBeenCalledWith('/tmp/prefix-random/does/not/exist', {recursive: true});
+      expect(cp).toHaveBeenCalledWith('/test', '/tmp/prefix-random', {recursive: true});
+      expect(scanError)
+        .toHaveBeenCalledWith('ignored path does/not/exist/ does not exist, skipping');
+      expect(scanError).toHaveBeenCalledTimes(1);
     });
 
     test('installs scanner modules', () => {
