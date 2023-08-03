@@ -55,7 +55,7 @@ const configuration = {
 
 describe('Scan', () => {
   const emitter = new Emitter();
-  const scan = new Scan(emitter, scanner, configuration);
+  const scan = new Scan(emitter, scanner, configuration, process.cwd());
 
   const onDebug = jest.fn();
   const setupStarted = jest.fn();
@@ -101,7 +101,7 @@ describe('Scan', () => {
         process.env['DEBUG'] = 'true';
         const onDebug = jest.fn();
         const emitter = new Emitter();
-        const scan = new Scan(emitter, scanner, configuration);
+        const scan = new Scan(emitter, scanner, configuration, process.cwd());
         emitter.on('debug', onDebug);
         await scan.setup();
         expect(onDebug).toHaveBeenCalledWith(
@@ -122,7 +122,7 @@ describe('Scan', () => {
             required: true,
           },
         },
-      }, {...configuration, with: {}});
+      }, {...configuration, with: {}}, process.cwd());
       emitter.on('scanner:setup:error', setupErrored);
 
       beforeAll(async () => {
@@ -152,7 +152,7 @@ describe('Scan', () => {
             required: true,
           },
         },
-      }, configuration);
+      }, configuration, process.cwd());
       emitter.on('scanner:setup:error', setupErrored);
 
       beforeAll(async () => {
@@ -197,7 +197,7 @@ describe('Scan', () => {
       test('raises "imageHash not found" error', async () => {
         (buildImage as jest.Mock).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
-        const scan = new Scan(emitter, scanner, configuration);
+        const scan = new Scan(emitter, scanner, configuration, process.cwd());
         await scan.setup();
 
         await expect(scan.run()).rejects.toThrow('imageHash not found');
@@ -208,7 +208,7 @@ describe('Scan', () => {
       test('raises "output directory not found" error', async () => {
         (makeTemporaryFolder as jest.Mock).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
-        const scan = new Scan(emitter, scanner, configuration);
+        const scan = new Scan(emitter, scanner, configuration, process.cwd());
         await scan.setup();
 
         await expect(scan.run()).rejects.toThrow('output directory not found');
@@ -235,7 +235,7 @@ describe('Scan', () => {
       test('raises "output directory not found" error', async () => {
         (makeTemporaryFolder as jest.Mock).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
-        const scan = new Scan(emitter, scanner, configuration);
+        const scan = new Scan(emitter, scanner, configuration, process.cwd());
         await scan.setup();
 
         await expect(scan.teardown()).rejects.toThrow('output directory not found');

@@ -11,11 +11,13 @@ export class Scan {
   private imageHash?: string;
   public report?: ScanReport;
   public readonly scanner: Scanner;
+  private readonly target: string;
 
-  constructor(emitter: EventEmitter, scanner: Scanner, configuration: ScannerConfiguration) {
+  constructor(emitter: EventEmitter, scanner: Scanner, configuration: ScannerConfiguration, target: string) {
     this.emitter = emitter;
     this.scanner = scanner;
     this.configuration = configuration;
+    this.target = target;
   }
 
   async setup() {
@@ -56,11 +58,10 @@ export class Scan {
 
     await runImage({
       configuration: this.configuration.with,
-      ignore: this.configuration.ignore,
       imageHash: this.imageHash,
       host: {
         output: this.output,
-        target: process.cwd(),
+        target: this.target,
       },
     });
 

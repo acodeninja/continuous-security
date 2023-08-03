@@ -83,7 +83,6 @@ describe('runImage', () => {
   describe('without image hash', () => {
     test('raises a "No image hash found." error', async () => {
       await expect(runImage({
-        ignore: ['ignored/'],
         imageHash: undefined,
         host: {
           target: '/target',
@@ -96,7 +95,6 @@ describe('runImage', () => {
   describe('without configuration', () => {
     beforeAll(async () => {
       await runImage({
-        ignore: ['ignored/'],
         imageHash: 'test',
         host: {
           target: '/target',
@@ -118,7 +116,7 @@ describe('runImage', () => {
           Env: [],
           HostConfig: {
             AutoRemove: true,
-            Binds: ['/output:/output', '/target:/target', '/target/ignored/'],
+            Binds: ['/output:/output', '/target:/target'],
             NetworkMode: 'host',
           },
           Tty: false,
@@ -126,13 +124,13 @@ describe('runImage', () => {
       );
     });
   });
+
   describe('with configuration', () => {
     beforeAll(async () => {
       await runImage({
         configuration: {
           input: 'test',
         },
-        ignore: ['ignored/'],
         imageHash: 'test',
         host: {
           target: '/target',
@@ -154,7 +152,7 @@ describe('runImage', () => {
           Env: ['CONFIG_INPUT=test'],
           HostConfig: {
             AutoRemove: true,
-            Binds: ['/output:/output', '/target:/target', '/target/ignored/'],
+            Binds: ['/output:/output', '/target:/target'],
             NetworkMode: 'host',
           },
           Tty: false,
