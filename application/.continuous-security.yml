@@ -1,4 +1,5 @@
 ignore:
+  - build/
   - jest.setup.js
 scanners:
   - "@continuous-security/scanner-javascript-js-x-ray"
