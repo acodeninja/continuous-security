@@ -1,4 +1,5 @@
 import {
+  buildImage,
   destroyTemporaryFolder,
   isURL,
   loadScannerModule,
@@ -8,9 +9,10 @@ import {
 } from './Helpers';
 import {tmpdir} from 'os';
 import {mkdtemp, rm} from 'fs/promises';
-import {Transform} from 'stream';
+import {Transform, Readable} from 'stream';
 import {exec} from 'child_process';
 import Docker from 'dockerode';
+import Modem from 'docker-modem';
 import {createWriteStream} from 'fs';
 
 jest.mock('fs/promises');
@@ -25,6 +27,52 @@ describe('packFiles', () => {
     expect(zip).toHaveProperty('bytesWritten', expect.any(Number));
     expect(zip).toHaveProperty('close', expect.any(Function));
     expect(zip).toHaveProperty('flush', expect.any(Function));
+  });
+});
+
+describe('buildImage', () => {
+  const dockerBuildImage = jest.spyOn(Docker.prototype, 'buildImage');
+  dockerBuildImage.mockResolvedValue(new Readable());
+
+  describe('when no error occurs', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(null, [{}]);
+      onFinish(null, [{aux: {ID: 'test-image'}}]);
+    });
+
+    beforeAll(async () => {
+      await buildImage({
+        files: {Dockerfile: 'FROM alpine'},
+      });
+    });
+
+    test('Docker.buildImage was called', () => {
+      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable), {});
+    });
+
+    test('Modem.followProgress was called', () => {
+      expect(followProgress).toHaveBeenCalledWith(expect.any(Readable), expect.any(Function));
+    });
+  });
+
+  describe('when an error occurs', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(new Error('test error'), []);
+    });
+
+    test('raises the error', async () => {
+      await expect(buildImage({files: {Dockerfile: 'FROM alpine'}})).rejects.toThrow('test error');
+    });
+
+    test('Docker.buildImage was called', () => {
+      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable), {});
+    });
+
+    test('Modem.followProgress was called', () => {
+      expect(followProgress).toHaveBeenCalledWith(expect.any(Readable), expect.any(Function));
+    });
   });
 });
 
