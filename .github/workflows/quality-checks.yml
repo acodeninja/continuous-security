@@ -127,6 +127,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: application-${{ github.run_id }}-build
+      - run: ls -al
+        working-directory: application/
       - run: npm link
         working-directory: application/
       - run: continuous-security scan
