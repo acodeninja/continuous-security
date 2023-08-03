@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`a GitHub security advisory has the correct description 1`] = `
+exports[`OSV.getById has the correct description 1`] = `
 "### Impact
 
 Mautic allows you to track open rates by using tracking pixels. 
