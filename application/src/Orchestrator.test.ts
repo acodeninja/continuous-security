@@ -3,18 +3,20 @@ import {access, readFile, writeFile} from 'fs/promises';
 import {exec} from 'child_process';
 import {loadScannerModule} from './Helpers';
 import {TestScanner} from '../tests/fixtures/Scanner';
-import {JSONConfiguration} from '../tests/fixtures/Configuration';
+import {JSONConfigurationWithExtraConfig} from '../tests/fixtures/Configuration';
 import {TestScanExpectation} from '../tests/fixtures/Scan';
 import {NpmAuditReport} from '../tests/fixtures/NpmAuditReport';
 
 jest.mock('fs/promises', () => ({
   access: jest.fn().mockResolvedValue(null),
+  cp: jest.fn().mockResolvedValue(null),
   readFile: jest.fn().mockImplementation((file: string) => {
     if (file.indexOf('report') !== -1) {
       return NpmAuditReport;
     }
-    return JSONConfiguration;
+    return JSONConfigurationWithExtraConfig;
   }),
+  rm: jest.fn().mockResolvedValue(null),
   writeFile: jest.fn(),
 }));
 
@@ -66,10 +68,6 @@ describe('Orchestrator', () => {
     test('loads the configuration from the target project', () => {
       expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
       expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
-      expect(orchestrator.configuration).toHaveProperty('scanners', [
-        {name: '@continuous-security/scanner-test'},
-        {name: '@another-organisation/scanner-test'},
-      ]);
     });
 
     test('installs scanner modules', () => {

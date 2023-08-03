@@ -32,7 +32,7 @@ export class Orchestrator {
         const tempProjectRoot = await makeTemporaryFolder('project-');
         await cp(this.projectRoot, tempProjectRoot, {recursive: true});
         await Promise.all(this.configuration.ignore.map(async (ignore) => {
-            await rm(resolve(tempProjectRoot, ignore), {recursive: true});
+            await rm(resolve(tempProjectRoot, ignore), {recursive: true}).catch();
         }));
         this.projectRoot = tempProjectRoot;
     }
