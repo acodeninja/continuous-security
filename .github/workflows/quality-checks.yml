@@ -127,6 +127,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: application-${{ github.run_id }}-build
+          path: application/build
       - run: ls -al
         working-directory: application/
       - run: npm link
