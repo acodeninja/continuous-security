@@ -152,7 +152,6 @@ describe('Configuration', () => {
       });
 
       describe('with the extension .yml', () => {
-        let configuration: Configuration;
         beforeAll(async () => {
           (access as jest.Mock).mockImplementation(async file => {
             if (file.endsWith('.yml')) return null;
@@ -160,10 +159,10 @@ describe('Configuration', () => {
           });
 
           (readFile as jest.Mock).mockResolvedValueOnce(
-              Buffer.from(YAMLConfigurationWithExtraConfig),
+            Buffer.from(YAMLConfigurationWithExtraConfig),
           );
 
-          configuration = await Configuration.load('/test');
+          await Configuration.load('/test');
         });
 
         afterAll(() => {
