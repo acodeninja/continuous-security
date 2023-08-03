@@ -13,7 +13,12 @@ export class Scan {
   public readonly scanner: Scanner;
   private readonly target: string;
 
-  constructor(emitter: EventEmitter, scanner: Scanner, configuration: ScannerConfiguration, target: string) {
+  constructor(
+      emitter: EventEmitter,
+      scanner: Scanner,
+      configuration: ScannerConfiguration,
+      target: string,
+  ) {
     this.emitter = emitter;
     this.scanner = scanner;
     this.configuration = configuration;

@@ -29,12 +29,12 @@ export class Orchestrator {
     this.configuration = await Configuration.load(this.projectRoot);
 
     if (this.configuration.ignore?.length > 0) {
-        const tempProjectRoot = await makeTemporaryFolder('project-');
-        await cp(this.projectRoot, tempProjectRoot, {recursive: true});
-        await Promise.all(this.configuration.ignore.map(async (ignore) => {
-            await rm(resolve(tempProjectRoot, ignore), {recursive: true}).catch();
-        }));
-        this.projectRoot = tempProjectRoot;
+      const tempProjectRoot = await makeTemporaryFolder('project-');
+      await cp(this.projectRoot, tempProjectRoot, {recursive: true});
+      await Promise.all(this.configuration.ignore.map(async (ignore) => {
+        await rm(resolve(tempProjectRoot, ignore), {recursive: true}).catch();
+      }));
+      this.projectRoot = tempProjectRoot;
     }
 
     if (!process.env.DEBUG) {
