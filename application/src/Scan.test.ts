@@ -205,7 +205,7 @@ describe('Scan', () => {
     });
 
     describe('with no temporary directory', () => {
-      test('raises "imageHash not found" error', async () => {
+      test('raises "output directory not found" error', async () => {
         (makeTemporaryFolder as jest.Mock).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
         const scan = new Scan(emitter, scanner, configuration);
@@ -229,6 +229,17 @@ describe('Scan', () => {
 
     test('emits the scanner:teardown:finished event', () => {
       expect(teardownFinished).toHaveBeenCalledWith(scan.scanner.name);
+    });
+
+    describe('where there is no temporary directory', () => {
+      test('raises "output directory not found" error', async () => {
+        (makeTemporaryFolder as jest.Mock).mockResolvedValueOnce(undefined);
+        const emitter = new Emitter();
+        const scan = new Scan(emitter, scanner, configuration);
+        await scan.setup();
+
+        await expect(scan.teardown()).rejects.toThrow('output directory not found');
+      });
     });
   });
 });
