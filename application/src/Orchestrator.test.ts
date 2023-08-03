@@ -108,7 +108,6 @@ describe('Orchestrator', () => {
 
     beforeAll(async () => {
       await orchestrator.run();
-
     });
 
     test('json file', async () => {
@@ -121,6 +120,18 @@ describe('Orchestrator', () => {
       await orchestrator.writeReport('/test/output', 'markdown');
 
       expect(writeFile).toHaveBeenCalledWith('/test/output/report.md', expect.any(Buffer));
+    });
+  });
+
+  describe('Orchestrator.getIssueCount', () => {
+    const orchestrator = new Orchestrator('/test');
+
+    beforeAll(async () => {
+      await orchestrator.run();
+    });
+
+    test('returns the correct number of issues', async () => {
+      expect(await orchestrator.getIssueCount()).toEqual(0);
     });
   });
 });
