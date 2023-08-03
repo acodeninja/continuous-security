@@ -76,7 +76,7 @@ jobs:
         working-directory: application/
       - uses: actions/upload-artifact@v3
         with:
-          name: application-${{ github.ref_name }}-build
+          name: application-${{ github.run_id }}-build
           path: application/build/
 
   enumerate-scanners:
@@ -126,7 +126,7 @@ jobs:
         working-directory: scanners/${{ matrix.scanner }}/
       - uses: actions/download-artifact@v3
         with:
-          name: application-${{ github.ref_name }}-build
+          name: application-${{ github.run_id }}-build
       - run: npm link
         working-directory: application/
       - run: continuous-security scan
