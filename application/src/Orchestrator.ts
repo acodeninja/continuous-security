@@ -1,11 +1,11 @@
 import {exec} from 'child_process';
-import {writeFile} from 'fs/promises';
+import {writeFile, cp, rm} from 'fs/promises';
 import {resolve} from 'path';
 import {promisify} from 'util';
 
 import {Configuration} from './Configuration';
 import {Emitter} from './Emitter';
-import {loadScannerModule} from './Helpers';
+import {loadScannerModule, makeTemporaryFolder} from './Helpers';
 import {Report} from './Report';
 import {Scan} from './Scan';
 
@@ -13,7 +13,7 @@ import packageJson from '../package.json';
 
 export class Orchestrator {
   public readonly emitter: Emitter;
-  private readonly projectRoot: string;
+  private projectRoot: string;
   public configuration?: Configuration;
   private scans: Array<Scan> = [];
   private report: Report;
@@ -27,6 +27,15 @@ export class Orchestrator {
   async run(): Promise<void> {
     this.emitter.emit('scan:started', '');
     this.configuration = await Configuration.load(this.projectRoot);
+
+    if (this.configuration.ignore?.length > 0) {
+      const tempProjectRoot = await makeTemporaryFolder('project-');
+      await cp(this.projectRoot, tempProjectRoot, {recursive: true});
+      await Promise.all(this.configuration.ignore.map(async (ignore) => {
+        await rm(resolve(tempProjectRoot, ignore), {recursive: true}).catch();
+      }));
+      this.projectRoot = tempProjectRoot;
+    }
 
     if (!process.env.DEBUG) {
       const installs = this.configuration.scanners
@@ -48,14 +57,7 @@ export class Orchestrator {
       this.configuration.scanners.map(configuration => new Promise<void>(resolve => {
         loadScannerModule(configuration.name)
           .then(scanner => {
-            this.scans.push(new Scan(
-              this.emitter,
-              scanner,
-              {
-                ...configuration,
-                ignore: (configuration.ignore || []).concat(this.configuration.ignore || []),
-              },
-            ));
+            this.scans.push(new Scan(this.emitter, scanner, configuration, this.projectRoot));
             this.emitter.emit('scanner:loaded', scanner.name);
             resolve();
           });

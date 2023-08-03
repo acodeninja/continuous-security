@@ -150,6 +150,30 @@ describe('Configuration', () => {
           expect(configuration).toHaveProperty('ignore', ['build/']);
         });
       });
+
+      describe('with the extension .yml', () => {
+        beforeAll(async () => {
+          (access as jest.Mock).mockImplementation(async file => {
+            if (file.endsWith('.yml')) return null;
+            throw new Error('file does not exist');
+          });
+
+          (readFile as jest.Mock).mockResolvedValueOnce(
+            Buffer.from(YAMLConfigurationWithExtraConfig),
+          );
+
+          await Configuration.load('/test');
+        });
+
+        afterAll(() => {
+          (access as jest.Mock).mockReset();
+        });
+
+        test('attempts to read from .continuous-security.yml', () => {
+          expect(access).toHaveBeenCalledWith('/test/.continuous-security.yml');
+          expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.yml');
+        });
+      });
     });
 
     describe('a non-existent configuration file', () => {

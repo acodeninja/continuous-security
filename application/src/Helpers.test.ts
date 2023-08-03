@@ -1,9 +1,166 @@
-import {isURL, makeTemporaryFolder} from './Helpers';
+import {
+  buildImage,
+  destroyTemporaryFolder,
+  isURL,
+  loadScannerModule,
+  makeTemporaryFolder,
+  packFiles,
+  runImage,
+} from './Helpers';
 import {tmpdir} from 'os';
-import {mkdtemp} from 'fs/promises';
+import {mkdtemp, rm} from 'fs/promises';
+import {Transform, Readable} from 'stream';
+import {exec} from 'child_process';
+import Docker from 'dockerode';
+import Modem from 'docker-modem';
+import {createWriteStream} from 'fs';
 
 jest.mock('fs/promises');
+jest.mock('fs');
+jest.mock('child_process');
 jest.mock('os');
+
+describe('packFiles', () => {
+  test('packing files produces a Gzip', async () => {
+    const zip = await packFiles({Dockerfile: 'FROM alpine'});
+    expect(zip).toBeInstanceOf(Transform);
+    expect(zip).toHaveProperty('bytesWritten', expect.any(Number));
+    expect(zip).toHaveProperty('close', expect.any(Function));
+    expect(zip).toHaveProperty('flush', expect.any(Function));
+  });
+});
+
+describe('buildImage', () => {
+  const dockerBuildImage = jest.spyOn(Docker.prototype, 'buildImage');
+  dockerBuildImage.mockResolvedValue(new Readable());
+
+  describe('when no error occurs', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(null, [{}]);
+      onFinish(null, [{aux: {ID: 'test-image'}}]);
+    });
+
+    beforeAll(async () => {
+      await buildImage({
+        files: {Dockerfile: 'FROM alpine'},
+      });
+    });
+
+    test('Docker.buildImage was called', () => {
+      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable), {});
+    });
+
+    test('Modem.followProgress was called', () => {
+      expect(followProgress).toHaveBeenCalledWith(expect.any(Readable), expect.any(Function));
+    });
+  });
+
+  describe('when an error occurs', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(new Error('test error'), []);
+    });
+
+    test('raises the error', async () => {
+      await expect(buildImage({files: {Dockerfile: 'FROM alpine'}})).rejects.toThrow('test error');
+    });
+
+    test('Docker.buildImage was called', () => {
+      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable), {});
+    });
+
+    test('Modem.followProgress was called', () => {
+      expect(followProgress).toHaveBeenCalledWith(expect.any(Readable), expect.any(Function));
+    });
+  });
+});
+
+describe('runImage', () => {
+  const runMock = jest.spyOn(Docker.prototype, 'run');
+  runMock.mockResolvedValue(null);
+
+  describe('without image hash', () => {
+    test('raises a "No image hash found." error', async () => {
+      await expect(runImage({
+        imageHash: undefined,
+        host: {
+          target: '/target',
+          output: '/output',
+        },
+      })).rejects.toThrow('No image hash found.');
+    });
+  });
+
+  describe('without configuration', () => {
+    beforeAll(async () => {
+      await runImage({
+        imageHash: 'test',
+        host: {
+          target: '/target',
+          output: '/output',
+        },
+      });
+    });
+
+    test('createWriteSteam call with output path', () => {
+      expect(createWriteStream).toHaveBeenCalledWith('/output/output.log');
+    });
+
+    test('Docker.run was called', () => {
+      expect(runMock).toHaveBeenCalledWith(
+        'test',
+        [],
+        [undefined, undefined],
+        {
+          Env: [],
+          HostConfig: {
+            AutoRemove: true,
+            Binds: ['/output:/output', '/target:/target'],
+            NetworkMode: 'host',
+          },
+          Tty: false,
+        },
+      );
+    });
+  });
+
+  describe('with configuration', () => {
+    beforeAll(async () => {
+      await runImage({
+        configuration: {
+          input: 'test',
+        },
+        imageHash: 'test',
+        host: {
+          target: '/target',
+          output: '/output',
+        },
+      });
+    });
+
+    test('createWriteSteam call with output path', () => {
+      expect(createWriteStream).toHaveBeenCalledWith('/output/output.log');
+    });
+
+    test('Docker.run was called', () => {
+      expect(runMock).toHaveBeenCalledWith(
+        'test',
+        [],
+        [undefined, undefined],
+        {
+          Env: ['CONFIG_INPUT=test'],
+          HostConfig: {
+            AutoRemove: true,
+            Binds: ['/output:/output', '/target:/target'],
+            NetworkMode: 'host',
+          },
+          Tty: false,
+        },
+      );
+    });
+  });
+});
 
 describe('isURL', () => {
   test('returns true for an http url', () => {
@@ -16,6 +173,10 @@ describe('isURL', () => {
 
   test('returns false for a windows filesystem path', () => {
     expect(isURL('C:\\Path\\To\\File')).toBeFalsy();
+  });
+
+  test('returns false for null input', () => {
+    expect(isURL(undefined)).toBeFalsy();
   });
 });
 
@@ -57,5 +218,31 @@ describe('makeTemporaryFolder', () => {
     test('returns a temporary folder', () => {
       expect(temporaryFolder).toBe('/test-temp/prefix');
     });
+  });
+});
+
+describe('destroyTemporaryFolder', () => {
+  test('calls rm with the folder path', async () => {
+    await destroyTemporaryFolder('/test/folder');
+    expect(rm).toHaveBeenCalledWith('/test/folder', {force: true, recursive: true});
+  });
+});
+
+describe('loadScannerModule', () => {
+  beforeAll(async () => {
+    (exec as unknown as jest.Mock).mockImplementation((command, options, callback) => {
+      callback(null, {stdout: ''});
+    });
+    await loadScannerModule('test');
+  });
+  test('runs npm root against the scanner module', () => {
+    expect(exec).toHaveBeenCalledWith(
+      'npm root -g',
+      {cwd: expect.stringContaining('continuous-security/application')},
+      expect.any(Function),
+    );
+  });
+  test('uses non-webpack require to load default module', () => {
+    expect(__non_webpack_require__).toHaveBeenCalledWith('/test/build/main.js');
   });
 });

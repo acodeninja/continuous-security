@@ -1,20 +1,23 @@
 import {Orchestrator} from './Orchestrator';
-import {access, readFile} from 'fs/promises';
+import {access, readFile, writeFile} from 'fs/promises';
 import {exec} from 'child_process';
 import {loadScannerModule} from './Helpers';
 import {TestScanner} from '../tests/fixtures/Scanner';
-import {JSONConfiguration} from '../tests/fixtures/Configuration';
+import {JSONConfigurationWithExtraConfig} from '../tests/fixtures/Configuration';
 import {TestScanExpectation} from '../tests/fixtures/Scan';
 import {NpmAuditReport} from '../tests/fixtures/NpmAuditReport';
 
 jest.mock('fs/promises', () => ({
   access: jest.fn().mockResolvedValue(null),
+  cp: jest.fn().mockResolvedValue(null),
   readFile: jest.fn().mockImplementation((file: string) => {
     if (file.indexOf('report') !== -1) {
       return NpmAuditReport;
     }
-    return JSONConfiguration;
+    return JSONConfigurationWithExtraConfig;
   }),
+  rm: jest.fn().mockResolvedValue(null),
+  writeFile: jest.fn(),
 }));
 
 jest.mock('child_process', () => ({
@@ -65,10 +68,6 @@ describe('Orchestrator', () => {
     test('loads the configuration from the target project', () => {
       expect(access).toHaveBeenCalledWith('/test/.continuous-security.json');
       expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.json');
-      expect(orchestrator.configuration).toHaveProperty('scanners', [
-        {name: '@continuous-security/scanner-test'},
-        {name: '@another-organisation/scanner-test'},
-      ]);
     });
 
     test('installs scanner modules', () => {
@@ -98,6 +97,39 @@ describe('Orchestrator', () => {
         TestScanExpectation.scanner.name,
         expect.anything(),
       );
+    });
+  });
+
+  describe('Orchestrator.writeReport', () => {
+    (writeFile as jest.Mock).mockResolvedValue(null);
+    const orchestrator = new Orchestrator('/test');
+
+    beforeAll(async () => {
+      await orchestrator.run();
+    });
+
+    test('json file', async () => {
+      await orchestrator.writeReport('/test/output', 'json');
+
+      expect(writeFile).toHaveBeenCalledWith('/test/output/report.json', expect.any(Buffer));
+    });
+
+    test('markdown file', async () => {
+      await orchestrator.writeReport('/test/output', 'markdown');
+
+      expect(writeFile).toHaveBeenCalledWith('/test/output/report.md', expect.any(Buffer));
+    });
+  });
+
+  describe('Orchestrator.getIssueCount', () => {
+    const orchestrator = new Orchestrator('/test');
+
+    beforeAll(async () => {
+      await orchestrator.run();
+    });
+
+    test('returns the correct number of issues', async () => {
+      expect(await orchestrator.getIssueCount()).toEqual(0);
     });
   });
 });
