@@ -74,6 +74,10 @@ jobs:
         working-directory: application/
       - run: continuous-security scan
         working-directory: application/
+      - uses: actions/upload-artifact@v3
+        with:
+          name: application-${{ github.ref_name }}-build
+          path: application/build/
 
   enumerate-scanners:
     name: scanner / enumerate
