@@ -11,9 +11,11 @@ export class ConfigurationLoadError extends Error {
 }
 
 export class Configuration {
+  public readonly ignore: Array<string>;
   public readonly scanners: Array<ScannerConfiguration>;
 
-  constructor({scanners}: ConfigurationFile) {
+  constructor({scanners, ignore}: ConfigurationFile) {
+    this.ignore = ignore;
     this.scanners = scanners.map(scanner =>
       typeof scanner === 'string' ? {name: scanner} : scanner);
   }

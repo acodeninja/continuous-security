@@ -2,3 +2,5 @@ scanners:
   - "@continuous-security/scanner-javascript-js-x-ray"
   - "@continuous-security/scanner-javascript-njsscan"
   - "@continuous-security/scanner-javascript-npm-audit"
+ignore:
+  - build/

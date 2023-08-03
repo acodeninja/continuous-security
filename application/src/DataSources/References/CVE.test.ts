@@ -6,7 +6,7 @@ jest.mock('axios', () => ({
   get: jest.fn(),
 }));
 
-describe('a CVE security advisory', () => {
+describe('CVE.getById', () => {
   (axios.get as jest.Mock).mockResolvedValueOnce({data: CVEResponse});
 
   let reference: ReportOutputIssueReference;
@@ -31,5 +31,13 @@ describe('a CVE security advisory', () => {
     expect(reference.directLink).toEqual(
       'https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-1010218',
     );
+  });
+
+  describe('when the cve does not exist', () => {
+    (axios.get as jest.Mock).mockRejectedValueOnce(new Error('404'));
+
+    test('raises an error', async () => {
+      await expect((new CVE()).getById('xxxxxxxxx')).rejects.toThrow('failed to get id xxxxxxxxx');
+    });
   });
 });

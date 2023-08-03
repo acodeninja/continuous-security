@@ -1,19 +1,32 @@
 export const JSONConfiguration = Buffer.from(JSON.stringify({
-  scanners: ['test-scanner'],
+  scanners: [
+    '@continuous-security/scanner-test',
+    '@another-organisation/scanner-test',
+  ],
 }));
 
 export const JSONConfigurationWithExtraConfig = Buffer.from(JSON.stringify({
-  scanners: [{name: 'test-scanner', with: {property: 'value'}}],
+  ignore: ['build/'],
+  scanners: [
+    {name: '@continuous-security/scanner-test', with: {property: 'value'}},
+    {name: '@another-organisation/scanner-test', with: {property: 'value'}},
+  ],
 }));
 
 export const YAMLConfiguration = Buffer.from(`
 scanners:
-  - test-scanner
+  - "@continuous-security/scanner-test"
+  - "@another-organisation/scanner-test"
 `);
 
 export const YAMLConfigurationWithExtraConfig = Buffer.from(`
+ignore:
+  - build/
 scanners:
-  - name: test-scanner
+  - name: "@continuous-security/scanner-test"
+    with:
+      property: value
+  - name: "@another-organisation/scanner-test"
     with:
       property: value
 `);

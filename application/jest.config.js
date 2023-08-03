@@ -6,4 +6,5 @@ module.exports = {
     '../assets/cwe.xml': '<rootDir>/tests/fixtures/assets/CWEData.js',
     'assets/report.template.md': '<rootDir>/tests/fixtures/assets/ReportTemplate.js',
   },
+  setupFiles: ['./jest.setup.js'],
 };

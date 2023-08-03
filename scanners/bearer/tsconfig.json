@@ -1,0 +1,5 @@
+{
+  "extends": "../_base/tsconfig.json",
+  "include": ["src/*.ts",
+    "types.d.ts", "types.local.d.ts"]
+}

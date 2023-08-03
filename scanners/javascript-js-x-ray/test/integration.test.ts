@@ -42,7 +42,7 @@ setupIntegrationTests(
         extracts: [
           {
             path: 'app.js',
-            lines: ['64'],
+            lines: ['65'],
             language: 'javascript',
           },
         ],

@@ -15,7 +15,7 @@ type ScannerConfiguration = {
 }
 
 type ScannerRunConfiguration = {
-  configuration: Record<string, string>;
+  configuration?: Record<string, string>;
   imageHash: string;
   host: {
     target: string;
@@ -77,6 +77,13 @@ declare module './assets/*' {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 declare module '../assets/*' {
+  const content: string;
+  export default content;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+declare module '../../assets/*' {
   const content: string;
   export default content;
 }

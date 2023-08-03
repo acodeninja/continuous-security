@@ -1,4 +1,4 @@
-# Scanner: python pip-audit
+# pip-audit
 
 ## Usage
 

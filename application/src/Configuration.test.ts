@@ -40,7 +40,8 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner'},
+            {name: '@continuous-security/scanner-test'},
+            {name: '@another-organisation/scanner-test'},
           ]);
         });
       });
@@ -72,8 +73,13 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner', with: {property: 'value'}},
+            {name: '@continuous-security/scanner-test', with: {property: 'value'}},
+            {name: '@another-organisation/scanner-test', with: {property: 'value'}},
           ]);
+        });
+
+        test('loads a list of ignored directories', () => {
+          expect(configuration).toHaveProperty('ignore', ['build/']);
         });
       });
     });
@@ -103,7 +109,8 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner'},
+            {name: '@continuous-security/scanner-test'},
+            {name: '@another-organisation/scanner-test'},
           ]);
         });
       });
@@ -134,11 +141,39 @@ describe('Configuration', () => {
 
         test('loads a list of scanners', () => {
           expect(configuration).toHaveProperty('scanners', [
-            {name: 'test-scanner', with: {property: 'value'}},
+            {name: '@continuous-security/scanner-test', with: {property: 'value'}},
+            {name: '@another-organisation/scanner-test', with: {property: 'value'}},
           ]);
+        });
+
+        test('loads a list of ignored directories', () => {
+          expect(configuration).toHaveProperty('ignore', ['build/']);
         });
       });
 
+      describe('with the extension .yml', () => {
+        beforeAll(async () => {
+          (access as jest.Mock).mockImplementation(async file => {
+            if (file.endsWith('.yml')) return null;
+            throw new Error('file does not exist');
+          });
+
+          (readFile as jest.Mock).mockResolvedValueOnce(
+            Buffer.from(YAMLConfigurationWithExtraConfig),
+          );
+
+          await Configuration.load('/test');
+        });
+
+        afterAll(() => {
+          (access as jest.Mock).mockReset();
+        });
+
+        test('attempts to read from .continuous-security.yml', () => {
+          expect(access).toHaveBeenCalledWith('/test/.continuous-security.yml');
+          expect(readFile).toHaveBeenCalledWith('/test/.continuous-security.yml');
+        });
+      });
     });
 
     describe('a non-existent configuration file', () => {

@@ -1,4 +1,4 @@
-# Scanner: js-x-ray
+# js-x-ray
 
 ## Usage
 
@@ -13,7 +13,6 @@ No configuration is required for this scanner.
 scanners:
   - @continuous-security/scanner-javascript-js-x-ray
 ```
-
 
 ## Attribution
 

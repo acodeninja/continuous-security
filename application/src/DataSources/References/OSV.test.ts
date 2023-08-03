@@ -6,7 +6,7 @@ jest.mock('axios', () => ({
   get: jest.fn(),
 }));
 
-describe('a GitHub security advisory', () => {
+describe('OSV.getById', () => {
   (axios.get as jest.Mock).mockResolvedValueOnce({data: Github});
 
   let reference: ReportOutputIssueReference;
@@ -31,5 +31,13 @@ describe('a GitHub security advisory', () => {
 
   test('has the correct url', () => {
     expect(reference.directLink).toEqual('https://osv.dev/vulnerability/GHSA-pjpc-87mp-4332');
+  });
+
+  describe('when the advisory does not exist', () => {
+    (axios.get as jest.Mock).mockRejectedValueOnce(new Error('404'));
+
+    test('raises an error', async () => {
+      await expect((new OSV()).getById('xxxxxxxxx')).rejects.toThrow('failed to get id xxxxxxxxx');
+    });
   });
 });

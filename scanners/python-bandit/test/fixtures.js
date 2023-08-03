@@ -58,10 +58,6 @@ module.exports = {
         end_col_offset: 27,
         filename: '/target/main.py',
         issue_confidence: 'MEDIUM',
-        issue_cwe: {
-          id: 259,
-          link: 'https://cwe.mitre.org/data/definitions/259.html',
-        },
         issue_severity: 'LOW',
         issue_text: 'Possible hardcoded password: \'password\'',
         line_number: 8,
