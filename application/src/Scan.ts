@@ -24,7 +24,7 @@ export class Scan {
     if (this.scanner.runConfiguration) {
       Object.entries(this.scanner.runConfiguration).forEach(([name, validation]) => {
         if (validation.required) {
-          if (!this.configuration?.with?.[name]) {
+          if (!this.configuration.with?.[name]) {
             this.emitter.emit(
               'scanner:setup:error',
               this.scanner.name,

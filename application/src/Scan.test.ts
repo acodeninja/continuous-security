@@ -57,6 +57,7 @@ describe('Scan', () => {
   const emitter = new Emitter();
   const scan = new Scan(emitter, scanner, configuration);
 
+  const onDebug = jest.fn();
   const setupStarted = jest.fn();
   const setupFinished = jest.fn();
   const runStarted = jest.fn();
@@ -64,6 +65,7 @@ describe('Scan', () => {
   const teardownStarted = jest.fn();
   const teardownFinished = jest.fn();
 
+  emitter.on('debug', onDebug);
   emitter.on('scanner:setup:started', setupStarted);
   emitter.on('scanner:setup:finished', setupFinished);
   emitter.on('scanner:run:started', runStarted);
@@ -90,7 +92,56 @@ describe('Scan', () => {
       expect(setupFinished).toHaveBeenCalledWith(scan.scanner.name);
     });
 
-    describe('with an invalid configuration', () => {
+    test('does not emit a debug event', () => {
+      expect(onDebug).not.toHaveBeenCalled();
+    });
+
+    describe('when running in debug mode', () => {
+      test('emits a debug event with the temporary directory', async () => {
+        process.env['DEBUG'] = 'true';
+        const onDebug = jest.fn();
+        const emitter = new Emitter();
+        const scan = new Scan(emitter, scanner, configuration);
+        emitter.on('debug', onDebug);
+        await scan.setup();
+        expect(onDebug).toHaveBeenCalledWith(
+          '@continuous-security/scanner-npm-audit output at /tmp/prefix-random',
+        );
+        delete process.env['DEBUG'];
+      });
+    });
+
+    describe('with an invalid required configuration', () => {
+      let error;
+      const emitter = new Emitter();
+      const setupErrored = jest.fn();
+      const scan = new Scan(emitter, {
+        ...scanner,
+        runConfiguration: {
+          test: {
+            required: true,
+          },
+        },
+      }, {...configuration, with: {}});
+      emitter.on('scanner:setup:error', setupErrored);
+
+      beforeAll(async () => {
+        await scan.setup().catch(e => error = e);
+      });
+
+      test('emits the scanner:setup:error event', () => {
+        expect(setupErrored).toHaveBeenCalledWith(
+          '@continuous-security/scanner-npm-audit',
+          'Property with.test is required',
+        );
+      });
+
+      test('raises an error', () => {
+        expect(error).toEqual(new ValidationError('Property with.test is required'));
+      });
+    });
+
+    describe('with an missing required configuration', () => {
       let error;
       const emitter = new Emitter();
       const setupErrored = jest.fn();
