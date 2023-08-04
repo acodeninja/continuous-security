@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-python-bandit",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Run python-bandit against your python codebase.",
   "main": "build/main.js",
   "scripts": {

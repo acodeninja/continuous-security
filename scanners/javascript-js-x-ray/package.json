@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-javascript-js-x-ray",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Run js-x-ray against your nodejs codebase.",
   "main": "build/main.js",
   "scripts": {
