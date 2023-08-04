@@ -150,11 +150,10 @@ jobs:
           path: artefacts/
       - run: |
           for D in "$(ls -1 artefacts/ | grep '${{ github.run_id }}-*')"; do
-            cd $D
+            cd artefacts/$D
             npm link
-            cd ..
+            cd ../..
           done
-        working-directory: artefacts/
       - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
         working-directory: application/
 
@@ -181,11 +180,10 @@ jobs:
           path: artefacts/
       - run: |
           for D in "$(ls -1 artefacts/ | grep '${{ github.run_id }}-*')"; do
-            cd $D
+            cd artefacts/$D
             npm link
-            cd ..
+            cd ../..
           done
-        working-directory: artefacts/
       - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
         working-directory: scanners/${{ matrix.scanner }}/
 
