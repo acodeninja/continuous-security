@@ -73,7 +73,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ github.run_id }}-application
-          path: application/
+          path: |
+            application/
+            !application/node_modules
 
   enumerate-scanners:
     name: scanner / enumerate
@@ -125,7 +127,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ github.run_id }}-${{ matrix.scanner }}
-          path: scanners/${{ matrix.scanner }}/
+          path: |
+            scanners/${{ matrix.scanner }}/
+            !scanners/${{ matrix.scanner }}/node_modules
 
   application-check:
     name: application / scan
