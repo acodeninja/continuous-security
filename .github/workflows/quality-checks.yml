@@ -144,7 +144,7 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
-          cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
+          cache-dependency-path: application/package-lock.json
       - uses: actions/download-artifact@v3
         with:
           path: artefacts/
