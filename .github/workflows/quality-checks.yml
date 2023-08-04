@@ -70,14 +70,10 @@ jobs:
         working-directory: application/
       - run: npm run build
         working-directory: application/
-      - run: npm link
-        working-directory: application/
-      - run: continuous-security scan
-        working-directory: application/
       - uses: actions/upload-artifact@v3
         with:
-          name: application-${{ github.run_id }}-build
-          path: application/build/
+          name: ${{ github.run_id }}-application
+          path: application/
 
   enumerate-scanners:
     name: scanner / enumerate
@@ -124,15 +120,68 @@ jobs:
       - name: integration test
         run: npm run test:integration --if-present
         working-directory: scanners/${{ matrix.scanner }}/
-      - uses: actions/download-artifact@v3
-        with:
-          name: application-${{ github.run_id }}-build
-          path: application/build
-      - run: ls -al
-        working-directory: application/
-      - run: npm link
-        working-directory: application/
-      - run: continuous-security scan
-        working-directory: scanners/${{ matrix.scanner }}/
       - run: npm run build
         working-directory: scanners/${{ matrix.scanner }}/
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.run_id }}-${{ matrix.scanner }}
+          path: scanners/${{ matrix.scanner }}/
+
+  application-check:
+    name: application / scan
+    runs-on: ubuntu-latest
+    needs: [ application, scanners ]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
+      - uses: actions/download-artifact@v3
+        with:
+          path: artefacts/
+      - run: |
+          for D in (ls -1 artefacts/ | grep '${{ github.run_id }}-*'); do
+            cd $D
+            npm link
+            cd ..
+          done
+        working-directory: artefacts/
+      - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
+        working-directory: application/
+
+
+  scanner-check:
+    name: scanner / scan / ${{ matrix.scanner }}
+    runs-on: ubuntu-latest
+    needs: [ application, scanners, enumerate-scanners ]
+    strategy:
+      matrix:
+        scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
+      - uses: actions/download-artifact@v3
+        with:
+          path: artefacts/
+      - run: |
+          for D in (ls -1 artefacts/ | grep '${{ github.run_id }}-*'); do
+            cd $D
+            npm link
+            cd ..
+          done
+        working-directory: artefacts/
+      - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
+        working-directory: scanners/${{ matrix.scanner }}/
+
