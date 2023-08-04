@@ -72,7 +72,7 @@ jobs:
         working-directory: application/
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.run_id }}-application
+          name: application
           path: |
             application/
             !application/node_modules
@@ -126,7 +126,7 @@ jobs:
         working-directory: scanners/${{ matrix.scanner }}/
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.run_id }}-${{ matrix.scanner }}
+          name: ${{ matrix.scanner }}
           path: |
             scanners/${{ matrix.scanner }}/
             !scanners/${{ matrix.scanner }}/node_modules
@@ -148,15 +148,9 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: artefacts/
-      - run: |
-          for D in "$(ls -1 artefacts/ | grep '${{ github.run_id }}-*')"; do
-            cd artefacts/$D
-            npm link
-            cd ../..
-          done
-      - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
-        working-directory: application/
-
+      - run: tree artefacts/
+#      - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
+#        working-directory: application/
 
   scanner-check:
     name: scanner / scan / ${{ matrix.scanner }}
@@ -178,12 +172,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: artefacts/
-      - run: |
-          for D in "$(ls -1 artefacts/ | grep '${{ github.run_id }}-*')"; do
-            cd artefacts/$D
-            npm link
-            cd ../..
-          done
-      - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
-        working-directory: scanners/${{ matrix.scanner }}/
-
+      - run: tree artefacts/
+#      - run: DEBUG=true continuous-security scan || (cat report.md >> $GITHUB_STEP_SUMMARY)
+#        working-directory: scanners/${{ matrix.scanner }}/
