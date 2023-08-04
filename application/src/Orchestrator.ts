@@ -32,7 +32,10 @@ export class Orchestrator {
       const tempProjectRoot = await makeTemporaryFolder('project-');
       await cp(this.projectRoot, tempProjectRoot, {recursive: true});
       await Promise.all(this.configuration.ignore.map(async (ignore) => {
-        await rm(resolve(tempProjectRoot, ignore), {recursive: true}).catch();
+        await rm(resolve(tempProjectRoot, ignore), {recursive: true})
+          .catch(() => {
+            this.emitter.emit('scan:error', `ignored path ${ignore} does not exist, skipping`);
+          });
       }));
       this.projectRoot = tempProjectRoot;
     }

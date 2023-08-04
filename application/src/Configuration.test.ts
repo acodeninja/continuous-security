@@ -79,7 +79,7 @@ describe('Configuration', () => {
         });
 
         test('loads a list of ignored directories', () => {
-          expect(configuration).toHaveProperty('ignore', ['build/']);
+          expect(configuration).toHaveProperty('ignore', ['build/', 'does/not/exist/']);
         });
       });
     });

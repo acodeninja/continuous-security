@@ -11,17 +11,23 @@ questions about the scanners you wish to use.
 
 ```typescript title="configuration.d.ts"
 type ConfigurationFile = {
+  ignore?: Array<string>;
   scanners: Array<string | {
     name: string;
     with?: Record<string, string>;
-  }>
+  }>;
 }
 ```
 
 ## Example JavaScript Project
 
 ```yaml title=".continuous-security.yml file for a JavaScript project"
+ignore:
+  - node_modules/
+  - build/
+  - dist/
 scanners:
+  - "@continuous-security/scanner-bearer"
   - "@continuous-security/scanner-javascript-js-x-ray"
   - "@continuous-security/scanner-javascript-njsscan"
   - "@continuous-security/scanner-javascript-npm-audit"
@@ -34,6 +40,7 @@ scanners:
 
 ```yaml title=".continuous-security.yml file for a Ruby project"
 scanners:
+  - "@continuous-security/scanner-bearer"
   - "@continuous-security/scanner-ruby-bundle-audit"
   - name: "@continuous-security/scanner-zed-attack-proxy"
     with:
