@@ -149,7 +149,7 @@ jobs:
         with:
           path: artefacts/
       - run: |
-          for D in (ls -1 artefacts/ | grep '${{ github.run_id }}-*'); do
+          for D in "$(ls -1 artefacts/ | grep '${{ github.run_id }}-*')"; do
             cd $D
             npm link
             cd ..
@@ -180,7 +180,7 @@ jobs:
         with:
           path: artefacts/
       - run: |
-          for D in (ls -1 artefacts/ | grep '${{ github.run_id }}-*'); do
+          for D in "$(ls -1 artefacts/ | grep '${{ github.run_id }}-*')"; do
             cd $D
             npm link
             cd ..
