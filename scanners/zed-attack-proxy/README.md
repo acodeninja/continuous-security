@@ -11,7 +11,7 @@ This scanner requires a target URL to scan and can be configured as follows:
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - name: @continuous-security/scanner-zed-attack-proxy
+  - name: "@continuous-security/scanner-zed-attack-proxy"
     with:
       target: http://example.com
 ```
@@ -39,7 +39,7 @@ Use this configuration
 
 ```yaml
 scanners:
-  - name: @continuous-security/scanner-zed-attack-proxy
+  - name: "@continuous-security/scanner-zed-attack-proxy"
     with:
       target: http://172.17.0.1:3000
 ```
