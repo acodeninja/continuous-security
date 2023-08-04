@@ -11,7 +11,7 @@ No configuration is required for this scanner.
 `.continuous-security.yml`
 ```yaml
 scanners:
-  - @continuous-security/scanner-javascript-js-x-ray
+  - "@continuous-security/scanner-javascript-js-x-ray"
 ```
 
 ## Attribution
