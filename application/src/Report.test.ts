@@ -4,6 +4,7 @@ import {Emitter} from './Emitter';
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
+import {resolve} from 'path';
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -101,6 +102,13 @@ describe('producing a report', () => {
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: '{\n' +
+            '  "menu": [\n' +
+            '    {"value": "New", "onclick": "CreateNewDoc()"},\n' +
+            '    {"value": "Open", "onclick": "OpenDoc()"},\n' +
+            '    {"value": "Close", "onclick": "CloseDoc()"}\n' +
+            '  ]\n' +
+            '}\n',
         },
       }],
       fix: 'Unknown',
@@ -155,6 +163,7 @@ describe('producing a report', () => {
 
     beforeAll(async () => {
       [, markdownReport] = await report.getReport('markdown');
+      await jest.requireActual('fs/promises').writeFile(resolve('test.md'), markdownReport);
     });
 
     test('matches snapshot', () => {

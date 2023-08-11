@@ -1,13 +1,15 @@
 import {template, TemplateExecutor} from 'lodash';
 import {basename} from 'path';
 import {readFile} from 'fs/promises';
-import BaseTemplate from './assets/report.template.md';
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
 
+import MarkdownTemplate from './assets/report.markdown.template.md';
+import HTMLTemplate from './assets/report.html.template.md';
+
 export class Report {
-  private readonly template: TemplateExecutor;
+  private readonly templates: Record<string, TemplateExecutor>;
   private reports: Array<ScanReport> = [];
   private cached: ReportOutput;
   private emitter: Emitter;
@@ -39,7 +41,10 @@ export class Report {
   constructor(emitter: Emitter) {
     this.emitter = emitter;
     this.references = new References(emitter);
-    this.template = template(BaseTemplate);
+    this.templates = {
+      markdown: template(MarkdownTemplate),
+      html: template(HTMLTemplate),
+    };
   }
 
   addScanReport(report: ScanReport): void {
@@ -116,7 +121,10 @@ export class Report {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
 
-    return ['md', Buffer.from(this.template({...report, functions: this.reportFunctions}))];
+    return [
+      'md',
+      Buffer.from(this.templates.markdown({...report, functions: this.reportFunctions})),
+    ];
   }
 
   async getReport(type: 'markdown' | 'json'): Promise<[string, Buffer]> {

@@ -229,7 +229,8 @@ exports[`producing a report in json matches snapshot 1`] = `
               "ETag": "\\"3147526947+ident\\"",
               "Keep-Alive": "timeout=5",
               "X-Powered-By": "Express"
-            }
+            },
+            "body": "{\\n  \\"menu\\": [\\n    {\\"value\\": \\"New\\", \\"onclick\\": \\"CreateNewDoc()\\"},\\n    {\\"value\\": \\"Open\\", \\"onclick\\": \\"OpenDoc()\\"},\\n    {\\"value\\": \\"Close\\", \\"onclick\\": \\"CloseDoc()\\"}\\n  ]\\n}\\n"
           }
         }
       ],
@@ -373,7 +374,7 @@ This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
 A total of 3 issue(s) were found, 2 of which may require immediate attention.
 
 This report is produced by running automated security scanning tools, which will likely not detect
-all vulnerabilities present. **It is not a replacement for a manual analysis of the application**. 
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**.
 
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 
@@ -414,7 +415,7 @@ When an exception is not caught, it may cause the program to crash or expose sen
 
 ### Consequences
 
-Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
+Using a vulnerability of this type an attacker may be able to affect the system in the following ways.
 
 * **Availability**: DoS: Crash, Exit, or Restart
 * **Confidentiality**: Read Application Data
@@ -436,7 +437,7 @@ The HttpOnly flag directs compatible browsers to prevent client-side script from
 
 ### Consequences
 
-Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
+Using a vulnerability of this type an attacker may be able to affect the system in the following ways.
 
 * **Confidentiality**: Read Application Data
 
@@ -465,55 +466,68 @@ test-issue-description with excluding term: block list
 The following evidence of this vulnerability was found in the application.
 
 
-??? example "Web Request 1"
 
-    * **Request**
-        * **Target**: \`http://localhost:3000\`
-        * **Method**: \`POST\`
-        * **Headers**:
-          \`\`\`json
-          {
-            "cache-control": "no-cache",
-            "content-length": "302",
-            "content-type": "application/x-www-form-urlencoded",
-            "host": "localhost:3000",
-            "pragma": "no-cache",
-            "referer": "http://localhost:3000",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-          }
-          \`\`\`
-        * **Body**:
-          \`\`\`json
-          "words=ZAP"
-          \`\`\`
-        * **Curl**:
-          \`\`\`shell
-          curl -o - -i \\
-            -X POST \\
-            --data 'words=ZAP' \\
-            -H "cache-control: no-cache" \\
+<details><summary><strong>Example "Web Request 1"</strong></summary>
+
+* **Request**
+    * **Target**: \`http://localhost:3000\`
+    * **Method**: \`POST\`
+    * **Headers**:
+      \`\`\`json
+      {
+        "cache-control": "no-cache",
+        "content-length": "302",
+        "content-type": "application/x-www-form-urlencoded",
+        "host": "localhost:3000",
+        "pragma": "no-cache",
+        "referer": "http://localhost:3000",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      }
+      \`\`\`
+    * **Body**:
+      \`\`\`json
+      "words=ZAP"
+      \`\`\`
+    * **Curl**:
+      \`\`\`shell
+      curl -o - -i \\
+        -X POST \\
+        --data 'words=ZAP' \\
+        -H "cache-control: no-cache" \\
             -H "content-type: application/x-www-form-urlencoded" \\
             -H "host: localhost:3000" \\
             -H "pragma: no-cache" \\
             -H "referer: http://localhost:3000" \\
             -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \\
-            "http://localhost:3000"
-          \`\`\`
-    * **Response**
-        * **Status Code**: \`200\`
-        * **Headers**:
-          \`\`\`json
-          {
-            "Connection": "keep-alive",
-            "Content-Length": "939",
-            "Content-Type": "text/html; charset=utf-8",
-            "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
-            "ETag": "\\"3147526947+ident\\"",
-            "Keep-Alive": "timeout=5",
-            "X-Powered-By": "Express"
-          }
-          \`\`\`
-    
+        "http://localhost:3000"
+      \`\`\`
+* **Response**
+    * **Status Code**: \`200\`
+    * **Headers**:
+      \`\`\`json
+      {
+        "Connection": "keep-alive",
+        "Content-Length": "939",
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Wed, 05 Jul 2023 11:49:16 GMT",
+        "ETag": "\\"3147526947+ident\\"",
+        "Keep-Alive": "timeout=5",
+        "X-Powered-By": "Express"
+      }
+      \`\`\`
+    * **Body**:
+      \`\`\`json
+      {
+        "menu": [
+          {"value": "New", "onclick": "CreateNewDoc()"},
+          {"value": "Open", "onclick": "OpenDoc()"},
+          {"value": "Close", "onclick": "CloseDoc()"}
+        ]
+      }
+      
+      \`\`\`
+
+</details>
 
 
 ##### References
