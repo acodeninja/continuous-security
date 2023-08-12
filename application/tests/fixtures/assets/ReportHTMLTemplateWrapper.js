@@ -1,0 +1,6 @@
+const {resolve} = require('path');
+const {readFileSync} = require('fs');
+
+const template = readFileSync(resolve('src/assets/report.html.wrapper.html'));
+
+module.exports = template;

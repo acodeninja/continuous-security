@@ -4,7 +4,6 @@ import {Emitter} from './Emitter';
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
-import {resolve} from 'path';
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -163,11 +162,22 @@ describe('producing a report', () => {
 
     beforeAll(async () => {
       [, markdownReport] = await report.getReport('markdown');
-      await jest.requireActual('fs/promises').writeFile(resolve('test.md'), markdownReport);
     });
 
     test('matches snapshot', () => {
       expect(markdownReport.toString()).toMatchSnapshot();
+    });
+  });
+
+  describe('in html', () => {
+    let htmlReport: Buffer;
+
+    beforeAll(async () => {
+      [, htmlReport] = await report.getReport('html');
+    });
+
+    test('matches snapshot', () => {
+      expect(htmlReport.toString()).toMatchSnapshot();
     });
   });
 });
