@@ -6,7 +6,7 @@ This security report was conducted on <%= date.toLocaleDateString() %> at <%= da
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
 
 This report is produced by running automated security scanning tools, which will likely not detect
-all vulnerabilities present. **It is not a replacement for a manual analysis of the application**. 
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**.
 <% if (summaryImpacts) { %>
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 <% summaryImpacts.forEach(({scope, impacts}) => { %>
@@ -44,10 +44,10 @@ To gain a better understanding of the severity levels please see [the appendix](
 
 <% if (o.dataSourceSpecific.cwe.consequences.length) { %>### Consequences
 
-Using a vulnerability of this type an attacker may be able to affect the system in the following ways. 
+Using a vulnerability of this type an attacker may be able to affect the system in the following ways.
 <% o.dataSourceSpecific.cwe.consequences.forEach(c => { %>
 <% c.scopeImpacts.forEach(si => { %>* **<%= si.scope %>**<% if (si.impact) { %>: <%= si.impact %><% } %>
-<% }) %><% if (c.likelihood) { %> 
+<% }) %><% if (c.likelihood) { %>
 **Likelihood** <%= c.likelihood %><% } %><% if (c.note) { %>
 > <%= c.note %><% } %>
 <% }) %><% } %>
@@ -75,37 +75,40 @@ The following evidence of this vulnerability was found in the application.
 ```
 <% }) %>
 <% issue.requests?.slice(0, 4).forEach((r, i) => { %>
-??? example "Web Request <%= i + 1 %>"
 
-    * **Request**
-        * **Target**: `<%= r.request.target %>`
-        * **Method**: `<%= r.request.method %>`
-        * **Headers**:
-          ```json
-<%= JSON.stringify(r.request.headers, null, 2).split('\n').map(l => `          ${l}`).join('\n') %>
-          ```<% if (r.request.body) { %>
-        * **Body**:
-          ```json
-<%= JSON.stringify(r.request.body, null, 2).split('\n').map(l => `          ${l}`).join('\n') %>
-          ```<% } %>
-        * **Curl**:
-          ```shell
-          curl -o - -i \
-            -X <%= r.request.method %> \<% if (r.request.body) { %>
-            --data '<%= r.request.body %>' \<% } %><% if (r.request.headers) { %>
-            <%= Object.entries(r.request.headers).filter(([name, value]) => name !== 'content-length').map(([name, value]) => `-H "${name}: ${value}" \\`).join('\n            ') %><% } %>
-            "<%= r.request.target %>"
-          ```
-    * **Response**
-        * **Status Code**: `<%= r.response.statusCode %>`
-        * **Headers**:
-          ```json
-<%= JSON.stringify(r.response.headers, null, 2).split('\n').map(l => `          ${l}`).join('\n') %>
-          ```
-    <% if (r.response.body) { %>    * **Body**:
-          ```<%= r.response.body.indexOf('<!doctype html>') !== -1 ? 'html' : 'json' %>
-<%= r.response.body?.split('\n').map(l => `          ${l}`).join('\n') %>
-          ```<% } %>
+<details><summary><strong>Example "Web Request <%= i + 1 %>"</strong></summary>
+
+* **Request**
+    * **Target**: `<%= r.request.target %>`
+    * **Method**: `<%= r.request.method %>`
+    * **Headers**:
+      ```json
+<%= JSON.stringify(r.request.headers, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
+      ```<% if (r.request.body) { %>
+    * **Body**:
+      ```json
+<%= JSON.stringify(r.request.body, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
+      ```<% } %>
+    * **Curl**:
+      ```shell
+      curl -o - -i \
+        -X <%= r.request.method %> \<% if (r.request.body) { %>
+        --data '<%= r.request.body %>' \<% } %><% if (r.request.headers) { %>
+        <%= Object.entries(r.request.headers).filter(([name, value]) => name !== 'content-length').map(([name, value]) => `-H "${name}: ${value}" \\`).join('\n            ') %><% } %>
+        "<%= r.request.target %>"
+      ```
+* **Response**
+    * **Status Code**: `<%= r.response.statusCode %>`
+    * **Headers**:
+      ```json
+<%= JSON.stringify(r.response.headers, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
+      ```
+<% if (r.response.body) { %>    * **Body**:
+      ```<%= r.response.body.indexOf('<!doctype html>') !== -1 ? 'html' : 'json' %>
+<%= r.response.body?.split('\n').map(l => `      ${l}`).join('\n') %>
+      ```<% } %>
+
+</details>
 
 <% }) %><% } %>
 <% if (issue.references?.length > 0) { %>##### References

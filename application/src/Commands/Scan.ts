@@ -5,8 +5,8 @@ import {Logger} from '../Logger';
 const orchestrator = new Orchestrator(process.cwd());
 new Logger(orchestrator.emitter);
 
-const isValidReport = (input: unknown): input is 'markdown' | 'json' =>
-  typeof input === 'string' && ['markdown', 'json'].includes(input);
+const isValidReport = (input: unknown): input is 'markdown' | 'json' | 'html' =>
+  typeof input === 'string' && ['markdown', 'json', 'html'].includes(input);
 
 export const ScanCommand = (program: Command) => {
   program.command('scan')
@@ -15,7 +15,7 @@ export const ScanCommand = (program: Command) => {
     .option('--report  <type>', 'The type of report you want the scan to produce.', 'markdown')
     .action(async (options: { ci?: boolean, report?: string }) => {
       if (!isValidReport(options.report))
-        throw new InvalidArgumentError('--report must be markdown or json');
+        throw new InvalidArgumentError('--report must be markdown, json or html');
 
       await orchestrator.run();
       await orchestrator.writeReport(process.cwd(), options.report);

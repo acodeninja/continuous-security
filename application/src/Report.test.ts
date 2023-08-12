@@ -101,6 +101,13 @@ describe('producing a report', () => {
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: '{\n' +
+            '  "menu": [\n' +
+            '    {"value": "New", "onclick": "CreateNewDoc()"},\n' +
+            '    {"value": "Open", "onclick": "OpenDoc()"},\n' +
+            '    {"value": "Close", "onclick": "CloseDoc()"}\n' +
+            '  ]\n' +
+            '}\n',
         },
       }],
       fix: 'Unknown',
@@ -159,6 +166,18 @@ describe('producing a report', () => {
 
     test('matches snapshot', () => {
       expect(markdownReport.toString()).toMatchSnapshot();
+    });
+  });
+
+  describe('in html', () => {
+    let htmlReport: Buffer;
+
+    beforeAll(async () => {
+      [, htmlReport] = await report.getReport('html');
+    });
+
+    test('matches snapshot', () => {
+      expect(htmlReport.toString()).toMatchSnapshot();
     });
   });
 });
