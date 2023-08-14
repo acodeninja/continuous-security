@@ -158,7 +158,7 @@ jobs:
             npm link
             cd ../..
           done
-      - run: DEBUG=true continuous-security scan
+      - run: DEBUG=true continuous-security scan --format html markdown pdf json
         id: scan
         working-directory: application/
         continue-on-error: true
@@ -193,7 +193,7 @@ jobs:
             npm link
             cd ../..
           done
-      - run: DEBUG=true continuous-security scan
+      - run: DEBUG=true continuous-security scan --format html markdown pdf json
         id: scan
         working-directory: scanners/${{ matrix.scanner }}/
         continue-on-error: true
