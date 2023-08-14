@@ -8,7 +8,6 @@ import {Emitter} from './Emitter';
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
 import {resolve} from 'path';
-import {makeTemporaryFolder} from './Helpers';
 
 jest.mock('axios', () => ({
   get: jest.fn(),

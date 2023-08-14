@@ -1,7 +1,6 @@
-import {Command, InvalidArgumentError} from 'commander';
+import {Command} from 'commander';
 import {Orchestrator} from '../Orchestrator';
 import {Logger} from '../Logger';
-import {input} from '@inquirer/prompts';
 
 const orchestrator = new Orchestrator(process.cwd());
 new Logger(orchestrator.emitter);
