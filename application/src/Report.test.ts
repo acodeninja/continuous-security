@@ -202,6 +202,10 @@ describe('producing a report', () => {
       const comparisonResults =
           await (comparer.compare as unknown as (type?: string) => Promise<{status: string}>)();
 
+      if (comparisonResults.status !== 'passed') {
+        console.log('PDF Comparison Failed:', JSON.stringify(comparisonResults, null, 2));
+      }
+
       expect(comparisonResults.status).toEqual('passed');
     });
   });
