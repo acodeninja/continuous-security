@@ -1,30 +1,48 @@
 import {Command, InvalidArgumentError} from 'commander';
 import {Orchestrator} from '../Orchestrator';
 import {Logger} from '../Logger';
+import {input} from '@inquirer/prompts';
 
 const orchestrator = new Orchestrator(process.cwd());
 new Logger(orchestrator.emitter);
 
-const isValidReport = (input: unknown): input is 'markdown' | 'json' | 'html' =>
-  typeof input === 'string' && ['markdown', 'json', 'html'].includes(input);
+type ReportFormat = 'markdown' | 'json' | 'html' | 'pdf';
+
+const allValidFormats =
+    (input: Array<unknown>): input is Array<ReportFormat> =>
+      Array.isArray(input) && input.filter(isValidFormat).length === input.length;
+
+const isValidFormat = (input: unknown): input is ReportFormat =>
+  typeof input === 'string' && ['markdown', 'json', 'html', 'pdf'].includes(input);
 
 export const ScanCommand = (program: Command) => {
   program.command('scan')
     .description('Perform a scan')
     .option('--ci', 'Use the CI logger for line by line output.')
-    .option('--report  <type>', 'The type of report you want the scan to produce.', 'markdown')
-    .action(async (options: { ci?: boolean, report?: string }) => {
-      if (!isValidReport(options.report))
-        throw new InvalidArgumentError('--report must be markdown, json or html');
+    .option('--format  <format...>', 'Space separated list of report formats.', 'markdown')
+    .action(async (options: { ci?: boolean, format?: Array<string> }) => {
+      if (!allValidFormats(options.format)) {
+        console.log('--report must be a space separated list of markdown, json, html, pdf');
+        process.exit(1);
+      }
 
       await orchestrator.run();
-      await orchestrator.writeReport(process.cwd(), options.report);
 
       const issueCount = await orchestrator.getIssueCount();
 
       if (issueCount > 0) {
-        console.log(`Scan found ${issueCount} issues, please check the report.`);
+        for (const thisFormat of options.format) {
+
+          if (isValidFormat(thisFormat)) {
+            console.log(`[report:write] writing report in ${thisFormat}`);
+            await orchestrator.writeReport(process.cwd(), thisFormat);
+          }
+        }
+        console.log(`Scan found ${issueCount} issues, please check the report(s).`);
+
         process.exit(1);
       }
+
+      console.log('Scan found no issues, no report to write');
     });
 };
