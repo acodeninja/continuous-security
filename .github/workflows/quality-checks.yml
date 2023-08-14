@@ -60,6 +60,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: application/package-lock.json
+      - name: pdf dependencies
+        run: |
+          apt-get install -y graphicsmagick imagemagick ghostscript
+          sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
       - run: npm ci
         working-directory: application/
       - run: npm audit
