@@ -9,6 +9,29 @@
         :root {
             --bs-font-sans-serif: Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
+        pre {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+            font-size: small;
+        }
+        @page {
+            margin: 2rem;
+            size: 21cm 29.7cm;
+        }
+        h1, h2, h3, h4, h5 {
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        hr {
+            page-break-after: always;
+            visibility: hidden;
+        }
+        html body * {
+            page-break-inside: avoid;
+        }
     </style>
 </head>
 <body>

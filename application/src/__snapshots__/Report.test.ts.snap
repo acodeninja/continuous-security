@@ -12,6 +12,29 @@ exports[`producing a report in html matches snapshot 1`] = `
         :root {
             --bs-font-sans-serif: Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
+        pre {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+            font-size: small;
+        }
+        @page {
+            margin: 2rem;
+            size: 21cm 29.7cm;
+        }
+        h1, h2, h3, h4, h5 {
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        hr {
+            page-break-after: always;
+            visibility: hidden;
+        }
+        html body * {
+            page-break-inside: avoid;
+        }
     </style>
 </head>
 <body>
@@ -30,22 +53,23 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 <li><strong>Integrity</strong>: Gain Privileges or Assume Identity</li>
 <li><strong>Availability</strong>: DoS: Crash, Exit, or Restart</li>
 </ul>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#statistics">Issue Statistics</a></li>
-<li><a href="#overview-of-issues">Overview of Issues</a><ul>
-<li><a href="#CWE-248">Uncaught Exception</a></li>
-<li><a href="#CWE-1004">Sensitive Cookie Without 'HttpOnly' Flag</a></li></ul></li>
-<li><a href="#vulnerabilities">Vulnerabilities</a><ul>
-<li><a href="#critical-severity">Critical (2)</a></li>
-<li><a href="#unknown-severity">Unknown (1)</a></li></ul></li>
-<li><a href="#additional-information">Additional Information</a><ul>
-<li><a href="#what-are-severity-levels">What are severity levels?</a></li></ul></li>
-</ul>
 <h1 id="statistics">Statistics</h1>
 <p>This report found issues with the following severities.</p>
 <p><strong>Critical</strong>: 2 | <strong>High</strong> 0 | <strong>Medium</strong> 0 | <strong>Low</strong> 0 | <strong>Informational</strong> 0 | <strong>Unknown</strong> 1</p>
 <p>To gain a better understanding of the severity levels please see <a href="#what-are-severity-levels">the appendix</a>.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#summary">Summary</a><ul>
+<li><a href="#statistics">Statistics</a></li></ul></li>
+<li><a href="#overviewofissues">Overview of Issues</a><ul>
+<li><a href="#CWE-248">Uncaught Exception</a></li>
+<li><a href="#CWE-1004">Sensitive Cookie Without 'HttpOnly' Flag</a></li></ul></li>
+<li><a href="#vulnerabilities">Vulnerabilities</a><ul>
+<li><a href="#criticalseverity">Critical (2)</a></li>
+<li><a href="#unknownseverity">Unknown (1)</a></li></ul></li>
+<li><a href="#additionalinformation">Additional Information</a><ul>
+<li><a href="#whatareseveritylevels">What are severity levels?</a></li></ul></li>
+</ul>
 <h1 id="overviewofissues">Overview of Issues</h1>
 <p><a id="CWE-248"></a></p>
 <h2 id="uncaughtexception">Uncaught Exception</h2>
@@ -597,8 +621,17 @@ The following technical impacts may arise if an adversary successfully exploits 
 * **Integrity**: Gain Privileges or Assume Identity
 * **Availability**: DoS: Crash, Exit, or Restart
 
+# Statistics
+
+This report found issues with the following severities.
+
+**Critical**: 2 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 1
+
+To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
+
 ## Contents
 
+* [Summary](#summary)
 * [Issue Statistics](#statistics)
 * [Overview of Issues](#overview-of-issues)
     * [Uncaught Exception](#CWE-248)
@@ -608,14 +641,6 @@ The following technical impacts may arise if an adversary successfully exploits 
     * [Unknown (1)](#unknown-severity)
 * [Additional Information](#additional-information)
     * [What are severity levels?](#what-are-severity-levels)
-
-# Statistics
-
-This report found issues with the following severities.
-
-**Critical**: 2 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 1
-
-To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
 # Overview of Issues
 

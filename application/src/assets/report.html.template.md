@@ -12,16 +12,6 @@ The following technical impacts may arise if an adversary successfully exploits 
 <% summaryImpacts.forEach(({scope, impacts}) => { %>
 * **<%= scope %>**<% if (impacts.length) { %>: <%= impacts.join(', ') %><% } %><% }) %><% } %>
 
-## Contents
-
-* [Issue Statistics](#statistics)
-* [Overview of Issues](#overview-of-issues)<% overviewOfIssues.forEach(o => { %>
-    * [<%= o.title %>](#<%= o.label %>)<% }) %>
-* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>
-    * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>-severity)<% }) %>
-* [Additional Information](#additional-information)
-    * [What are severity levels?](#what-are-severity-levels)
-
 # Statistics
 
 This report found issues with the following severities.
@@ -29,6 +19,17 @@ This report found issues with the following severities.
 **Critical**: <%= counts.critical %> | **High** <%= counts.high %> | **Medium** <%= counts.moderate %> | **Low** <%= counts.low %> | **Informational** <%= counts.info %> | **Unknown** <%= counts.unknown %>
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
+
+## Contents
+
+* [Summary](#summary)
+    * [Statistics](#statistics)
+* [Overview of Issues](#overviewofissues)<% overviewOfIssues.forEach(o => { %>
+    * [<%= o.title %>](#<%= o.label %>)<% }) %>
+* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>
+    * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>severity)<% }) %>
+* [Additional Information](#additionalinformation)
+    * [What are severity levels?](#whatareseveritylevels)
 
 # Overview of Issues
 <% overviewOfIssues.forEach(o => { %>
