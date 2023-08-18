@@ -1,7 +1,7 @@
 import {exec} from 'child_process';
 import Docker from 'dockerode';
 import {createWriteStream} from 'fs';
-import {mkdtemp, rm} from 'fs/promises';
+import {access, constants, mkdtemp, rm} from 'fs/promises';
 import {join} from 'path';
 import {tmpdir} from 'os';
 import {pack} from 'tar-stream';
@@ -18,6 +18,25 @@ export const packFiles = async (files: ScannerBuildConfiguration['files']) => {
   tarPack.finalize();
 
   return tarPack.pipe(createGzip());
+};
+
+export const getDockerSocketPath = async (): Promise<string> => {
+  const possibleDockerSocketPaths = [
+    '/var/run/docker.sock',
+    `${process.env['HOME']}/.rd/docker.sock`,
+  ];
+
+  const filePath = (await Promise.all(
+    possibleDockerSocketPaths.map(file =>
+      access(file, constants.R_OK | constants.W_OK)
+        .then(() => file)
+        .catch(() => null),
+    ),
+  )).find(file => !!file);
+
+  if (filePath) return filePath;
+
+  throw new Error(`Docker socket is not readable, tried ${possibleDockerSocketPaths.join(', ')}`);
 };
 
 export const buildImage = async (buildConfiguration: ScannerBuildConfiguration):
