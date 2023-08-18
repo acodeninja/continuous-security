@@ -1,7 +1,8 @@
 import {Orchestrator} from './Orchestrator';
 import {access, cp, readFile, rm, writeFile} from 'fs/promises';
 import {exec} from 'child_process';
-import {loadScannerModule} from './Helpers';
+import {loadScannerModule} from './Helpers/ScannerLoader';
+
 import {TestScanner} from '../tests/fixtures/Scanner';
 import {JSONConfigurationWithExtraConfig} from '../tests/fixtures/Configuration';
 import {TestScanExpectation} from '../tests/fixtures/Scan';
@@ -34,11 +35,17 @@ jest.mock('../package.json', () => ({
   version: '1.2.3',
 }));
 
-jest.mock('./Helpers', () => ({
+jest.mock('./Helpers/Files', () => ({
   makeTemporaryFolder: jest.fn().mockResolvedValue('/tmp/prefix-random'),
   destroyTemporaryFolder: jest.fn(),
+}));
+
+jest.mock('./Helpers/DockerClient', () => ({
   buildImage: jest.fn().mockResolvedValue('image-hash'),
   runImage: jest.fn(),
+}));
+
+jest.mock('./Helpers/ScannerLoader', () => ({
   loadScannerModule: jest.fn(),
 }));
 

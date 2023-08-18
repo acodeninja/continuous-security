@@ -8,7 +8,7 @@ import {exec} from 'child_process';
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
-import {makeTemporaryFolder} from './Helpers';
+import {makeTemporaryFolder} from './Helpers/Files';
 
 import MarkdownTemplate from './assets/report.markdown.template.md';
 import PDFTemplate from './assets/report.pdf.template.md';

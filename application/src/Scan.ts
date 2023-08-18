@@ -1,4 +1,5 @@
-import {buildImage, makeTemporaryFolder, destroyTemporaryFolder, runImage} from './Helpers';
+import {buildImage, runImage} from './Helpers/DockerClient';
+import {destroyTemporaryFolder, makeTemporaryFolder} from './Helpers/Files';
 
 export class ValidationError extends Error {
 
