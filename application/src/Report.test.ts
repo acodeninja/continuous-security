@@ -1,9 +1,13 @@
 import axios from 'axios';
+import {readFile, writeFile} from 'fs/promises';
+import ComparePdf from 'compare-pdf';
+
 import {Report} from './Report';
 import {Emitter} from './Emitter';
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
+import {resolve} from 'path';
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -102,12 +106,12 @@ describe('producing a report', () => {
             'X-Powered-By': 'Express',
           },
           body: '{\n' +
-            '  "menu": [\n' +
-            '    {"value": "New", "onclick": "CreateNewDoc()"},\n' +
-            '    {"value": "Open", "onclick": "OpenDoc()"},\n' +
-            '    {"value": "Close", "onclick": "CloseDoc()"}\n' +
-            '  ]\n' +
-            '}\n',
+                        '  "menu": [\n' +
+                        '    {"value": "New", "onclick": "CreateNewDoc()"},\n' +
+                        '    {"value": "Open", "onclick": "OpenDoc()"},\n' +
+                        '    {"value": "Close", "onclick": "CloseDoc()"}\n' +
+                        '  ]\n' +
+                        '}\n',
         },
       }],
       fix: 'Unknown',
@@ -178,6 +182,31 @@ describe('producing a report', () => {
 
     test('matches snapshot', () => {
       expect(htmlReport.toString()).toMatchSnapshot();
+    });
+  });
+
+  describe('in pdf', () => {
+    let pdf: Buffer;
+
+    beforeAll(async () => {
+      [, pdf] = await report.getReport('pdf');
+      await writeFile('test.pdf', pdf);
+    });
+
+    test('matches baseline', async () => {
+      const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
+      const comparer = new ComparePdf()
+        .actualPdfBuffer(pdf, 'actual.pdf')
+        .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
+
+      const comparisonResults =
+          await (comparer.compare as unknown as (type?: string) => Promise<{status: string}>)();
+
+      if (comparisonResults.status !== 'passed') {
+        console.log('PDF Comparison Failed:', JSON.stringify(comparisonResults, null, 2));
+      }
+
+      expect(comparisonResults.status).toEqual('passed');
     });
   });
 });

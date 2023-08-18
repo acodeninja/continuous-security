@@ -81,7 +81,7 @@ export class Orchestrator {
     });
   }
 
-  async writeReport(path: string, type: 'markdown' | 'json' | 'html'): Promise<void> {
+  async writeReport(path: string, type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<void> {
     const [extension, report] = await this.report.getReport(type);
     await writeFile(resolve(path, `report.${extension}`), report);
   }

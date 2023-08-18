@@ -6,7 +6,9 @@ This security report was conducted on <%= date.toLocaleDateString() %> at <%= da
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
 
 This report is produced by running automated security scanning tools, which will likely not detect
-all vulnerabilities present. **It is not a replacement for a manual analysis of the application**.
+all vulnerabilities present.
+
+**It is not a replacement for a manual analysis of the application**.
 <% if (summaryImpacts) { %>
 The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
 <% summaryImpacts.forEach(({scope, impacts}) => { %>
@@ -18,18 +20,22 @@ This report found issues with the following severities.
 
 **Critical**: <%= counts.critical %> | **High** <%= counts.high %> | **Medium** <%= counts.moderate %> | **Low** <%= counts.low %> | **Informational** <%= counts.info %> | **Unknown** <%= counts.unknown %>
 
-To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
+To gain a better understanding of the severity levels please see [the appendix](#whatareseveritylevels).
+
+---
 
 ## Contents
 
 * [Summary](#summary)
-* [Issue Statistics](#statistics)
-* [Overview of Issues](#overview-of-issues)<% overviewOfIssues.forEach(o => { %>
+    * [Statistics](#statistics)
+* [Overview of Issues](#overviewofissues)<% overviewOfIssues.forEach(o => { %>
     * [<%= o.title %>](#<%= o.label %>)<% }) %>
 * [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>
-    * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>-severity)<% }) %>
-* [Additional Information](#additional-information)
-    * [What are severity levels?](#what-are-severity-levels)
+    * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>severity)<% }) %>
+* [Additional Information](#additionalinformation)
+    * [What are severity levels?](#whatareseveritylevels)
+
+---
 
 # Overview of Issues
 <% overviewOfIssues.forEach(o => { %>
@@ -54,6 +60,9 @@ Using a vulnerability of this type an attacker may be able to affect the system 
 <% }) %><% } %>
 
 For more information see [<%= o.label %>](<%= o.directLink %>).
+
+---
+
 <% }) %>
 
 # Vulnerabilities
@@ -75,46 +84,55 @@ The following evidence of this vulnerability was found in the application.
 <%= extract.code %>
 ```
 <% }) %>
-<% issue.requests?.slice(0, 4).forEach((r, i) => { %>
+<% issue.requests?.slice(0, 1).forEach((r, i) => { %>
 
-<details><summary><strong>Example "Web Request <%= i + 1 %>"</strong></summary>
+##### Example Web Request
 
-* **Request**
-    * **Target**: `<%= r.request.target %>`
-    * **Method**: `<%= r.request.method %>`
-    * **Headers**:
-      ```json
-<%= JSON.stringify(r.request.headers, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
-      ```<% if (r.request.body) { %>
-    * **Body**:
-      ```json
-<%= JSON.stringify(r.request.body, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
-      ```<% } %>
-    * **Curl**:
-      ```shell
-      curl -o - -i \
-        -X <%= r.request.method %> \<% if (r.request.body) { %>
-        --data '<%= r.request.body %>' \<% } %><% if (r.request.headers) { %>
-        <%= Object.entries(r.request.headers).filter(([name, value]) => name !== 'content-length').map(([name, value]) => `-H "${name}: ${value}" \\`).join('\n            ') %><% } %>
-        "<%= r.request.target %>"
-      ```
-* **Response**
-    * **Status Code**: `<%= r.response.statusCode %>`
-    * **Headers**:
-      ```json
-<%= JSON.stringify(r.response.headers, null, 2).split('\n').map(l => `      ${l}`).join('\n') %>
-      ```
-<% if (r.response.body) { %>    * **Body**:
-      ```<%= r.response.body.indexOf('<!doctype html>') !== -1 ? 'html' : 'json' %>
-<%= r.response.body?.split('\n').map(l => `      ${l}`).join('\n') %>
-      ```<% } %>
+In PDF format only a single example web request is included, for a more complete view, check the html, markdown or json
+report options.
 
-</details>
+**Curl**
+
+```bash
+curl -o - -i \
+  -X <%= r.request.method %> \<% if (r.request.body) { %>
+  --data '<%= r.request.body %>' \<% } %><% if (r.request.headers) { %>
+  <%= Object.entries(r.request.headers).filter(([name, value]) => name !== 'content-length').map(([name, value]) => `-H "${name}: ${value}" \\`).join('\n  ') %><% } %>
+  "<%= r.request.target %>"
+```
+
+**Request**
+
+A `<%= r.request.method %>` request to the target `<%= r.request.target %>` <% if (r.request.body) { %>with the following body:
+
+```json
+<%= JSON.stringify(r.request.body, null, 2) %>
+```
+<% } else { %>with an empty body.<% } %>
+
+**Response**
+
+The server responded with a `<%= r.response.statusCode %>` status code.
+
+The following headers were returned.
+
+```json
+<%= JSON.stringify(r.response.headers, null, 2) %>
+```
+<% if (r.response.body) { %>
+Along with the response body:
+
+```<%= r.response.body.toLowerCase().indexOf('<!doctype html>') !== -1 ? 'html' : 'json' %>
+<%= r.response.body?.toLowerCase().indexOf('<!doctype html>') !== -1 ? r.response.body : JSON.stringify(JSON.parse(r.response.body), null, 2) %>
+```
+<% } %>
 
 <% }) %><% } %>
 <% if (issue.references?.length > 0) { %>##### References
 
 <%= issue.references?.map(r => r.label.startsWith('CWE') ? `[${r.label}](#${r.label})` : `[${r.label}](${r.directLink})`).join(' | ') %>
+
+---
 
 <% } %><% }) %><% }) %>
 

@@ -60,6 +60,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: application/package-lock.json
+      - name: pdf dependencies
+        run: |
+          sudo apt-get install -y graphicsmagick imagemagick ghostscript
+          sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
       - run: npm ci
         working-directory: application/
       - run: npm audit
@@ -67,7 +71,17 @@ jobs:
       - run: npm run lint
         working-directory: application/
       - run: npm test
+        id: test
         working-directory: application/
+        continue-on-error: true
+      - if: steps.test.outcome != 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: pdf-failure-diff
+          path: |
+            application/data/diffPngs
+      - if: steps.test.outcome != 'success'
+        run: exit 1
       - run: npm run build
         working-directory: application/
       - uses: actions/upload-artifact@v3
@@ -154,7 +168,7 @@ jobs:
             npm link
             cd ../..
           done
-      - run: DEBUG=true continuous-security scan
+      - run: DEBUG=true continuous-security scan --format html markdown pdf json
         id: scan
         working-directory: application/
         continue-on-error: true
@@ -189,7 +203,7 @@ jobs:
             npm link
             cd ../..
           done
-      - run: DEBUG=true continuous-security scan
+      - run: DEBUG=true continuous-security scan --format html markdown pdf json
         id: scan
         working-directory: scanners/${{ matrix.scanner }}/
         continue-on-error: true

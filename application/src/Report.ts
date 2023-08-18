@@ -1,12 +1,17 @@
 import {template, TemplateExecutor} from 'lodash';
-import {basename} from 'path';
-import {readFile} from 'fs/promises';
+import {basename, resolve} from 'path';
+import {readFile, writeFile} from 'fs/promises';
+import {Converter as Showdown} from 'showdown';
+import {promisify} from 'util';
+import {exec} from 'child_process';
+
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
-import {Converter as Showdown} from 'showdown';
+import {makeTemporaryFolder} from './Helpers';
 
 import MarkdownTemplate from './assets/report.markdown.template.md';
+import PDFTemplate from './assets/report.pdf.template.md';
 import HTMLTemplate from './assets/report.html.template.md';
 import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
 
@@ -46,6 +51,7 @@ export class Report {
     this.templates = {
       markdown: template(MarkdownTemplate),
       html: template(HTMLTemplate),
+      pdf: template(PDFTemplate),
     };
   }
 
@@ -144,13 +150,53 @@ export class Report {
     return ['html', Buffer.from(html)];
   }
 
-  async getReport(type: 'markdown' | 'json' | 'html'): Promise<[string, Buffer]> {
+  async toPDF(): Promise<[string, Buffer]> {
+    const htmlCacheLocation = await makeTemporaryFolder('html');
+
+    const report = await this.toObject();
+    this.emitter.emit('report:finished', '');
+
+    const convert = new Showdown();
+    const converted = convert.makeHtml(this.templates.pdf({
+      ...report,
+      functions: this.reportFunctions,
+    }));
+
+    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
+
+    await writeFile(resolve(htmlCacheLocation, 'report.html'), html);
+
+    const pdfPath = resolve(htmlCacheLocation, 'report.pdf');
+    const htmlPath = resolve(htmlCacheLocation, 'report.html');
+
+    // chrome --headless --disable-gpu --print-to-pdf https://www.chromestatus.com/
+
+    try {
+      await promisify(exec)(
+        `google-chrome \
+        --headless \
+        --disable-gpu \
+        --no-margins \
+        --no-pdf-header-footer \
+        --print-to-pdf="${pdfPath}" \
+        ${htmlPath}`,
+      );
+    } catch (e) {
+      console.log(e);
+    }
+
+    return ['pdf', Buffer.from(await readFile(pdfPath))];
+  }
+
+  async getReport(type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<[string, Buffer]> {
     this.emitter.emit('report:started', `generating output report in ${type}`);
     switch (type) {
     case 'markdown':
       return await this.toMarkdown();
     case 'html':
       return await this.toHTML();
+    case 'pdf':
+      return await this.toPDF();
     case 'json':
       return await this.toJSON();
     }

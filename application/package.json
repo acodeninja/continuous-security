@@ -40,6 +40,7 @@
     "@xmldom/xmldom": "^0.8.6",
     "axios": "^1.4.0",
     "commander": "^10.0.0",
+    "compare-pdf": "^1.1.8",
     "dockerode": "^3.3.4",
     "eslint": "^8.33.0",
     "eventemitter2": "^6.4.9",
