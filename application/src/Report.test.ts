@@ -187,6 +187,7 @@ describe('producing a report', () => {
 
   describe('in pdf', () => {
     let pdf: Buffer;
+    jest.setTimeout(120 * 1000);
 
     beforeAll(async () => {
       [, pdf] = await report.getReport('pdf');

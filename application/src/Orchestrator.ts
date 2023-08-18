@@ -5,7 +5,8 @@ import {promisify} from 'util';
 
 import {Configuration} from './Configuration';
 import {Emitter} from './Emitter';
-import {loadScannerModule, makeTemporaryFolder} from './Helpers';
+import {makeTemporaryFolder} from './Helpers/Files';
+import {loadScannerModule} from './Helpers/ScannerLoader';
 import {Report} from './Report';
 import {Scan} from './Scan';
 
