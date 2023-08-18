@@ -8,7 +8,7 @@ describe('getDockerSocketPath', () => {
     let socketPath: string;
 
     beforeAll(async () => {
-      (access as jest.Mock).mockImplementation(async (file, _) => {
+      (access as jest.Mock).mockImplementation(async (file) => {
         if (file === '/var/run/docker.sock') return null;
         throw new Error('file does not exist');
       });
@@ -32,7 +32,7 @@ describe('getDockerSocketPath', () => {
 
     beforeAll(async () => {
       process.env['HOME'] = '/home/test-user';
-      (access as jest.Mock).mockImplementation(async (file, _) => {
+      (access as jest.Mock).mockImplementation(async (file) => {
         if (file === '/home/test-user/.rd/docker.sock') return null;
         throw new Error('file does not exist');
       });
