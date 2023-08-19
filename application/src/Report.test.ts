@@ -105,13 +105,13 @@ describe('producing a report', () => {
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
-          body: '{\n' +
-                        '  "menu": [\n' +
-                        '    {"value": "New", "onclick": "CreateNewDoc()"},\n' +
-                        '    {"value": "Open", "onclick": "OpenDoc()"},\n' +
-                        '    {"value": "Close", "onclick": "CloseDoc()"}\n' +
-                        '  ]\n' +
-                        '}\n',
+          body: JSON.stringify({
+            menu: [
+              {value: 'New', onclick: 'CreateNewDoc()'},
+              {value: 'Open', onclick: 'OpenDoc()'},
+              {value: 'Close', onclick: 'CloseDoc()'},
+            ],
+          }, null, 2),
         },
       }],
       fix: 'Unknown',
