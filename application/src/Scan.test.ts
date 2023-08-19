@@ -181,7 +181,7 @@ describe('Scan', () => {
     test('calls buildImage with the buildConfiguration', () => {
       expect(runImage).toHaveBeenCalledWith({
         imageHash: 'image-hash',
-        host: {
+        volumes: {
           output: '/tmp/prefix-random',
           target: resolve('..', '..', 'examples', 'nodejs'),
         },
