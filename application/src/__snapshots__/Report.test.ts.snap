@@ -172,9 +172,18 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 <li><strong>Body</strong>:</li></ul>
 <pre><code class="json language-json">  {
     "menu": [
-      {"value": "New", "onclick": "CreateNewDoc()"},
-      {"value": "Open", "onclick": "OpenDoc()"},
-      {"value": "Close", "onclick": "CloseDoc()"}
+      {
+        "value": "New",
+        "onclick": "CreateNewDoc()"
+      },
+      {
+        "value": "Open",
+        "onclick": "OpenDoc()"
+      },
+      {
+        "value": "Close",
+        "onclick": "CloseDoc()"
+      }
     ]
   }
 </code></pre></li>
@@ -477,7 +486,7 @@ exports[`producing a report in json matches snapshot 1`] = `
               "Keep-Alive": "timeout=5",
               "X-Powered-By": "Express"
             },
-            "body": "{\\n  \\"menu\\": [\\n    {\\"value\\": \\"New\\", \\"onclick\\": \\"CreateNewDoc()\\"},\\n    {\\"value\\": \\"Open\\", \\"onclick\\": \\"OpenDoc()\\"},\\n    {\\"value\\": \\"Close\\", \\"onclick\\": \\"CloseDoc()\\"}\\n  ]\\n}\\n"
+            "body": "{\\n  \\"menu\\": [\\n    {\\n      \\"value\\": \\"New\\",\\n      \\"onclick\\": \\"CreateNewDoc()\\"\\n    },\\n    {\\n      \\"value\\": \\"Open\\",\\n      \\"onclick\\": \\"OpenDoc()\\"\\n    },\\n    {\\n      \\"value\\": \\"Close\\",\\n      \\"onclick\\": \\"CloseDoc()\\"\\n    }\\n  ]\\n}"
           }
         }
       ],
@@ -767,12 +776,20 @@ The following evidence of this vulnerability was found in the application.
       \`\`\`json
       {
         "menu": [
-          {"value": "New", "onclick": "CreateNewDoc()"},
-          {"value": "Open", "onclick": "OpenDoc()"},
-          {"value": "Close", "onclick": "CloseDoc()"}
+          {
+            "value": "New",
+            "onclick": "CreateNewDoc()"
+          },
+          {
+            "value": "Open",
+            "onclick": "OpenDoc()"
+          },
+          {
+            "value": "Close",
+            "onclick": "CloseDoc()"
+          }
         ]
       }
-      
       \`\`\`
 
 </details>

@@ -16,10 +16,11 @@ type ScannerConfiguration = {
 
 type ScannerRunConfiguration = {
   configuration?: Record<string, string>;
+  command?: string[];
   imageHash: string;
-  host: {
-    target: string;
+  volumes: {
     output: string;
+    target?: string;
   },
 }
 

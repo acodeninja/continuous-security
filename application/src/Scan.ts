@@ -65,7 +65,7 @@ export class Scan {
     await runImage({
       configuration: this.configuration.with,
       imageHash: this.imageHash,
-      host: {
+      volumes: {
         output: this.output,
         target: this.target,
       },

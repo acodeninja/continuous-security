@@ -28,7 +28,7 @@ export const buildImage = async (buildConfiguration: ScannerBuildConfiguration):
 };
 
 export const runImage = async (runConfiguration: ScannerRunConfiguration) => {
-  const log = createWriteStream(join(runConfiguration.host.output, 'output.log'));
+  const log = createWriteStream(join(runConfiguration.volumes.output, 'output.log'));
 
   if (!runConfiguration.imageHash) throw new Error('No image hash found.');
 
@@ -36,11 +36,12 @@ export const runImage = async (runConfiguration: ScannerRunConfiguration) => {
     socketPath: await getDockerSocketPath(),
   });
 
-  const binds = [`${runConfiguration.host.output}:/output`];
-
-  if (!isURL(runConfiguration.host.target)) binds.push(`${runConfiguration.host.target}:/target`);
+  const binds = Object.entries(runConfiguration.volumes)
+    .filter(entry => !isURL(entry[1]))
+    .map(([container, host]) => `${host}:/${container}`);
 
   await docker.run(runConfiguration.imageHash, [], [log, log], {
+    Cmd: runConfiguration.command || [],
     Tty: false,
     HostConfig: {
       AutoRemove: true,
