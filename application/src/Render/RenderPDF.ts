@@ -13,6 +13,7 @@ import {readFile, writeFile} from 'fs/promises';
 import {resolve} from 'path';
 import {executed} from '../Helpers/Processes';
 import {buildImage, runImage} from '../Helpers/DockerClient';
+import {timezone, toDate, toTime} from '../Helpers/Dates';
 
 export class RenderPDF {
   private report: Report;
@@ -32,6 +33,9 @@ export class RenderPDF {
     const innerReport = convert.makeHtml(template(PDFTemplate)({...report, functions: {
       groupToObjectBy,
       capitalise,
+      toDate,
+      toTime,
+      timezone,
     }}));
 
     const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', innerReport);

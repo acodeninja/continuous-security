@@ -28,7 +28,7 @@ describe('buildImage', () => {
     });
 
     test('Docker.buildImage was called', () => {
-      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable), {});
+      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable));
     });
 
     test('Modem.followProgress was called', () => {
@@ -47,7 +47,7 @@ describe('buildImage', () => {
     });
 
     test('Docker.buildImage was called', () => {
-      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable), {});
+      expect(dockerBuildImage).toHaveBeenCalledWith(expect.any(Readable));
     });
 
     test('Modem.followProgress was called', () => {

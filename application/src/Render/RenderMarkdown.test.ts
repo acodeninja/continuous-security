@@ -4,6 +4,12 @@ import {RenderMarkdown} from './RenderMarkdown';
 
 import {emptyReport, fullReport} from '../../tests/fixtures/Reports';
 
+jest.mock('../Helpers/Dates', () => ({
+  toDate: jest.fn().mockReturnValue('01/04/2020'),
+  toTime: jest.fn().mockReturnValue('01:30:10'),
+  timezone: jest.fn().mockReturnValue('UTC+0'),
+}));
+
 describe('RenderMarkdown', () => {
   describe.each([
     ['empty', emptyReport],

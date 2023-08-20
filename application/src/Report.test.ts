@@ -13,6 +13,15 @@ jest.mock('axios', () => ({
   }),
 }));
 
+beforeAll(() => {
+  jest.useFakeTimers();
+  jest.setSystemTime(new Date(2020, 3, 1, 1, 30, 10, 30));
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
+
 describe('fetching vulnerability data', () => {
   const report = new Report(new Emitter());
   report.addScanReport({

@@ -11,8 +11,14 @@ import {promisify} from 'util';
 import {exec} from 'child_process';
 
 jest.mock('../Helpers/Processes');
+jest.mock('../Helpers/Dates', () => ({
+  toDate: jest.fn().mockReturnValue('01/04/2020'),
+  toTime: jest.fn().mockReturnValue('01:30:10'),
+  timezone: jest.fn().mockReturnValue('UTC+0'),
+}));
 
 describe('RenderPDF', () => {
+  jest.setTimeout(120 * 1000);
   describe('a report rendered with chrome', () => {
     const onReportRenderStarted = jest.fn();
     const onReportRenderFallback = jest.fn();
@@ -95,7 +101,8 @@ describe('RenderPDF', () => {
       });
 
       test('emits event report:render:pdf:fallback', () => {
-        expect(onReportRenderFallback).toHaveBeenCalledWith();
+        expect(onReportRenderFallback)
+          .toHaveBeenCalledWith('Failed to generate with local chrome, falling back to docker');
       });
 
       test('emits event report:render:pdf:finished', () => {

@@ -8,6 +8,7 @@ import {capitalise} from '../Helpers/Strings';
 import HTMLTemplate from '../assets/report.html.template.md';
 import HTMLTemplateWrapper from '../assets/report.html.wrapper.html';
 import {Converter as Showdown} from 'showdown';
+import {timezone, toDate, toTime} from '../Helpers/Dates';
 
 export class RenderHTML {
   private report: Report;
@@ -27,6 +28,9 @@ export class RenderHTML {
     const innerReport = convert.makeHtml(template(HTMLTemplate)({...report, functions: {
       groupToObjectBy,
       capitalise,
+      toDate,
+      toTime,
+      timezone,
     }}));
 
     const output = HTMLTemplateWrapper.toString().replace('%%REPORT%%', innerReport);

@@ -6,6 +6,7 @@ import {groupToObjectBy} from '../Helpers/Arrays';
 import {capitalise} from '../Helpers/Strings';
 
 import MarkdownTemplate from '../assets/report.markdown.template.md';
+import {timezone, toDate, toTime} from '../Helpers/Dates';
 
 export class RenderMarkdown {
   private report: Report;
@@ -23,6 +24,9 @@ export class RenderMarkdown {
     const output = template(MarkdownTemplate)({...report, functions: {
       groupToObjectBy,
       capitalise,
+      toDate,
+      toTime,
+      timezone,
     }});
 
     this.emitter.emit('report:render:markdown:finished');

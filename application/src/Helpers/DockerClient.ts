@@ -14,7 +14,7 @@ export const buildImage = async (buildConfiguration: ScannerBuildConfiguration):
     socketPath: await getDockerSocketPath(),
   });
 
-  const builder = await docker.buildImage(packedFiles, {});
+  const builder = await docker.buildImage(packedFiles);
 
   return await new Promise((resolve, reject) => {
     docker.modem.followProgress(
