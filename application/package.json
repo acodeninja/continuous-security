@@ -3,7 +3,8 @@
   "version": "1.7.0",
   "description": "Command line application for running security scans against application code.",
   "scripts": {
-    "test": "LANG=en_GB.utf8 TZ=UTC jest",
+    "test": "jest",
+    "test:long": "WITH_FALLBACK_REPORT_RENDER=yes jest",
     "build": "npm run update-cwe && npm run update-scanner-list && webpack",
     "update-cwe": "scripts/update-cwe.js",
     "lint": "eslint ./",

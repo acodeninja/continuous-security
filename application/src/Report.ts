@@ -1,23 +1,15 @@
-import {basename, resolve} from 'path';
-import {readFile, writeFile} from 'fs/promises';
+import {basename} from 'path';
+import {readFile} from 'fs/promises';
 
 import {template, TemplateExecutor} from 'lodash';
-import {Converter as Showdown} from 'showdown';
 
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
-import {buildImage, runImage} from './Helpers/DockerClient';
-import {makeTemporaryFolder} from './Helpers/Files';
-
-import MarkdownTemplate from './assets/report.markdown.template.md';
-import PDFTemplate from './assets/report.pdf.template.md';
-import HTMLTemplate from './assets/report.html.template.md';
-import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
-import {executed} from './Helpers/Processes';
 import {RenderJSON} from './Render/RenderJSON';
 import {RenderMarkdown} from './Render/RenderMarkdown';
 import {RenderHTML} from './Render/RenderHTML';
+import {RenderPDF} from './Render/RenderPDF';
 
 export class Report {
   private readonly templates: Record<string, TemplateExecutor>;
@@ -26,37 +18,10 @@ export class Report {
   private emitter: Emitter;
   private references: References;
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
-  private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
-    groupBy: (list: Array<unknown>, grouping: string) => {
-      const groupedIssues =
-        [{}, ...list].reduce((group: Record<string, Array<unknown>> = {}, item) => {
-          if (item) {
-            group[item[grouping]] = group[item[grouping]] ?? [];
-            group[item[grouping]].push(item);
-          }
-          return group;
-        });
-
-      const asEntries = Object.entries(groupedIssues);
-
-      asEntries.sort((a, b) => this.severityOrder.indexOf(a[0]) - this.severityOrder.indexOf(b[0]));
-
-      return Object.fromEntries(asEntries);
-    },
-    capitalise: (words: string) =>
-      words.split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' '),
-  };
 
   constructor(emitter: Emitter) {
     this.emitter = emitter;
     this.references = new References(emitter);
-    this.templates = {
-      markdown: template(MarkdownTemplate),
-      html: template(HTMLTemplate),
-      pdf: template(PDFTemplate),
-    };
   }
 
   addScanReport(report: ScanReport): void {
@@ -122,64 +87,6 @@ export class Report {
     return this.cached;
   }
 
-  async toPDF(): Promise<[string, Buffer]> {
-    const htmlCacheLocation = await makeTemporaryFolder('html-');
-
-    const report = await this.toObject();
-
-    const convert = new Showdown();
-    const converted = convert.makeHtml(this.templates.pdf({
-      ...report,
-      functions: this.reportFunctions,
-    }));
-
-    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
-
-    await writeFile(resolve(htmlCacheLocation, 'report.html'), html);
-
-    const pdfPath = resolve(htmlCacheLocation, 'report.pdf');
-    const htmlPath = resolve(htmlCacheLocation, 'report.html');
-
-    const chromeRun = await executed(
-      `google-chrome \
-        --headless \
-        --disable-gpu \
-        --no-margins \
-        --no-pdf-header-footer \
-        --print-to-pdf="${pdfPath}" \
-        ${htmlPath}`,
-    );
-
-    if (chromeRun) return ['pdf', Buffer.from(await readFile(pdfPath))];
-
-    this.emitter.emit('report:pdf', 'Failed to generate with local chrome, falling back to docker');
-
-    const imageHash = await buildImage({
-      files: {
-        Dockerfile: 'FROM ubuntu:latest\n' +
-          'ADD https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb c.deb\n' +
-          'RUN apt-get update && apt-get install -y ./c.deb && apt-get clean\n',
-      },
-    });
-
-    await runImage({
-      imageHash,
-      command: [
-        'google-chrome',
-        '--headless',
-        '--no-sandbox',
-        '--disable-gpu',
-        '--no-margins',
-        '--no-pdf-header-footer',
-        '--print-to-pdf=/output/report.pdf',
-        '/output/report.html',
-      ],
-      volumes: {output: htmlCacheLocation},
-    });
-
-    return ['pdf', Buffer.from(await readFile(pdfPath))];
-  }
-
   async getReport(type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<[string, Buffer]> {
     switch (type) {
     case 'markdown':
@@ -187,7 +94,7 @@ export class Report {
     case 'html':
       return ['html', await (new RenderHTML(this, this.emitter)).render()];
     case 'pdf':
-      return await this.toPDF();
+      return ['pdf', await (new RenderPDF(this, this.emitter)).render()];
     case 'json':
       return ['json', await (new RenderJSON(this, this.emitter)).render()];
     }

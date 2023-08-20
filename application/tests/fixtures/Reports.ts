@@ -1,4 +1,4 @@
-export const emptyReport = {
+export const emptyReport: ReportOutput = {
     title: 'Empty Report',
     date: new Date,
     counts: {critical: 0, high: 0, info: 0, low: 0, moderate: 0, total: 0, unknown: 0},
@@ -7,7 +7,7 @@ export const emptyReport = {
     issues: [],
 };
 
-export const fullReport = {
+export const fullReport: ReportOutput = {
     title: 'Security Report for application',
     date: new Date,
     counts: {critical: 0, high: 0, info: 0, low: 0, moderate: 0, total: 1, unknown: 1},
