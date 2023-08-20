@@ -249,27 +249,49 @@ export class Report {
       return {...i, severity: severities[0]};
     });
 
-    return await Promise.all(withHighestSeverities.map(async issue => {
-      return {
-        ...issue,
-        extracts: issue.extracts ? await Promise.all(issue.extracts.map(async extract => {
-          const code = (await readFile(extract.path)).toString().split('\n');
-          const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
-          const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
-          const lines = new Array(code.slice(start, end).length)
-            .fill(null)
-            .map((_, i) => start + i + 1);
-
+    const withFullExtracts: Array<ReportOutputIssue> =
+        await Promise.all(withHighestSeverities.map(async issue => {
           return {
-            ...extract,
-            lines: extract.lines.map(line => `${line}`),
-            code: code.slice(start, end).map((l, i) => {
-              const length = lines[lines.length - 1].toString().length;
-              return `${lines[i].toString().padStart(length)}| ${l}`;
-            }).join('\n'),
+            ...issue,
+            extracts: issue.extracts ? await Promise.all(issue.extracts.map(async extract => {
+              const code = (await readFile(extract.path)).toString().split('\n');
+              const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
+              const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
+              const lines = new Array(code.slice(start, end).length)
+                .fill(null)
+                .map((_, i) => start + i + 1);
+
+              return {
+                ...extract,
+                lines: extract.lines.map(line => `${line}`),
+                code: code.slice(start, end).map((l, i) => {
+                  const length = lines[lines.length - 1].toString().length;
+                  return `${lines[i].toString().padStart(length)}| ${l}`;
+                }).join('\n'),
+              };
+            })) : undefined,
           };
-        })) : undefined,
-      };
-    }));
+        }));
+
+    return withFullExtracts
+      .reduce((grouped: Array<ReportOutputIssue>, item: ReportOutputIssue) => {
+        if (item.title) {
+          const existingGroupIndex = grouped.findIndex(i =>
+            i.title === item.title && i.foundBy === item.foundBy);
+          if (existingGroupIndex !== -1) {
+            const issue = grouped[existingGroupIndex];
+            issue.references = issue.references.concat(item.references);
+            issue.references = [...new Set(issue.references)];
+            if (issue.extracts) {
+              issue.extracts = issue.extracts.concat(item.extracts || []);
+            } else {
+              issue.extracts = item.extracts;
+            }
+          } else {
+            grouped.push(item);
+          }
+        }
+        return grouped;
+      }, []);
   }
 }

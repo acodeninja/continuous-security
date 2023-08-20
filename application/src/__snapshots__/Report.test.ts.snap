@@ -52,7 +52,7 @@ exports[`producing a report in html matches snapshot 1`] = `
             <h1 id="securityreportforapplication">Security Report for application</h1>
 <h1 id="summary">Summary</h1>
 <p>This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
-A total of 3 issue(s) were found, 2 of which may require immediate attention.</p>
+A total of 2 issue(s) were found, 2 of which may require immediate attention.</p>
 <p>This report is produced by running automated security scanning tools, which will likely not detect
 all vulnerabilities present. <strong>It is not a replacement for a manual analysis of the application</strong>.</p>
 <p>The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.</p>
@@ -63,7 +63,7 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 </ul>
 <h1 id="statistics">Statistics</h1>
 <p>This report found issues with the following severities.</p>
-<p><strong>Critical</strong>: 2 | <strong>High</strong> 0 | <strong>Medium</strong> 0 | <strong>Low</strong> 0 | <strong>Informational</strong> 0 | <strong>Unknown</strong> 1</p>
+<p><strong>Critical</strong>: 2 | <strong>High</strong> 0 | <strong>Medium</strong> 0 | <strong>Low</strong> 0 | <strong>Informational</strong> 0 | <strong>Unknown</strong> 0</p>
 <p>To gain a better understanding of the severity levels please see <a href="#what-are-severity-levels">the appendix</a>.</p>
 <h2 id="contents">Contents</h2>
 <ul>
@@ -73,8 +73,7 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 <li><a href="#CWE-248">Uncaught Exception</a></li>
 <li><a href="#CWE-1004">Sensitive Cookie Without 'HttpOnly' Flag</a></li></ul></li>
 <li><a href="#vulnerabilities">Vulnerabilities</a><ul>
-<li><a href="#criticalseverity">Critical (2)</a></li>
-<li><a href="#unknownseverity">Unknown (1)</a></li></ul></li>
+<li><a href="#criticalseverity">Critical (2)</a></li></ul></li>
 <li><a href="#additionalinformation">Additional Information</a><ul>
 <li><a href="#whatareseveritylevels">What are severity levels?</a></li></ul></li>
 </ul>
@@ -115,7 +114,7 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 <p>For more information see <a href="https://cwe.mitre.org/data/definitions/1004.html">CWE-1004</a>.</p>
 <h1 id="vulnerabilities">Vulnerabilities</h1>
 <h2 id="criticalseverity">Critical Severity</h2>
-<h3 id="testissuetitleversion1324">test-issue-title (version 1.3.24)</h3>
+<h3 id="webtestissuetitleversion1324">web-test-issue-title (version 1.3.24)</h3>
 <p><strong>Severity</strong>: <a href="#critical">Critical</a> | <strong>Type</strong>: dependency | <strong>Fix</strong>: Unknown | <strong>Found By</strong>: <a href="https://www.npmjs.com/package/test-scanner">test-scanner</a></p>
 <p>test-issue-description with excluding term: block list</p>
 <h4 id="evidence">Evidence</h4>
@@ -191,7 +190,7 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 <p></details></p>
 <h5 id="references">References</h5>
 <p><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772">CVE-2022-25772</a> | <a href="#CWE-1004">CWE-1004</a> | <a href="#CWE-248">CWE-248</a> | <a href="https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4">GHSA-f9xv-q969-pqx4</a></p>
-<h3 id="testissuetitle">test-issue-title</h3>
+<h3 id="codetestissuetitle">code-test-issue-title</h3>
 <p><strong>Severity</strong>: <a href="#critical">Critical</a> | <strong>Type</strong>: code smell | <strong>Fix</strong>: Unknown | <strong>Found By</strong>: <a href="https://www.npmjs.com/package/test-scanner">test-scanner</a></p>
 <p>test-issue-description</p>
 <h4 id="evidence-1">Evidence</h4>
@@ -204,13 +203,7 @@ all vulnerabilities present. <strong>It is not a replacement for a manual analys
 7| const {minifyStream} = require('minify-xml');
 </code></pre>
 <h5 id="references-1">References</h5>
-<p><a href="#CWE-1004">CWE-1004</a> | <a href="https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4">GHSA-f9xv-q969-pqx4</a></p>
-<h2 id="unknownseverity">Unknown Severity</h2>
-<h3 id="testissuetitle-1">test-issue-title</h3>
-<p><strong>Severity</strong>: <a href="#unknown">Unknown</a> | <strong>Type</strong>: code smell | <strong>Fix</strong>: Unknown | <strong>Found By</strong>: <a href="https://www.npmjs.com/package/test-scanner">test-scanner</a></p>
-<p>test-issue-description</p>
-<h5 id="references-2">References</h5>
-<p><a href="#CWE-248">CWE-248</a></p>
+<p><a href="#CWE-1004">CWE-1004</a> | <a href="https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4">GHSA-f9xv-q969-pqx4</a> | <a href="#CWE-248">CWE-248</a></p>
 <h1 id="additionalinformation">Additional Information</h1>
 <h2 id="whatareseveritylevels">What are severity levels?</h2>
 <p>Issue severity is scored using the <a href="https://www.first.org/cvss/">Common Vulnerability Scoring System</a> (CVSS) where
@@ -352,7 +345,7 @@ exports[`producing a report in json matches snapshot 1`] = `
   ],
   "issues": [
     {
-      "title": "test-issue-title",
+      "title": "web-test-issue-title",
       "description": "test-issue-description with excluding term: block list",
       "type": "dependency",
       "references": [
@@ -495,7 +488,7 @@ exports[`producing a report in json matches snapshot 1`] = `
       "foundBy": "test-scanner"
     },
     {
-      "title": "test-issue-title",
+      "title": "code-test-issue-title",
       "description": "test-issue-description",
       "type": "code smell",
       "extracts": [
@@ -564,17 +557,7 @@ exports[`producing a report in json matches snapshot 1`] = `
               "severity": "critical"
             }
           }
-        }
-      ],
-      "fix": "Unknown",
-      "severity": "critical",
-      "foundBy": "test-scanner"
-    },
-    {
-      "title": "test-issue-title",
-      "description": "test-issue-description",
-      "type": "code smell",
-      "references": [
+        },
         {
           "label": "CWE-248",
           "title": "Uncaught Exception",
@@ -605,7 +588,7 @@ exports[`producing a report in json matches snapshot 1`] = `
         }
       ],
       "fix": "Unknown",
-      "severity": "unknown",
+      "severity": "critical",
       "foundBy": "test-scanner"
     }
   ],
@@ -615,8 +598,8 @@ exports[`producing a report in json matches snapshot 1`] = `
     "moderate": 0,
     "low": 0,
     "info": 0,
-    "unknown": 1,
-    "total": 3
+    "unknown": 0,
+    "total": 2
   }
 }"
 `;
@@ -627,7 +610,7 @@ exports[`producing a report in markdown matches snapshot 1`] = `
 # Summary
 
 This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
-A total of 3 issue(s) were found, 2 of which may require immediate attention.
+A total of 2 issue(s) were found, 2 of which may require immediate attention.
 
 This report is produced by running automated security scanning tools, which will likely not detect
 all vulnerabilities present. **It is not a replacement for a manual analysis of the application**.
@@ -642,7 +625,7 @@ The following technical impacts may arise if an adversary successfully exploits 
 
 This report found issues with the following severities.
 
-**Critical**: 2 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 1
+**Critical**: 2 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 0
 
 To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
 
@@ -655,7 +638,6 @@ To gain a better understanding of the severity levels please see [the appendix](
     * [Sensitive Cookie Without 'HttpOnly' Flag](#CWE-1004)
 * [Vulnerabilities](#vulnerabilities)
     * [Critical (2)](#critical-severity)
-    * [Unknown (1)](#unknown-severity)
 * [Additional Information](#additional-information)
     * [What are severity levels?](#what-are-severity-levels)
 
@@ -712,7 +694,7 @@ For more information see [CWE-1004](https://cwe.mitre.org/data/definitions/1004.
 
 ## Critical Severity
 
-### test-issue-title (version 1.3.24)
+### web-test-issue-title (version 1.3.24)
 
 **Severity**: [Critical](#critical) | **Type**: dependency | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
@@ -799,7 +781,7 @@ The following evidence of this vulnerability was found in the application.
 
 [CVE-2022-25772](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-25772) | [CWE-1004](#CWE-1004) | [CWE-248](#CWE-248) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
 
-### test-issue-title 
+### code-test-issue-title 
 
 **Severity**: [Critical](#critical) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
 
@@ -821,20 +803,7 @@ The following evidence of this vulnerability was found in the application.
 
 ##### References
 
-[CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4)
-
-## Unknown Severity
-
-### test-issue-title 
-
-**Severity**: [Unknown](#unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
-
-test-issue-description
-
-
-##### References
-
-[CWE-248](#CWE-248)
+[CWE-1004](#CWE-1004) | [GHSA-f9xv-q969-pqx4](https://osv.dev/vulnerability/GHSA-f9xv-q969-pqx4) | [CWE-248](#CWE-248)
 
 
 

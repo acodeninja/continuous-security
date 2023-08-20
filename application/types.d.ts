@@ -37,6 +37,25 @@ type ReportOutputIssue = {
     name: string;
     version?: string;
   };
+  extracts?: Array<{
+    lines: Array<string>;
+    path: string;
+    language?: string;
+    code?: string;
+  }>;
+  requests?: Array<{
+    request: {
+      target: string;
+      method: string;
+      headers: Record<string, string>;
+      body?: string;
+    };
+    response: {
+      statusCode: number;
+      headers: Record<string, string>;
+      body?: string;
+    };
+  }>;
   references?: Array<ReportOutputIssueReference>;
   fix: string;
   severity: 'info' | 'low' | 'moderate' | 'high' | 'critical' | 'unknown';
