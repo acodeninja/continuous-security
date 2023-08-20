@@ -2,7 +2,7 @@ import {template} from 'lodash';
 
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';
-import {groupToObjectBy} from '../Helpers/Arrays';
+import {groupToObjectBy, sortObjectKeysBy} from '../Helpers/Arrays';
 import {capitalise} from '../Helpers/Strings';
 
 import PDFTemplate from '../assets/report.pdf.template.md';
@@ -32,6 +32,7 @@ export class RenderPDF {
 
     const innerReport = convert.makeHtml(template(PDFTemplate)({...report, functions: {
       groupToObjectBy,
+      sortObjectKeysBy,
       capitalise,
       toDate,
       toTime,

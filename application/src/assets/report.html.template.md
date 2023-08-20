@@ -26,7 +26,12 @@ To gain a better understanding of the severity levels please see [the appendix](
     * [Statistics](#statistics)
 * [Overview of Issues](#overviewofissues)<% overviewOfIssues.forEach(o => { %>
     * [<%= o.title %>](#<%= o.label %>)<% }) %>
-* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupToObjectBy(issues, 'severity')).forEach(([severity, issues]) => { %>
+* [Vulnerabilities](#vulnerabilities)<% Object.entries(
+    functions.sortObjectKeysBy(
+        functions.groupToObjectBy(issues, 'severity'),
+        ['critical', 'high', 'moderate', 'low', 'info', 'unknown'],
+    )
+).forEach(([severity, issues]) => { %>
     * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>severity)<% }) %>
 * [Additional Information](#additionalinformation)
     * [What are severity levels?](#whatareseveritylevels)
