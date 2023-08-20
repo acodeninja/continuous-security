@@ -21,7 +21,7 @@ export const ScanCommand = (program: Command) => {
     .option('--format  <format...>', 'Space separated list of report formats.', ['markdown'])
     .action(async (options: { ci?: boolean, format?: Array<string> }) => {
       if (!allValidFormats(options.format)) {
-        console.log('--report must be a space separated list of markdown, json, html, pdf');
+        console.log('--format must be a space separated list of markdown, json, html, pdf');
         process.exit(1);
       }
 
