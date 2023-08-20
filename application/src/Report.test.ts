@@ -12,6 +12,7 @@ import {executed} from './Helpers/Processes';
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
+import {RenderJSON} from './Render/RenderJSON';
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -260,14 +261,21 @@ describe('producing a report', () => {
   });
 
   describe('in json', () => {
+    const renderJSON = jest.spyOn(RenderJSON.prototype, 'render');
     let jsonReport: Buffer;
 
     beforeAll(async () => {
+      renderJSON.mockResolvedValue(Buffer.from(JSON.stringify({test: true}, null, 2)));
+
       [, jsonReport] = await report.getReport('json');
     });
 
+    test('calls RenderJSON.render', () => {
+      expect(renderJSON).toHaveBeenCalledWith();
+    });
+
     test('matches snapshot', () => {
-      expect(jsonReport.toString()).toMatchSnapshot();
+      expect(jsonReport.toString()).toEqual(JSON.stringify({test: true}, null, 2));
     });
   });
 

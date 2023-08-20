@@ -15,6 +15,7 @@ import PDFTemplate from './assets/report.pdf.template.md';
 import HTMLTemplate from './assets/report.html.template.md';
 import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
 import {executed} from './Helpers/Processes';
+import {RenderJSON} from './Render/RenderJSON';
 
 export class Report {
   private readonly templates: Record<string, TemplateExecutor>;
@@ -119,13 +120,6 @@ export class Report {
     return this.cached;
   }
 
-  async toJSON(): Promise<[string, Buffer]> {
-    const report = await this.toObject();
-    this.emitter.emit('report:finished', '');
-
-    return ['json', Buffer.from(JSON.stringify(report, null, 2))];
-  }
-
   async toMarkdown(): Promise<[string, Buffer]> {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
@@ -219,7 +213,7 @@ export class Report {
     case 'pdf':
       return await this.toPDF();
     case 'json':
-      return await this.toJSON();
+      return ['json', await (new RenderJSON(this, this.emitter)).render()];
     }
   }
 
