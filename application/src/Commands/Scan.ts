@@ -18,10 +18,14 @@ export const ScanCommand = (program: Command) => {
   program.command('scan')
     .description('Perform a scan')
     .option('--ci', 'Use the CI logger for line by line output.')
-    .option('--format  <format...>', 'Space separated list of report formats.', 'markdown')
+    .option(
+      '--format  <format...>',
+      'Space separated list of report formats (markdown, json, html and pdf).',
+      ['markdown'],
+    )
     .action(async (options: { ci?: boolean, format?: Array<string> }) => {
       if (!allValidFormats(options.format)) {
-        console.log('--report must be a space separated list of markdown, json, html, pdf');
+        console.log('--format must be a space separated list of markdown, json, html, pdf');
         process.exit(1);
       }
 
