@@ -17,6 +17,7 @@ import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
 import {executed} from './Helpers/Processes';
 import {RenderJSON} from './Render/RenderJSON';
 import {RenderMarkdown} from './Render/RenderMarkdown';
+import {RenderHTML} from './Render/RenderHTML';
 
 export class Report {
   private readonly templates: Record<string, TemplateExecutor>;
@@ -121,21 +122,6 @@ export class Report {
     return this.cached;
   }
 
-  async toHTML(): Promise<[string, Buffer]> {
-    const report = await this.toObject();
-    this.emitter.emit('report:finished', '');
-
-    const convert = new Showdown();
-    const converted = convert.makeHtml(this.templates.html({
-      ...report,
-      functions: this.reportFunctions,
-    }));
-
-    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
-
-    return ['html', Buffer.from(html)];
-  }
-
   async toPDF(): Promise<[string, Buffer]> {
     const htmlCacheLocation = await makeTemporaryFolder('html-');
 
@@ -199,7 +185,7 @@ export class Report {
     case 'markdown':
       return ['md', await (new RenderMarkdown(this, this.emitter)).render()];
     case 'html':
-      return await this.toHTML();
+      return ['html', await (new RenderHTML(this, this.emitter)).render()];
     case 'pdf':
       return await this.toPDF();
     case 'json':
