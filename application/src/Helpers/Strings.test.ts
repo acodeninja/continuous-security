@@ -1,4 +1,4 @@
-import {isURL} from './Strings';
+import {capitalise, isURL, tidyString} from './Strings';
 
 describe('isURL', () => {
   test('returns true for an http url', () => {
@@ -15,5 +15,25 @@ describe('isURL', () => {
 
   test('returns false for null input', () => {
     expect(isURL(undefined)).toBeFalsy();
+  });
+});
+
+describe('capitalise', () => {
+  test('a single word', () => {
+    expect(capitalise('test')).toEqual('Test');
+  });
+
+  test('multiple words', () => {
+    expect(capitalise('test case')).toEqual('Test Case');
+  });
+});
+
+describe('tidyString', () => {
+  test('single line', () => {
+    expect(tidyString('a  single line     of text')).toEqual('a single line of text');
+  });
+
+  test('multiline', () => {
+    expect(tidyString('multiple lines\nof text')).toEqual('multiple lines of text');
   });
 });

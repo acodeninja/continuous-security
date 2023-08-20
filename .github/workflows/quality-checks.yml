@@ -71,7 +71,7 @@ jobs:
         working-directory: application/
       - run: npm run lint
         working-directory: application/
-      - run: npm test
+      - run: npm run test:long
         id: test
         working-directory: application/
         continue-on-error: true

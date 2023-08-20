@@ -1,0 +1,242 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RenderMarkdown an empty report returns the expected report 1`] = `
+"# Empty Report
+
+# Summary
+
+This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
+A total of 0 issue(s) were found, 0 of which may require immediate attention.
+
+This report is produced by running automated security scanning tools, which will likely not detect
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**.
+
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+
+
+# Statistics
+
+This report found issues with the following severities.
+
+**Critical**: 0 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 0
+
+To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
+
+## Contents
+
+* [Summary](#summary)
+* [Issue Statistics](#statistics)
+* [Overview of Issues](#overview-of-issues)
+* [Vulnerabilities](#vulnerabilities)
+* [Additional Information](#additional-information)
+    * [What are severity levels?](#what-are-severity-levels)
+
+# Overview of Issues
+
+
+# Vulnerabilities
+
+
+
+# Additional Information
+
+## What are severity levels?
+
+Issue severity is scored using the [Common Vulnerability Scoring System](https://www.first.org/cvss/) (CVSS) where
+such data is available. Severity levels do not represent the risk associated with an issue as risk depends on your
+specific context. Severity scoring does however give an indication of the ease of exploitation and potential scope of an
+attacks effect on an application.
+
+### Critical
+
+Exploitation will likely lead to an attacker gaining administrative access to the application and infrastructure that
+supports it. Exploiting critical vulnerabilities is usually trivial and will generally not require prior access to the
+application. **A development team should aim to resolve these issues immediately by mitigating or directly resolving the
+issue**.
+
+### High
+
+Exploitation could lead to an attacker gaining elevated access to the application and the infrastructure that supports
+it. It is likely that an attacker will not find exploitation trivial. Such exploitation could lead to significant data
+loss or downtime.
+
+### Medium
+
+Exploitation could lead to an attacker gaining limited access to the application. Exploiting vulnerabilities may require
+an attacker to manipulate users to gain access to their credentials. Such exploitation could lead to limited data loss
+or downtime.
+
+### Low
+
+Exploitation will likely have very little impact on the application, and it is unlikely that an attacker will gain any
+meaningful access to the application. Exploiting an issue of this severity will potentially require physical access to
+the infrastructure that supports the application.
+
+### Informational
+
+While not part of the CVSS scoring specification, several security analysis tools use this severity level to indicate
+that an issue is a matter of best practice. It is extremely unlikely that issues with this severity will lead to an
+attacker gaining access to any application components.
+
+### Unknown
+
+This severity level is used when the analysis tool used to perform a scan of the application does not associate any kind
+of severity level with the issues or vulnerabilities it finds. Issues with an unknown severity should be investigated by
+application developers and project stakeholders to establish the ease of exploitation, scope of any potential impact and
+the specific risks associated.
+"
+`;
+
+exports[`RenderMarkdown an full report returns the expected report 1`] = `
+"# Security Report for application
+
+# Summary
+
+This security report was conducted on 01/04/2020 at 01:30:10 (UTC+0).
+A total of 1 issue(s) were found, 0 of which may require immediate attention.
+
+This report is produced by running automated security scanning tools, which will likely not detect
+all vulnerabilities present. **It is not a replacement for a manual analysis of the application**.
+
+The following technical impacts may arise if an adversary successfully exploits one of the issues found by this scan.
+
+* **Availability**: DoS: Crash, Exit, or Restart
+* **Confidentiality**: Read Application Data
+
+# Statistics
+
+This report found issues with the following severities.
+
+**Critical**: 0 | **High** 0 | **Medium** 0 | **Low** 0 | **Informational** 0 | **Unknown** 1
+
+To gain a better understanding of the severity levels please see [the appendix](#what-are-severity-levels).
+
+## Contents
+
+* [Summary](#summary)
+* [Issue Statistics](#statistics)
+* [Overview of Issues](#overview-of-issues)
+    * [Uncaught Exception](#CWE-248)
+* [Vulnerabilities](#vulnerabilities)
+    * [Unknown (1)](#unknown-severity)
+* [Additional Information](#additional-information)
+    * [What are severity levels?](#what-are-severity-levels)
+
+# Overview of Issues
+
+<a id="CWE-248"></a>
+## Uncaught Exception
+
+An exception is thrown from a function, but it is not caught.
+
+
+When an exception is not caught
+
+
+### Consequences
+
+Using a vulnerability of this type an attacker may be able to affect the system in the following ways.
+
+* **Availability**: DoS: Crash, Exit, or Restart
+* **Confidentiality**: Read Application Data
+
+> An uncaught exception
+
+
+For more information see [CWE-248](https://cwe.mitre.org/data/definitions/248.html).
+
+
+# Vulnerabilities
+
+## Unknown Severity
+
+### test-issue-title 
+
+**Severity**: [Unknown](#unknown) | **Type**: code smell | **Fix**: Unknown | **Found By**: [test-scanner](https://www.npmjs.com/package/test-scanner)
+
+test-issue-description
+
+#### Evidence
+
+The following evidence of this vulnerability was found in the application.
+
+\`application/src/Report\` (starting on line: 2)
+\`\`\`python
+import
+\`\`\`
+
+\`application/src/Report\` (starting on line: 2)
+\`\`\`python
+import
+\`\`\`
+
+\`application/src/Report\` (starting on line: 2)
+\`\`\`python
+import
+\`\`\`
+
+\`application/src/Report\` (starting on line: 2)
+\`\`\`python
+import
+\`\`\`
+
+\`application/src/Report\` (starting on line: 2)
+\`\`\`python
+import
+\`\`\`
+
+
+##### References
+
+[CWE-248](#CWE-248)
+
+
+
+# Additional Information
+
+## What are severity levels?
+
+Issue severity is scored using the [Common Vulnerability Scoring System](https://www.first.org/cvss/) (CVSS) where
+such data is available. Severity levels do not represent the risk associated with an issue as risk depends on your
+specific context. Severity scoring does however give an indication of the ease of exploitation and potential scope of an
+attacks effect on an application.
+
+### Critical
+
+Exploitation will likely lead to an attacker gaining administrative access to the application and infrastructure that
+supports it. Exploiting critical vulnerabilities is usually trivial and will generally not require prior access to the
+application. **A development team should aim to resolve these issues immediately by mitigating or directly resolving the
+issue**.
+
+### High
+
+Exploitation could lead to an attacker gaining elevated access to the application and the infrastructure that supports
+it. It is likely that an attacker will not find exploitation trivial. Such exploitation could lead to significant data
+loss or downtime.
+
+### Medium
+
+Exploitation could lead to an attacker gaining limited access to the application. Exploiting vulnerabilities may require
+an attacker to manipulate users to gain access to their credentials. Such exploitation could lead to limited data loss
+or downtime.
+
+### Low
+
+Exploitation will likely have very little impact on the application, and it is unlikely that an attacker will gain any
+meaningful access to the application. Exploiting an issue of this severity will potentially require physical access to
+the infrastructure that supports the application.
+
+### Informational
+
+While not part of the CVSS scoring specification, several security analysis tools use this severity level to indicate
+that an issue is a matter of best practice. It is extremely unlikely that issues with this severity will lead to an
+attacker gaining access to any application components.
+
+### Unknown
+
+This severity level is used when the analysis tool used to perform a scan of the application does not associate any kind
+of severity level with the issues or vulnerabilities it finds. Issues with an unknown severity should be investigated by
+application developers and project stakeholders to establish the ease of exploitation, scope of any potential impact and
+the specific risks associated.
+"
+`;

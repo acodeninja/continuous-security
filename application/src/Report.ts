@@ -1,59 +1,25 @@
-import {basename, resolve} from 'path';
-import {readFile, writeFile} from 'fs/promises';
-
-import {template, TemplateExecutor} from 'lodash';
-import {Converter as Showdown} from 'showdown';
+import {basename} from 'path';
+import {readFile} from 'fs/promises';
 
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
-import {buildImage, runImage} from './Helpers/DockerClient';
-import {makeTemporaryFolder} from './Helpers/Files';
 
-import MarkdownTemplate from './assets/report.markdown.template.md';
-import PDFTemplate from './assets/report.pdf.template.md';
-import HTMLTemplate from './assets/report.html.template.md';
-import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
-import {executed} from './Helpers/Processes';
+import {RenderJSON} from './Render/RenderJSON';
+import {RenderMarkdown} from './Render/RenderMarkdown';
+import {RenderHTML} from './Render/RenderHTML';
+import {RenderPDF} from './Render/RenderPDF';
 
 export class Report {
-  private readonly templates: Record<string, TemplateExecutor>;
   private reports: Array<ScanReport> = [];
   private cached: ReportOutput;
   private emitter: Emitter;
   private references: References;
   private severityOrder = ['critical', 'high', 'moderate', 'low', 'info', 'unknown'];
-  private reportFunctions: Record<string, (...args: Array<unknown>) => unknown> = {
-    groupBy: (list: Array<unknown>, grouping: string) => {
-      const groupedIssues =
-        [{}, ...list].reduce((group: Record<string, Array<unknown>> = {}, item) => {
-          if (item) {
-            group[item[grouping]] = group[item[grouping]] ?? [];
-            group[item[grouping]].push(item);
-          }
-          return group;
-        });
-
-      const asEntries = Object.entries(groupedIssues);
-
-      asEntries.sort((a, b) => this.severityOrder.indexOf(a[0]) - this.severityOrder.indexOf(b[0]));
-
-      return Object.fromEntries(asEntries);
-    },
-    capitalise: (words: string) =>
-      words.split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' '),
-  };
 
   constructor(emitter: Emitter) {
     this.emitter = emitter;
     this.references = new References(emitter);
-    this.templates = {
-      markdown: template(MarkdownTemplate),
-      html: template(HTMLTemplate),
-      pdf: template(PDFTemplate),
-    };
   }
 
   addScanReport(report: ScanReport): void {
@@ -108,7 +74,7 @@ export class Report {
     }), (key, value) => {
       if (
         String(value).length === 24 &&
-        String(value).match(/\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}.\d{3}Z/)
+          String(value).match(/\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}.\d{3}Z/)
       ) return new Date(value);
 
       if (key === 'code' || key === 'target' || key === 'name') return value;
@@ -119,107 +85,16 @@ export class Report {
     return this.cached;
   }
 
-  async toJSON(): Promise<[string, Buffer]> {
-    const report = await this.toObject();
-    this.emitter.emit('report:finished', '');
-
-    return ['json', Buffer.from(JSON.stringify(report, null, 2))];
-  }
-
-  async toMarkdown(): Promise<[string, Buffer]> {
-    const report = await this.toObject();
-    this.emitter.emit('report:finished', '');
-
-    return [
-      'md',
-      Buffer.from(this.templates.markdown({...report, functions: this.reportFunctions})),
-    ];
-  }
-
-  async toHTML(): Promise<[string, Buffer]> {
-    const report = await this.toObject();
-    this.emitter.emit('report:finished', '');
-
-    const convert = new Showdown();
-    const converted = convert.makeHtml(this.templates.html({
-      ...report,
-      functions: this.reportFunctions,
-    }));
-
-    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
-
-    return ['html', Buffer.from(html)];
-  }
-
-  async toPDF(): Promise<[string, Buffer]> {
-    const htmlCacheLocation = await makeTemporaryFolder('html-');
-
-    const report = await this.toObject();
-
-    const convert = new Showdown();
-    const converted = convert.makeHtml(this.templates.pdf({
-      ...report,
-      functions: this.reportFunctions,
-    }));
-
-    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
-
-    await writeFile(resolve(htmlCacheLocation, 'report.html'), html);
-
-    const pdfPath = resolve(htmlCacheLocation, 'report.pdf');
-    const htmlPath = resolve(htmlCacheLocation, 'report.html');
-
-    const chromeRun = await executed(
-      `google-chrome \
-        --headless \
-        --disable-gpu \
-        --no-margins \
-        --no-pdf-header-footer \
-        --print-to-pdf="${pdfPath}" \
-        ${htmlPath}`,
-    );
-
-    if (chromeRun) return ['pdf', Buffer.from(await readFile(pdfPath))];
-
-    this.emitter.emit('report:pdf', 'Failed to generate with local chrome, falling back to docker');
-
-    const imageHash = await buildImage({
-      files: {
-        Dockerfile: 'FROM ubuntu:latest\n' +
-          'ADD https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb c.deb\n' +
-          'RUN apt-get update && apt-get install -y ./c.deb && apt-get clean\n',
-      },
-    });
-
-    await runImage({
-      imageHash,
-      command: [
-        'google-chrome',
-        '--headless',
-        '--no-sandbox',
-        '--disable-gpu',
-        '--no-margins',
-        '--no-pdf-header-footer',
-        '--print-to-pdf=/output/report.pdf',
-        '/output/report.html',
-      ],
-      volumes: {output: htmlCacheLocation},
-    });
-
-    return ['pdf', Buffer.from(await readFile(pdfPath))];
-  }
-
   async getReport(type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<[string, Buffer]> {
-    this.emitter.emit('report:started', `generating output report in ${type}`);
     switch (type) {
     case 'markdown':
-      return await this.toMarkdown();
+      return ['md', await (new RenderMarkdown(this, this.emitter)).render()];
     case 'html':
-      return await this.toHTML();
+      return ['html', await (new RenderHTML(this, this.emitter)).render()];
     case 'pdf':
-      return await this.toPDF();
+      return ['pdf', await (new RenderPDF(this, this.emitter)).render()];
     case 'json':
-      return await this.toJSON();
+      return ['json', await (new RenderJSON(this, this.emitter)).render()];
     }
   }
 
@@ -249,27 +124,49 @@ export class Report {
       return {...i, severity: severities[0]};
     });
 
-    return await Promise.all(withHighestSeverities.map(async issue => {
-      return {
-        ...issue,
-        extracts: issue.extracts ? await Promise.all(issue.extracts.map(async extract => {
-          const code = (await readFile(extract.path)).toString().split('\n');
-          const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
-          const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
-          const lines = new Array(code.slice(start, end).length)
-            .fill(null)
-            .map((_, i) => start + i + 1);
-
+    const withFullExtracts: Array<ReportOutputIssue> =
+        await Promise.all(withHighestSeverities.map(async issue => {
           return {
-            ...extract,
-            lines: extract.lines.map(line => `${line}`),
-            code: code.slice(start, end).map((l, i) => {
-              const length = lines[lines.length - 1].toString().length;
-              return `${lines[i].toString().padStart(length)}| ${l}`;
-            }).join('\n'),
+            ...issue,
+            extracts: issue.extracts ? await Promise.all(issue.extracts.map(async extract => {
+              const code = (await readFile(extract.path)).toString().split('\n');
+              const start = Math.max(parseInt(extract.lines[0]) - 3, 0);
+              const end = Math.min(parseInt(extract.lines[0]) + 2, code.length);
+              const lines = new Array(code.slice(start, end).length)
+                .fill(null)
+                .map((_, i) => start + i + 1);
+
+              return {
+                ...extract,
+                lines: extract.lines.map(line => `${line}`),
+                code: code.slice(start, end).map((l, i) => {
+                  const length = lines[lines.length - 1].toString().length;
+                  return `${lines[i].toString().padStart(length)}| ${l}`;
+                }).join('\n'),
+              };
+            })) : undefined,
           };
-        })) : undefined,
-      };
-    }));
+        }));
+
+    return withFullExtracts
+      .reduce((grouped: Array<ReportOutputIssue>, item: ReportOutputIssue) => {
+        if (item.title) {
+          const existingGroupIndex = grouped.findIndex(i =>
+            i.title === item.title && i.foundBy === item.foundBy);
+          if (existingGroupIndex !== -1) {
+            const issue = grouped[existingGroupIndex];
+            issue.references = issue.references.concat(item.references);
+            issue.references = [...new Set(issue.references)];
+            if (issue.extracts) {
+              issue.extracts = issue.extracts.concat(item.extracts || []);
+            } else {
+              issue.extracts = item.extracts;
+            }
+          } else {
+            grouped.push(item);
+          }
+        }
+        return grouped;
+      }, []);
   }
 }
