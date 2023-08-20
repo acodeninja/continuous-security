@@ -1,4 +1,5 @@
-import {buildImage, makeTemporaryFolder, destroyTemporaryFolder, runImage} from './Helpers';
+import {buildImage, runImage} from './Helpers/DockerClient';
+import {destroyTemporaryFolder, makeTemporaryFolder} from './Helpers/Files';
 
 export class ValidationError extends Error {
 
@@ -64,7 +65,7 @@ export class Scan {
     await runImage({
       configuration: this.configuration.with,
       imageHash: this.imageHash,
-      host: {
+      volumes: {
         output: this.output,
         target: this.target,
       },

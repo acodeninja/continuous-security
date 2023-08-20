@@ -1,6 +1,14 @@
+import {readFile, writeFile} from 'fs/promises';
+import {resolve} from 'path';
+import {promisify} from 'util';
+import {exec} from 'child_process';
+
 import axios from 'axios';
+import ComparePdf from 'compare-pdf';
+
 import {Report} from './Report';
 import {Emitter} from './Emitter';
+import {executed} from './Helpers/Processes';
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
@@ -8,6 +16,8 @@ import {Github} from '../tests/fixtures/OSVResponse';
 jest.mock('axios', () => ({
   get: jest.fn(),
 }));
+
+jest.mock('./Helpers/Processes');
 
 (axios.get as jest.Mock).mockImplementation(async (url) => {
   if (url.indexOf('services.nvd.nist.gov') !== -1) return {data: CVEResponse};
@@ -17,6 +27,7 @@ jest.mock('axios', () => ({
 beforeAll(() => {
   jest.useFakeTimers();
   jest.setSystemTime(new Date(2020, 3, 1, 1, 30, 10, 30));
+  jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(0);
 });
 
 afterAll(() => {
@@ -63,7 +74,10 @@ describe('fetching vulnerability data', () => {
   });
 });
 describe('producing a report', () => {
-  const report = new Report(new Emitter());
+  const onEvent = jest.fn();
+  const emitter = new Emitter();
+  emitter.on('*', onEvent);
+  const report = new Report(emitter);
 
   report.addScanReport({
     issues: [{
@@ -101,6 +115,13 @@ describe('producing a report', () => {
             'Keep-Alive': 'timeout=5',
             'X-Powered-By': 'Express',
           },
+          body: JSON.stringify({
+            menu: [
+              {value: 'New', onclick: 'CreateNewDoc()'},
+              {value: 'Open', onclick: 'OpenDoc()'},
+              {value: 'Close', onclick: 'CloseDoc()'},
+            ],
+          }, null, 2),
         },
       }],
       fix: 'Unknown',
@@ -159,6 +180,82 @@ describe('producing a report', () => {
 
     test('matches snapshot', () => {
       expect(markdownReport.toString()).toMatchSnapshot();
+    });
+  });
+
+  describe('in html', () => {
+    let htmlReport: Buffer;
+
+    beforeAll(async () => {
+      [, htmlReport] = await report.getReport('html');
+    });
+
+    test('matches snapshot', () => {
+      expect(htmlReport.toString()).toMatchSnapshot();
+    });
+  });
+
+  describe('in pdf', () => {
+    jest.setTimeout(240 * 1000);
+
+    describe('local binary', () => {
+      let pdf: Buffer;
+
+      beforeAll(async () => {
+        (executed as jest.Mock).mockImplementationOnce(async (command: string) =>
+          await promisify(exec)(command)
+            .then(() => true)
+            .catch(() => false));
+
+        [, pdf] = await report.getReport('pdf');
+        await writeFile('test.pdf', pdf);
+      });
+
+      test('matches baseline', async () => {
+        const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
+        const comparer = new ComparePdf()
+          .actualPdfBuffer(pdf, 'actual.pdf')
+          .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
+
+        const comparisonResults =
+          await (comparer.compare as unknown as (type?: string) => Promise<{status: string}>)();
+
+        if (comparisonResults.status !== 'passed')
+          console.log('PDF Comparison Failed:', JSON.stringify(comparisonResults, null, 2));
+
+        expect(comparisonResults.status).toEqual('passed');
+      });
+    });
+
+    describe('docker binary', () => {
+      let pdf: Buffer;
+
+      beforeAll(async () => {
+        (executed as jest.Mock).mockResolvedValue(false);
+        [, pdf] = await report.getReport('pdf');
+        await writeFile('test.pdf', pdf);
+      });
+
+      test('matches baseline', async () => {
+        const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
+        const comparer = new ComparePdf()
+          .actualPdfBuffer(pdf, 'actual.pdf')
+          .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
+
+        const comparisonResults =
+          await (comparer.compare as unknown as (type?: string) => Promise<{status: string}>)();
+
+        if (comparisonResults.status !== 'passed')
+          console.log('PDF Comparison Failed:', JSON.stringify(comparisonResults, null, 2));
+
+        expect(comparisonResults.status).toEqual('passed');
+      });
+
+      test('emits pdf docker fallback event', async () => {
+        expect(onEvent).toHaveBeenCalledWith(
+          'Failed to generate with local chrome, falling back to docker',
+        );
+      });
     });
   });
 });

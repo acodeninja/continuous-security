@@ -1,13 +1,23 @@
+import {basename, resolve} from 'path';
+import {readFile, writeFile} from 'fs/promises';
+
 import {template, TemplateExecutor} from 'lodash';
-import {basename} from 'path';
-import {readFile} from 'fs/promises';
-import BaseTemplate from './assets/report.template.md';
+import {Converter as Showdown} from 'showdown';
+
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
+import {buildImage, runImage} from './Helpers/DockerClient';
+import {makeTemporaryFolder} from './Helpers/Files';
+
+import MarkdownTemplate from './assets/report.markdown.template.md';
+import PDFTemplate from './assets/report.pdf.template.md';
+import HTMLTemplate from './assets/report.html.template.md';
+import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
+import {executed} from './Helpers/Processes';
 
 export class Report {
-  private readonly template: TemplateExecutor;
+  private readonly templates: Record<string, TemplateExecutor>;
   private reports: Array<ScanReport> = [];
   private cached: ReportOutput;
   private emitter: Emitter;
@@ -39,7 +49,11 @@ export class Report {
   constructor(emitter: Emitter) {
     this.emitter = emitter;
     this.references = new References(emitter);
-    this.template = template(BaseTemplate);
+    this.templates = {
+      markdown: template(MarkdownTemplate),
+      html: template(HTMLTemplate),
+      pdf: template(PDFTemplate),
+    };
   }
 
   addScanReport(report: ScanReport): void {
@@ -116,14 +130,94 @@ export class Report {
     const report = await this.toObject();
     this.emitter.emit('report:finished', '');
 
-    return ['md', Buffer.from(this.template({...report, functions: this.reportFunctions}))];
+    return [
+      'md',
+      Buffer.from(this.templates.markdown({...report, functions: this.reportFunctions})),
+    ];
   }
 
-  async getReport(type: 'markdown' | 'json'): Promise<[string, Buffer]> {
+  async toHTML(): Promise<[string, Buffer]> {
+    const report = await this.toObject();
+    this.emitter.emit('report:finished', '');
+
+    const convert = new Showdown();
+    const converted = convert.makeHtml(this.templates.html({
+      ...report,
+      functions: this.reportFunctions,
+    }));
+
+    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
+
+    return ['html', Buffer.from(html)];
+  }
+
+  async toPDF(): Promise<[string, Buffer]> {
+    const htmlCacheLocation = await makeTemporaryFolder('html-');
+
+    const report = await this.toObject();
+
+    const convert = new Showdown();
+    const converted = convert.makeHtml(this.templates.pdf({
+      ...report,
+      functions: this.reportFunctions,
+    }));
+
+    const html = HTMLTemplateWrapper.toString().replace('%%REPORT%%', converted);
+
+    await writeFile(resolve(htmlCacheLocation, 'report.html'), html);
+
+    const pdfPath = resolve(htmlCacheLocation, 'report.pdf');
+    const htmlPath = resolve(htmlCacheLocation, 'report.html');
+
+    const chromeRun = await executed(
+      `google-chrome \
+        --headless \
+        --disable-gpu \
+        --no-margins \
+        --no-pdf-header-footer \
+        --print-to-pdf="${pdfPath}" \
+        ${htmlPath}`,
+    );
+
+    if (chromeRun) return ['pdf', Buffer.from(await readFile(pdfPath))];
+
+    this.emitter.emit('report:pdf', 'Failed to generate with local chrome, falling back to docker');
+
+    const imageHash = await buildImage({
+      files: {
+        Dockerfile: 'FROM ubuntu:latest\n' +
+          'ADD https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb c.deb\n' +
+          'RUN apt-get update && apt-get install -y ./c.deb && apt-get clean\n',
+      },
+    });
+
+    await runImage({
+      imageHash,
+      command: [
+        'google-chrome',
+        '--headless',
+        '--no-sandbox',
+        '--disable-gpu',
+        '--no-margins',
+        '--no-pdf-header-footer',
+        '--print-to-pdf=/output/report.pdf',
+        '/output/report.html',
+      ],
+      volumes: {output: htmlCacheLocation},
+    });
+
+    return ['pdf', Buffer.from(await readFile(pdfPath))];
+  }
+
+  async getReport(type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<[string, Buffer]> {
     this.emitter.emit('report:started', `generating output report in ${type}`);
     switch (type) {
     case 'markdown':
       return await this.toMarkdown();
+    case 'html':
+      return await this.toHTML();
+    case 'pdf':
+      return await this.toPDF();
     case 'json':
       return await this.toJSON();
     }

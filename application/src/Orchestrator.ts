@@ -5,7 +5,8 @@ import {promisify} from 'util';
 
 import {Configuration} from './Configuration';
 import {Emitter} from './Emitter';
-import {loadScannerModule, makeTemporaryFolder} from './Helpers';
+import {makeTemporaryFolder} from './Helpers/Files';
+import {loadScannerModule} from './Helpers/ScannerLoader';
 import {Report} from './Report';
 import {Scan} from './Scan';
 
@@ -81,7 +82,7 @@ export class Orchestrator {
     });
   }
 
-  async writeReport(path: string, type: 'markdown' | 'json'): Promise<void> {
+  async writeReport(path: string, type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<void> {
     const [extension, report] = await this.report.getReport(type);
     await writeFile(resolve(path, `report.${extension}`), report);
   }

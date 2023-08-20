@@ -1,11 +1,7 @@
 import {Scan, ValidationError} from './Scan';
 import {Emitter} from './Emitter';
-import {
-  buildImage,
-  makeTemporaryFolder,
-  destroyTemporaryFolder,
-  runImage,
-} from './Helpers';
+import {buildImage, runImage} from './Helpers/DockerClient';
+import {destroyTemporaryFolder, makeTemporaryFolder} from './Helpers/Files';
 import {resolve} from 'path';
 import {NpmAuditReport} from '../tests/fixtures/NpmAuditReport';
 
@@ -34,9 +30,12 @@ const scanner: Scanner = {
   report: jest.fn().mockResolvedValue({}),
 };
 
-jest.mock('./Helpers', () => ({
+jest.mock('./Helpers/Files', () => ({
   makeTemporaryFolder: jest.fn().mockResolvedValue('/tmp/prefix-random'),
   destroyTemporaryFolder: jest.fn(),
+}));
+
+jest.mock('./Helpers/DockerClient', () => ({
   buildImage: jest.fn().mockResolvedValue('image-hash'),
   runImage: jest.fn(),
 }));
@@ -182,7 +181,7 @@ describe('Scan', () => {
     test('calls buildImage with the buildConfiguration', () => {
       expect(runImage).toHaveBeenCalledWith({
         imageHash: 'image-hash',
-        host: {
+        volumes: {
           output: '/tmp/prefix-random',
           target: resolve('..', '..', 'examples', 'nodejs'),
         },
