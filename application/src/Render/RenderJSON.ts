@@ -11,8 +11,13 @@ export class RenderJSON {
   }
 
   async render(): Promise<Buffer> {
-    this.emitter.emit('report:render:json');
+    this.emitter.emit('report:render:json:started');
 
-    return Buffer.from(JSON.stringify(await this.report.toObject(), null, 2));
+    const report = await this.report.toObject();
+    const output = JSON.stringify(report, null, 2);
+
+    this.emitter.emit('report:render:json:finished');
+
+    return Buffer.from(output);
   }
 }

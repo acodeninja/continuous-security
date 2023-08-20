@@ -26,7 +26,7 @@ To gain a better understanding of the severity levels please see [the appendix](
 * [Issue Statistics](#statistics)
 * [Overview of Issues](#overview-of-issues)<% overviewOfIssues.forEach(o => { %>
     * [<%= o.title %>](#<%= o.label %>)<% }) %>
-* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>
+* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupToObjectBy(issues, 'severity')).forEach(([severity, issues]) => { %>
     * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>-severity)<% }) %>
 * [Additional Information](#additional-information)
     * [What are severity levels?](#what-are-severity-levels)
@@ -58,7 +58,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 # Vulnerabilities
 
-<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>## <%= functions.capitalise(severity) %> Severity
+<% Object.entries(functions.groupToObjectBy(issues, 'severity')).forEach(([severity, issues]) => { %>## <%= functions.capitalise(severity) %> Severity
 
 <% issues.forEach(issue => { %>### <%= issue.title %> <% if (issue.package) { %>(version <%= issue.package.version %>)<% } %>
 

@@ -16,6 +16,7 @@ import HTMLTemplate from './assets/report.html.template.md';
 import HTMLTemplateWrapper from './assets/report.html.wrapper.html';
 import {executed} from './Helpers/Processes';
 import {RenderJSON} from './Render/RenderJSON';
+import {RenderMarkdown} from './Render/RenderMarkdown';
 
 export class Report {
   private readonly templates: Record<string, TemplateExecutor>;
@@ -109,7 +110,7 @@ export class Report {
     }), (key, value) => {
       if (
         String(value).length === 24 &&
-        String(value).match(/\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}.\d{3}Z/)
+          String(value).match(/\d{4}-\d{2}-\d{2}T(\d{2}:){2}\d{2}.\d{3}Z/)
       ) return new Date(value);
 
       if (key === 'code' || key === 'target' || key === 'name') return value;
@@ -118,16 +119,6 @@ export class Report {
     });
 
     return this.cached;
-  }
-
-  async toMarkdown(): Promise<[string, Buffer]> {
-    const report = await this.toObject();
-    this.emitter.emit('report:finished', '');
-
-    return [
-      'md',
-      Buffer.from(this.templates.markdown({...report, functions: this.reportFunctions})),
-    ];
   }
 
   async toHTML(): Promise<[string, Buffer]> {
@@ -204,10 +195,9 @@ export class Report {
   }
 
   async getReport(type: 'markdown' | 'json' | 'html' | 'pdf'): Promise<[string, Buffer]> {
-    this.emitter.emit('report:started', `generating output report in ${type}`);
     switch (type) {
     case 'markdown':
-      return await this.toMarkdown();
+      return ['md', await (new RenderMarkdown(this, this.emitter)).render()];
     case 'html':
       return await this.toHTML();
     case 'pdf':
