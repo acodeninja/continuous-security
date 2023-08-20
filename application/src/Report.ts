@@ -1,18 +1,16 @@
 import {basename} from 'path';
 import {readFile} from 'fs/promises';
 
-import {template, TemplateExecutor} from 'lodash';
-
 import {Emitter} from './Emitter';
 import {translate} from './DataSources/Translations';
 import {References} from './DataSources/References';
+
 import {RenderJSON} from './Render/RenderJSON';
 import {RenderMarkdown} from './Render/RenderMarkdown';
 import {RenderHTML} from './Render/RenderHTML';
 import {RenderPDF} from './Render/RenderPDF';
 
 export class Report {
-  private readonly templates: Record<string, TemplateExecutor>;
   private reports: Array<ScanReport> = [];
   private cached: ReportOutput;
   private emitter: Emitter;
