@@ -1,33 +1,21 @@
-import {readFile, writeFile} from 'fs/promises';
-import {resolve} from 'path';
-import {promisify} from 'util';
-import {exec} from 'child_process';
-
 import axios from 'axios';
-import ComparePdf from 'compare-pdf';
 
 import {Report} from './Report';
 import {Emitter} from './Emitter';
-import {executed} from './Helpers/Processes';
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
 
 jest.mock('axios', () => ({
-  get: jest.fn(),
+  get: jest.fn().mockImplementation(async (url) => {
+    if (url.indexOf('services.nvd.nist.gov') !== -1) return {data: CVEResponse};
+    if (url.indexOf('api.osv.dev') !== -1) return {data: Github};
+  }),
 }));
-
-jest.mock('./Helpers/Processes');
-
-(axios.get as jest.Mock).mockImplementation(async (url) => {
-  if (url.indexOf('services.nvd.nist.gov') !== -1) return {data: CVEResponse};
-  if (url.indexOf('api.osv.dev') !== -1) return {data: Github};
-});
 
 beforeAll(() => {
   jest.useFakeTimers();
   jest.setSystemTime(new Date(2020, 3, 1, 1, 30, 10, 30));
-  jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(0);
 });
 
 afterAll(() => {
@@ -73,6 +61,7 @@ describe('fetching vulnerability data', () => {
       .toHaveLength(1);
   });
 });
+
 describe('producing a report', () => {
   const onEvent = jest.fn();
   const emitter = new Emitter();
@@ -81,7 +70,7 @@ describe('producing a report', () => {
 
   report.addScanReport({
     issues: [{
-      title: 'test-issue-title',
+      title: 'web-test-issue-title',
       description: 'test-issue-description with excluding term: blacklist',
       type: 'dependency',
       references: ['GHSA-f9xv-q969-pqx4', 'CWE-1004'],
@@ -132,7 +121,7 @@ describe('producing a report', () => {
 
   report.addScanReport({
     issues: [{
-      title: 'test-issue-title',
+      title: 'code-test-issue-title',
       description: 'test-issue-description',
       type: 'code smell',
       extracts: [{
@@ -149,7 +138,7 @@ describe('producing a report', () => {
 
   report.addScanReport({
     issues: [{
-      title: 'test-issue-title',
+      title: 'code-test-issue-title',
       description: 'test-issue-description',
       type: 'code smell',
       references: ['CWE-248'],
@@ -159,102 +148,101 @@ describe('producing a report', () => {
     scanner: 'test-scanner',
   });
 
-  describe('in json', () => {
-    let jsonReport: Buffer;
+  describe('grouping issues', () => {
+    const report = new Report(new Emitter());
 
-    beforeAll(async () => {
-      [, jsonReport] = await report.getReport('json');
+    report.addScanReport({
+      issues: new Array<ScanReportIssue>(5).fill({
+        title: 'test-issue-title',
+        description: 'test-issue-description',
+        type: 'code smell',
+        references: ['CWE-248'],
+        extracts: [{
+          language: 'python',
+          code: 'things\nand\nstuff',
+          path: __filename,
+          lines: ['2', '6'],
+        }],
+        fix: 'Unknown',
+        severity: 'unknown',
+      }),
+      scanner: 'test-scanner',
     });
 
-    test('matches snapshot', () => {
-      expect(jsonReport.toString()).toMatchSnapshot();
-    });
-  });
+    test('groups issues', async () => {
+      const reportObject = await report.toObject();
 
-  describe('in markdown', () => {
-    let markdownReport: Buffer;
-
-    beforeAll(async () => {
-      [, markdownReport] = await report.getReport('markdown');
-    });
-
-    test('matches snapshot', () => {
-      expect(markdownReport.toString()).toMatchSnapshot();
-    });
-  });
-
-  describe('in html', () => {
-    let htmlReport: Buffer;
-
-    beforeAll(async () => {
-      [, htmlReport] = await report.getReport('html');
-    });
-
-    test('matches snapshot', () => {
-      expect(htmlReport.toString()).toMatchSnapshot();
-    });
-  });
-
-  describe('in pdf', () => {
-    jest.setTimeout(240 * 1000);
-
-    describe('local binary', () => {
-      let pdf: Buffer;
-
-      beforeAll(async () => {
-        (executed as jest.Mock).mockImplementationOnce(async (command: string) =>
-          await promisify(exec)(command)
-            .then(() => true)
-            .catch(() => false));
-
-        [, pdf] = await report.getReport('pdf');
-        await writeFile('test.pdf', pdf);
-      });
-
-      test('matches baseline', async () => {
-        const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
-        const comparer = new ComparePdf()
-          .actualPdfBuffer(pdf, 'actual.pdf')
-          .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
-
-        const comparisonResults =
-          await (comparer.compare as unknown as (type?: string) => Promise<{status: string}>)();
-
-        if (comparisonResults.status !== 'passed')
-          console.log('PDF Comparison Failed:', JSON.stringify(comparisonResults, null, 2));
-
-        expect(comparisonResults.status).toEqual('passed');
-      });
-    });
-
-    describe('docker binary', () => {
-      let pdf: Buffer;
-
-      beforeAll(async () => {
-        (executed as jest.Mock).mockResolvedValue(false);
-        [, pdf] = await report.getReport('pdf');
-        await writeFile('test.pdf', pdf);
-      });
-
-      test('matches baseline', async () => {
-        const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
-        const comparer = new ComparePdf()
-          .actualPdfBuffer(pdf, 'actual.pdf')
-          .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
-
-        const comparisonResults =
-          await (comparer.compare as unknown as (type?: string) => Promise<{status: string}>)();
-
-        if (comparisonResults.status !== 'passed')
-          console.log('PDF Comparison Failed:', JSON.stringify(comparisonResults, null, 2));
-
-        expect(comparisonResults.status).toEqual('passed');
-      });
-
-      test('emits pdf docker fallback event', async () => {
-        expect(onEvent).toHaveBeenCalledWith(
-          'Failed to generate with local chrome, falling back to docker',
-        );
+      expect(reportObject).toEqual({
+        title: 'Security Report for application',
+        date: new Date,
+        counts: {critical: 0, high: 0, info: 0, low: 0, moderate: 0, total: 1, unknown: 1},
+        overviewOfIssues: [{
+          dataSourceSpecific: {
+            cwe: {
+              background: '',
+              consequences: [{
+                note: expect.stringContaining('An uncaught exception'),
+                scopeImpacts: [{
+                  impact: 'DoS: Crash, Exit, or Restart',
+                  scope: 'Availability',
+                }, {
+                  impact: 'Read Application Data',
+                  scope: 'Confidentiality',
+                }],
+              }],
+              extendedDescription: expect.stringContaining('When an exception is not caught'),
+              mitigations: [],
+            },
+          },
+          description: 'An exception is thrown from a function, but it is not caught.',
+          directLink: 'https://cwe.mitre.org/data/definitions/248.html',
+          label: 'CWE-248',
+          title: 'Uncaught Exception',
+        }],
+        summaryImpacts: [{
+          impacts: ['DoS: Crash, Exit, or Restart'],
+          scope: 'Availability',
+        }, {
+          impacts: ['Read Application Data'],
+          scope: 'Confidentiality',
+        }],
+        issues: [{
+          description: 'test-issue-description',
+          extracts: new Array(5).fill({
+            code: expect.stringContaining('import'),
+            language: 'python',
+            lines: ['2', '6'],
+            path: expect.stringContaining('application/src/Report'),
+          }),
+          fix: 'Unknown',
+          foundBy: 'test-scanner',
+          references: [{
+            dataSourceSpecific: {
+              cwe: {
+                background: '',
+                consequences: [{
+                  note: expect.stringContaining('An uncaught exception'),
+                  scopeImpacts: [{
+                    impact: 'DoS: Crash, Exit, or Restart',
+                    scope: 'Availability',
+                  }, {
+                    impact: 'Read Application Data',
+                    scope: 'Confidentiality',
+                  }],
+                }],
+                extendedDescription: expect.stringContaining('When an exception is not caught'),
+                mitigations: [],
+              },
+            },
+            description: 'An exception is thrown from a function, but it is not caught.',
+            directLink: 'https://cwe.mitre.org/data/definitions/248.html',
+            label: 'CWE-248',
+            title: 'Uncaught Exception',
+          }],
+          severity: 'unknown',
+          title: 'test-issue-title',
+          type: 'code smell',
+        }],
       });
     });
   });

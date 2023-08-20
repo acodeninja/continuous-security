@@ -12,3 +12,8 @@ export const isURL = (input: unknown): input is URL => {
     return false;
   }
 };
+
+export const capitalise = (words: string) =>
+  words.split(' ')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');

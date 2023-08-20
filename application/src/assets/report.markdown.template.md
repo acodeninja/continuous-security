@@ -2,7 +2,7 @@
 
 # Summary
 
-This security report was conducted on <%= date.toLocaleDateString() %> at <%= date.toLocaleTimeString() %> (UTC<%= (date.getTimezoneOffset()/-60 >= 0 ? '+' : '') + date.getTimezoneOffset()/-60 %>).
+This security report was conducted on <%= functions.toDate(date) %> at <%= functions.toTime(date) %> (<%= functions.timezone(date) %>).
 A total of <%= counts.total %> issue(s) were found, <%= counts.critical %> of which may require immediate attention.
 
 This report is produced by running automated security scanning tools, which will likely not detect
@@ -26,7 +26,7 @@ To gain a better understanding of the severity levels please see [the appendix](
 * [Issue Statistics](#statistics)
 * [Overview of Issues](#overview-of-issues)<% overviewOfIssues.forEach(o => { %>
     * [<%= o.title %>](#<%= o.label %>)<% }) %>
-* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>
+* [Vulnerabilities](#vulnerabilities)<% Object.entries(functions.groupToObjectBy(issues, 'severity')).forEach(([severity, issues]) => { %>
     * [<%= functions.capitalise(severity) %> (<%= issues.length %>)](#<%= severity %>-severity)<% }) %>
 * [Additional Information](#additional-information)
     * [What are severity levels?](#what-are-severity-levels)
@@ -58,7 +58,7 @@ For more information see [<%= o.label %>](<%= o.directLink %>).
 
 # Vulnerabilities
 
-<% Object.entries(functions.groupBy(issues, 'severity')).forEach(([severity, issues]) => { %>## <%= functions.capitalise(severity) %> Severity
+<% Object.entries(functions.groupToObjectBy(issues, 'severity')).forEach(([severity, issues]) => { %>## <%= functions.capitalise(severity) %> Severity
 
 <% issues.forEach(issue => { %>### <%= issue.title %> <% if (issue.package) { %>(version <%= issue.package.version %>)<% } %>
 
