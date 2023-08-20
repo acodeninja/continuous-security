@@ -2,7 +2,7 @@ import {template} from 'lodash';
 
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';
-import {groupToObjectBy} from '../Helpers/Arrays';
+import {groupToObjectBy, sortObjectKeysBy} from '../Helpers/Arrays';
 import {capitalise} from '../Helpers/Strings';
 
 import HTMLTemplate from '../assets/report.html.template.md';
@@ -27,6 +27,7 @@ export class RenderHTML {
 
     const innerReport = convert.makeHtml(template(HTMLTemplate)({...report, functions: {
       groupToObjectBy,
+      sortObjectKeysBy,
       capitalise,
       toDate,
       toTime,

@@ -2,7 +2,7 @@ import {template} from 'lodash';
 
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';
-import {groupToObjectBy} from '../Helpers/Arrays';
+import {groupToObjectBy, sortObjectKeysBy} from '../Helpers/Arrays';
 import {capitalise} from '../Helpers/Strings';
 
 import MarkdownTemplate from '../assets/report.markdown.template.md';
@@ -23,6 +23,7 @@ export class RenderMarkdown {
     const report = await this.report.toObject();
     const output = template(MarkdownTemplate)({...report, functions: {
       groupToObjectBy,
+      sortObjectKeysBy,
       capitalise,
       toDate,
       toTime,
