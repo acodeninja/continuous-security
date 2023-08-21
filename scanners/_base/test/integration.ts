@@ -1,5 +1,5 @@
 import {exec, spawn} from 'child_process';
-import {resolve} from 'path';
+import {basename, resolve} from 'path';
 import {promisify} from 'util';
 import {chmod, mkdtemp, readdir, readFile} from 'fs/promises';
 import {join} from 'path';
@@ -10,14 +10,15 @@ export const setupIntegrationTests = (
   {afterAll, beforeAll, describe, expect, jest, test},
   scanner,
   process,
-  exampleCodebase,
+  exampleCodebase: string,
   reportFormat,
   configuration: Record<string, string> = {},
   outputReportFile = 'report.json',
 ) => {
   jest.setTimeout(120 * 1000);
   const runningCommands = [];
-  let codebasePath;
+  let codebasePath: string;
+  let temporaryDirectory: string;
 
   beforeAll(async () => {
     const fixturesPath = resolve(__dirname, '..', '..', '..', 'examples', 'codebases');
@@ -25,12 +26,13 @@ export const setupIntegrationTests = (
     const codebaseFixtures = await readdir(fixturesPath)
       .then(files => files.map(f => resolve(fixturesPath, f)))
       .then(files => files.filter(f => lstatSync(f).isDirectory()))
-      .then(files => files.map(path => {
-        const config = require(resolve(path, 'config.json'));
-
-        return [config.language, {path, ...config}];
-      }))
-      .then(fixtures => Object.fromEntries(fixtures));
+      .then(files => files.map(path => [
+        basename(path),
+        {
+          path,
+          config: require(resolve(path, 'config.json')),
+        },
+      ])).then(fixtures => Object.fromEntries(fixtures));
 
     if (codebaseFixtures[exampleCodebase]) {
       const fixture = codebaseFixtures[exampleCodebase];
@@ -46,40 +48,57 @@ export const setupIntegrationTests = (
           {cwd: fixture.path},
         ));
     }
+
+    const build = await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug}-${exampleCodebase} .`, {
+      cwd: resolve(process.cwd(), 'src', 'assets'),
+    });
+
+    temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}-${exampleCodebase}-`));
+
+    await chmod(temporaryDirectory, 0o777);
+
+    const runCommand = [
+      'docker run --rm --network host',
+      `-v ${codebasePath}:/target`,
+      `-v ${temporaryDirectory}:/output`,
+    ];
+
+    Object.entries(configuration).forEach(([name, value]) => {
+      runCommand.push(`--env "CONFIG_${name.toUpperCase()}=${value}"`);
+    });
+
+    const run = await promisify(exec)(
+      runCommand.concat([`integration-test-${scanner.slug}-${exampleCodebase}`]).join(' '),
+      {cwd: resolve(process.cwd())},
+    );
+
+    if (process.env['DEBUG']) console.log({build, run});
+  });
+
+  afterAll(async () => {
+    runningCommands.forEach(c => c.kill());
+
+    const {stdout: containers} = await promisify(exec)([
+      'docker ps -a --format="{{.Image}} {{.ID}}"',
+      `grep "integration-test-${scanner.slug}-${exampleCodebase}"`,
+      "cut -d' ' -f2",
+    ].join(' | '));
+
+    const {stdout: images} = await promisify(exec)([
+      'docker images --format="{{.Repository}} {{.ID}}"',
+      `grep "integration-test-${scanner.slug}-${exampleCodebase}"`,
+      "cut -d' ' -f2",
+    ].join(' | '));
+
+    const foundImages = images.split('\n').filter(i => !!i);
+
+    if (foundImages.length > 0)
+      await promisify(exec)(`docker rmi -f ${foundImages.join(' ')}`);
+
+    await promisify(exec)(`rm -rf ${temporaryDirectory}`);
   });
 
   describe(`running the docker container against a ${exampleCodebase} application`, () => {
-    let temporaryDirectory;
-
-    beforeAll(async () => {
-      await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug} .`, {
-        cwd: resolve(process.cwd(), 'src', 'assets'),
-      });
-
-      temporaryDirectory = await mkdtemp(join(tmpdir(), `integration-test-${scanner.slug}`));
-
-      await chmod(temporaryDirectory, 0o777);
-
-      const runCommand = [
-        'docker run --rm --network host',
-        `-v ${codebasePath}:/target`,
-        `-v ${temporaryDirectory}:/output`,
-      ];
-
-      Object.entries(configuration).forEach(([name, value]) => {
-        runCommand.push(`--env "CONFIG_${name.toUpperCase()}=${value}"`);
-      });
-
-      await promisify(exec)(
-        runCommand.concat([`integration-test-${scanner.slug}`]).join(' '),
-        {cwd: resolve(process.cwd())},
-      );
-    });
-
-    afterAll(async () => {
-      await promisify(exec)(`rm -rf ${temporaryDirectory}`);
-    });
-
     test('creates the output report', async () => {
       await expect(readdir(temporaryDirectory))
         .resolves.toEqual(expect.arrayContaining([outputReportFile]));
@@ -89,26 +108,5 @@ export const setupIntegrationTests = (
       await expect(scanner.report(temporaryDirectory))
         .resolves.toEqual(reportFormat);
     });
-  });
-
-  afterAll(async () => {
-    runningCommands.forEach(c => c.kill());
-
-    const {stdout: containers} = await promisify(exec)([
-      'docker ps -a --format="{{.Image}} {{.ID}}"',
-      `grep "integration-test-${scanner.slug}"`,
-      "cut -d' ' -f2",
-    ].join(' | '));
-
-    const {stdout: images} = await promisify(exec)([
-      'docker images --format="{{.Repository}} {{.ID}}"',
-      `grep "integration-test-${scanner.slug}"`,
-      "cut -d' ' -f2",
-    ].join(' | '));
-
-    const foundImages = images.split('\n').filter(i => !!i);
-
-    if (foundImages.length > 0)
-      await promisify(exec)(`docker rmi -f ${foundImages.join(' ')}`);
   });
 };
