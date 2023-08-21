@@ -122,6 +122,9 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
+      - name: install base
+        run: npm ci
+        working-directory: scanners/_base
       - name: install
         run: npm ci
         working-directory: scanners/${{ matrix.scanner }}/
