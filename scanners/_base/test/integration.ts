@@ -78,12 +78,6 @@ export const setupIntegrationTests = (
   afterAll(async () => {
     runningCommands.forEach(c => c.kill());
 
-    const {stdout: containers} = await promisify(exec)([
-      'docker ps -a --format="{{.Image}} {{.ID}}"',
-      `grep "integration-test-${scanner.slug}-${exampleCodebase}"`,
-      "cut -d' ' -f2",
-    ].join(' | '));
-
     const {stdout: images} = await promisify(exec)([
       'docker images --format="{{.Repository}} {{.ID}}"',
       `grep "integration-test-${scanner.slug}-${exampleCodebase}"`,
