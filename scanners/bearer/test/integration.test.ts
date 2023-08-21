@@ -2,7 +2,6 @@ import scanner from '../src/main';
 import {setupIntegrationTests} from '../../_base/test/integration';
 
 setupIntegrationTests(
-  {afterAll, beforeAll, describe, expect, jest, test},
   scanner,
   process,
   'ruby',
@@ -27,7 +26,6 @@ setupIntegrationTests(
 );
 
 setupIntegrationTests(
-  {afterAll, beforeAll, describe, expect, jest, test},
   scanner,
   process,
   'javascript',

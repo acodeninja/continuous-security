@@ -5,13 +5,13 @@ import {chmod, mkdtemp, readdir, readFile} from 'fs/promises';
 import {join} from 'path';
 import {tmpdir} from 'os';
 import {lstatSync} from "fs";
+import {jest, beforeAll, afterAll, expect, test, describe} from '@jest/globals';
 
 export const setupIntegrationTests = (
-  {afterAll, beforeAll, describe, expect, jest, test},
-  scanner,
-  process,
+  scanner: { slug: string; report: (path: string) => unknown; },
+  process: { cwd: () => string; env: { [x: string]: any; }; },
   exampleCodebase: string,
-  reportFormat,
+  reportFormat: any,
   configuration: Record<string, string> = {},
   outputReportFile = 'report.json',
 ) => {
@@ -28,10 +28,7 @@ export const setupIntegrationTests = (
       .then(files => files.filter(f => lstatSync(f).isDirectory()))
       .then(files => files.map(path => [
         basename(path),
-        {
-          path,
-          config: require(resolve(path, 'config.json')),
-        },
+        {path, ...require(resolve(path, 'config.json'))},
       ])).then(fixtures => Object.fromEntries(fixtures));
 
     if (codebaseFixtures[exampleCodebase]) {
