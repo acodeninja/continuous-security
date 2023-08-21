@@ -21,3 +21,24 @@ setupIntegrationTests(
     }]),
   },
 );
+
+setupIntegrationTests(
+  scanner,
+  process,
+  'python-poetry',
+  {
+    scanner: '@continuous-security/scanner-python-pip-audit',
+    issues: expect.arrayContaining([{
+      title: 'Vulnerable Third-Party Library `cairosvg`',
+      severity: 'unknown',
+      description: '',
+      type: 'dependency',
+      fix: 'unknown',
+      package: {
+        name: 'cairosvg',
+        version: '2.6.0',
+      },
+      references: ['PYSEC-2023-9'],
+    }]),
+  },
+);
