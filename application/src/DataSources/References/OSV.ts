@@ -32,7 +32,7 @@ export class OSV {
           },
         },
       };
-    } catch (e) {
+    } catch (_e) {
       throw new Error(`failed to get id ${id}`);
     }
   }

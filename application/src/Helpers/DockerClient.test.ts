@@ -1,7 +1,7 @@
 import Docker from 'dockerode';
 import {Readable} from 'stream';
 import Modem from 'docker-modem';
-import {buildImage, runImage} from './DockerClient';
+import {buildImage, extractImageHash, runImage} from './DockerClient';
 import {getDockerSocketPath} from './DockerSocket';
 import {createWriteStream} from 'fs';
 
@@ -36,6 +36,61 @@ describe('buildImage', () => {
     });
   });
 
+  describe('when using BuildKit builder', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(null, [
+        {stream: 'writing image sha256:ab12cd34ef56 done\n'},
+      ]);
+    });
+
+    let result: string;
+
+    beforeAll(async () => {
+      result = await buildImage({
+        files: {Dockerfile: 'FROM alpine'},
+      });
+    });
+
+    test('extracts the image hash', () => {
+      expect(result).toBe('ab12cd34ef56');
+    });
+  });
+
+  describe('when classic builder without aux', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(null, [
+        {stream: 'Step 1/2 : FROM alpine\n'},
+        {stream: 'Successfully built de78fa90bc12\n'},
+      ]);
+    });
+
+    let result: string;
+
+    beforeAll(async () => {
+      result = await buildImage({
+        files: {Dockerfile: 'FROM alpine'},
+      });
+    });
+
+    test('extracts the image hash', () => {
+      expect(result).toBe('de78fa90bc12');
+    });
+  });
+
+  describe('when the build fails', () => {
+    const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
+    followProgress.mockImplementationOnce((builder, onFinish) => {
+      onFinish(null, [{error: 'The command returned a non-zero code: 100'}]);
+    });
+
+    test('rejects with the build error', async () => {
+      await expect(buildImage({files: {Dockerfile: 'FROM alpine'}}))
+        .rejects.toThrow('The command returned a non-zero code: 100');
+    });
+  });
+
   describe('when an error occurs', () => {
     const followProgress = jest.spyOn(Modem.prototype, 'followProgress');
     followProgress.mockImplementationOnce((builder, onFinish) => {
@@ -53,6 +108,41 @@ describe('buildImage', () => {
     test('Modem.followProgress was called', () => {
       expect(followProgress).toHaveBeenCalledWith(expect.any(Readable), expect.any(Function));
     });
+  });
+});
+
+describe('extractImageHash', () => {
+  test('extracts hash from classic builder aux format', () => {
+    const result = [{}, {aux: {ID: 'sha256:abc123def456'}}];
+    expect(extractImageHash(result)).toBe('abc123def456');
+  });
+
+  test('extracts hash from classic builder stream format', () => {
+    const result = [
+      {stream: 'Step 1/2 : FROM alpine\n'},
+      {stream: 'Successfully built abc123def456\n'},
+    ];
+    expect(extractImageHash(result)).toBe('abc123def456');
+  });
+
+  test('extracts hash from BuildKit stream format', () => {
+    const result = [
+      {stream: 'writing image sha256:abc123def456789 done\n'},
+    ];
+    expect(extractImageHash(result)).toBe('abc123def456789');
+  });
+
+  test('prefers aux format over stream formats', () => {
+    const result = [
+      {aux: {ID: 'sha256:aaa111'}},
+      {stream: 'Successfully built bbb222\n'},
+    ];
+    expect(extractImageHash(result)).toBe('aaa111');
+  });
+
+  test('returns undefined when no hash is found', () => {
+    const result = [{stream: 'some random output\n'}];
+    expect(extractImageHash(result)).toBeUndefined();
   });
 });
 

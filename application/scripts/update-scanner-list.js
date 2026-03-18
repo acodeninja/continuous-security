@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-/* eslint-disable @typescript-eslint/no-var-requires */
+ 
 const {readdir, writeFile, readFile} = require('fs/promises');
 const {resolve} = require('path');
-/* eslint-enable */
+ 
 
 readdir(resolve(process.cwd(), '..', 'scanners'))
   .then(l => l.filter(i => i !== '_base'))

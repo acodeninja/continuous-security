@@ -6,6 +6,30 @@ import {createWriteStream} from 'fs';
 import {isURL} from './Strings';
 import {packFiles} from './PackFiles';
 
+export const extractImageHash = (result: Array<Record<string, unknown>>): string | undefined => {
+  const auxEntry = result.find(r => !!r.aux);
+  if (auxEntry) {
+    return (auxEntry.aux as {ID: string}).ID.replace(/^sha256:/, '');
+  }
+
+  const builtEntry = result.find(
+    r => typeof r.stream === 'string' && r.stream.startsWith('Successfully built '),
+  );
+  if (builtEntry) {
+    return (builtEntry.stream as string).replace('Successfully built ', '').trim();
+  }
+
+  const sha256Match = result
+    .map(r => typeof r.stream === 'string' ? r.stream : '')
+    .join('')
+    .match(/sha256:([a-f0-9]+)/);
+  if (sha256Match) {
+    return sha256Match[1];
+  }
+
+  return undefined;
+};
+
 export const buildImage = async (buildConfiguration: ScannerBuildConfiguration):
   Promise<string> => {
   const packedFiles = await packFiles(buildConfiguration.files);
@@ -21,7 +45,9 @@ export const buildImage = async (buildConfiguration: ScannerBuildConfiguration):
       builder,
       (error, result) => {
         if (error) return reject(error);
-        resolve(result.find(r => !!r.aux)?.aux.ID.split(':')?.[1]);
+        const buildError = result.find(r => !!r.error);
+        if (buildError) return reject(new Error(buildError.error as string));
+        resolve(extractImageHash(result));
       },
     );
   });

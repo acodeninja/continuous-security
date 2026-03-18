@@ -22,7 +22,8 @@ export class CWE {
   getById(id: string): ReportOutputIssueReference {
     const parsedId = id.toLowerCase().replace('cwe-', '');
 
-    const [weakness] = select(`//*[local-name(.)='Weakness' and @id='${parsedId}']`, this.data);
+    const result = select(`//*[local-name(.)='Weakness' and @id='${parsedId}']`, this.data);
+    const weakness = Array.isArray(result) ? result[0] : undefined;
 
     if (weakness) {
       const queryable = XmlQuery(XmlReader.parseSync(weakness.toString()));

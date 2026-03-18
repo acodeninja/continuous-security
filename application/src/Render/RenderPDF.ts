@@ -48,19 +48,27 @@ export class RenderPDF {
     const pdfPath = resolve(htmlCacheLocation, 'report.pdf');
     const htmlPath = resolve(htmlCacheLocation, 'report.html');
 
-    const chromeRun = await executed(
-      `google-chrome \
-        --headless \
-        --disable-gpu \
-        --no-margins \
-        --no-pdf-header-footer \
-        --print-to-pdf="${pdfPath}" \
-        ${htmlPath}`,
-    );
+    const chromeExecutables = [
+      'google-chrome',
+      'chromium',
+      '"/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"',
+      '"/Applications/Chromium.app/Contents/MacOS/Chromium"',
+    ];
 
-    if (chromeRun) {
-      this.emitter.emit('report:render:pdf:finished');
-      return Buffer.from(await readFile(pdfPath));
+    for (const executable of chromeExecutables) {
+      const chromeRun = await executed(
+        `${executable} ` +
+          '--headless ' + 
+          '--disable-gpu ' + 
+          '--no-pdf-header-footer ' + 
+          `--print-to-pdf="${pdfPath}" `+
+          `${htmlPath}`,
+      );
+
+      if (chromeRun) {
+        this.emitter.emit('report:render:pdf:finished');
+        return Buffer.from(await readFile(pdfPath));
+      }
     }
 
     this.emitter.emit(
@@ -68,20 +76,18 @@ export class RenderPDF {
       'Failed to generate with local chrome, falling back to docker',
     );
 
-    const Dockerfile = 'FROM ubuntu:latest\n' +
-        'ADD https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb c.deb\n' +
-        'RUN apt-get update && apt-get install -y ./c.deb && apt-get clean\n';
+    const Dockerfile = 'FROM debian:bookworm-slim\n' +
+        'RUN apt-get update && apt-get install -y chromium && apt-get clean\n';
 
     const imageHash = await buildImage({files: {Dockerfile}});
 
     await runImage({
       imageHash,
       command: [
-        'google-chrome',
+        'chromium',
         '--headless',
         '--no-sandbox',
         '--disable-gpu',
-        '--no-margins',
         '--no-pdf-header-footer',
         '--print-to-pdf=/output/report.pdf',
         '/output/report.html',
