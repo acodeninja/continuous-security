@@ -1,4 +1,4 @@
-FROM owasp/zap2docker-stable
+FROM zaproxy/zap-stable
 
 USER root
 RUN apt-get update && apt-get install -y gettext-base && rm -rf /var/lib/apt/lists/*
