@@ -10,8 +10,8 @@ jobs:
     name: application / publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -31,7 +31,7 @@ jobs:
     outputs:
       scanners: ${{ steps.scanners.outputs.scanners }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: scanners
         run: echo "scanners=$(ls -1 ./scanners | jq -Rnrc '[inputs] | map(select(. != "_base"))')" >> $GITHUB_OUTPUT
 
@@ -43,8 +43,8 @@ jobs:
       matrix:
         scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'

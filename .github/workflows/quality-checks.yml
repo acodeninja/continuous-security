@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check and correct pull request
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const {owner, repo} = context.repo;
@@ -51,10 +51,10 @@ jobs:
   application:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -76,7 +76,7 @@ jobs:
         working-directory: application/
         continue-on-error: true
       - if: steps.test.outcome != 'success'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: pdf-failure-diff
           path: |
@@ -85,7 +85,7 @@ jobs:
         run: exit 1
       - run: npm run build
         working-directory: application/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v7
         with:
           name: application
           path: |
@@ -98,7 +98,7 @@ jobs:
     outputs:
       scanners: ${{ steps.scanners.outputs.scanners }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: scanners
         run: echo "scanners=$(ls -1 ./scanners | jq -Rnrc '[inputs] | map(select(. != "_base"))')" >> $GITHUB_OUTPUT
 
@@ -110,10 +110,10 @@ jobs:
       matrix:
         scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
@@ -122,7 +122,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - name: install poetry
@@ -147,7 +147,7 @@ jobs:
         working-directory: scanners/${{ matrix.scanner }}/
       - run: npm run build
         working-directory: scanners/${{ matrix.scanner }}/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.scanner }}
           path: |
@@ -159,16 +159,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ application, scanners ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: application/package-lock.json
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           path: artefacts/
       - run: |
@@ -194,16 +194,16 @@ jobs:
       matrix:
         scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v8
         with:
           path: artefacts/
       - run: |

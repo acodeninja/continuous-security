@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: main
 
       - name: get release version
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const {title} = context.payload.pull_request;
@@ -65,7 +65,7 @@ jobs:
           git push
 
       - name: create draft release
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const {owner, repo} = context.repo;
