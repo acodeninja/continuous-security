@@ -1,11 +1,16 @@
-import {exec} from 'child_process';
-import {executed} from './Processes';
-jest.mock('child_process');
+import {jest, describe, test, expect} from '@jest/globals';
+
+jest.unstable_mockModule('child_process', () => ({
+  exec: jest.fn(),
+}));
+
+const {exec} = await import('child_process');
+const {executed} = await import('./Processes');
 
 describe('executed', () => {
   describe('successful execution', () => {
     test('returns true', async () => {
-      (exec as unknown as jest.Mock).mockImplementationOnce((_c, _o, callback) => {
+      (exec as unknown as jest.Mock<any>).mockImplementationOnce((_c, _o, callback) => {
         callback(null, '', '');
       });
 
@@ -15,7 +20,7 @@ describe('executed', () => {
   });
   describe('unsuccessful execution', () => {
     test('returns false', async () => {
-      (exec as unknown as jest.Mock).mockImplementationOnce((_c, _o, callback) => {
+      (exec as unknown as jest.Mock<any>).mockImplementationOnce((_c, _o, callback) => {
         callback(new Error, '', '');
       });
 

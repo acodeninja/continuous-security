@@ -1,14 +1,15 @@
-import {Report} from '../Report';
-import {Emitter} from '../Emitter';
-import {RenderHTML} from './RenderHTML';
-
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {emptyReport, fullReport} from '../../tests/fixtures/Reports';
 
-jest.mock('../Helpers/Dates', () => ({
+jest.unstable_mockModule('../Helpers/Dates', () => ({
   toDate: jest.fn().mockReturnValue('01/04/2020'),
   toTime: jest.fn().mockReturnValue('01:30:10'),
   timezone: jest.fn().mockReturnValue('UTC+0'),
 }));
+
+const {Report} = await import('../Report');
+const {Emitter} = await import('../Emitter');
+const {RenderHTML} = await import('./RenderHTML');
 
 describe('RenderHTML', () => {
   describe.each([

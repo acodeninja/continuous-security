@@ -1,4 +1,5 @@
-import {template} from 'lodash';
+import _ from 'lodash';
+const {template} = _;
 
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';
@@ -7,7 +8,8 @@ import {capitalise} from '../Helpers/Strings';
 
 import HTMLTemplate from '../assets/report.html.template.md';
 import HTMLTemplateWrapper from '../assets/report.html.wrapper.html';
-import {Converter as Showdown} from 'showdown';
+import showdown from 'showdown';
+const {Converter: Showdown} = showdown;
 import {timezone, toDate, toTime} from '../Helpers/Dates';
 
 export class RenderHTML {

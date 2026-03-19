@@ -1,14 +1,20 @@
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import Docker from 'dockerode';
 import {Readable} from 'stream';
 import Modem from 'docker-modem';
-import {buildImage, extractImageHash, runImage} from './DockerClient';
-import {getDockerSocketPath} from './DockerSocket';
-import {createWriteStream} from 'fs';
 
-jest.mock('fs');
-jest.mock('./DockerSocket');
+jest.unstable_mockModule('fs', () => ({
+  createWriteStream: jest.fn(),
+}));
+jest.unstable_mockModule('./DockerSocket', () => ({
+  getDockerSocketPath: jest.fn(),
+}));
 
-(getDockerSocketPath as jest.Mock).mockResolvedValue('/var/run/docker.sock');
+const {createWriteStream} = await import('fs');
+const {getDockerSocketPath} = await import('./DockerSocket');
+const {buildImage, extractImageHash, runImage} = await import('./DockerClient');
+
+(getDockerSocketPath as jest.Mock<any>).mockResolvedValue('/var/run/docker.sock');
 
 describe('buildImage', () => {
   const dockerBuildImage = jest.spyOn(Docker.prototype, 'buildImage');

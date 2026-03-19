@@ -1,4 +1,5 @@
-import {template} from 'lodash';
+import _ from 'lodash';
+const {template} = _;
 
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';

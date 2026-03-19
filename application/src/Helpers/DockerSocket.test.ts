@@ -1,14 +1,20 @@
-import {access, constants} from 'fs/promises';
-import {getDockerSocketPath} from './DockerSocket';
+import {jest, describe, test, expect, beforeAll, afterAll} from '@jest/globals';
+import {constants} from 'fs/promises';
 
-jest.mock('fs/promises');
+jest.unstable_mockModule('fs/promises', () => ({
+  access: jest.fn(),
+  constants,
+}));
+
+const {access} = await import('fs/promises');
+const {getDockerSocketPath} = await import('./DockerSocket');
 
 describe('getDockerSocketPath', () => {
   describe('when using docker desktop',  () => {
     let socketPath: string;
 
     beforeAll(async () => {
-      (access as jest.Mock).mockImplementation(async (file) => {
+      (access as jest.Mock<any>).mockImplementation(async (file) => {
         if (file === '/var/run/docker.sock') return null;
         throw new Error('file does not exist');
       });
@@ -21,7 +27,7 @@ describe('getDockerSocketPath', () => {
     });
 
     test('checks if /var/run/docker.sock permissions are correct', () => {
-      expect(access as jest.Mock)
+      expect(access as jest.Mock<any>)
         .toHaveBeenCalledWith('/var/run/docker.sock', constants.R_OK | constants.W_OK);
     });
   });
@@ -32,7 +38,7 @@ describe('getDockerSocketPath', () => {
 
     beforeAll(async () => {
       process.env['HOME'] = '/home/test-user';
-      (access as jest.Mock).mockImplementation(async (file) => {
+      (access as jest.Mock<any>).mockImplementation(async (file) => {
         if (file === '/home/test-user/.rd/docker.sock') return null;
         throw new Error('file does not exist');
       });
@@ -49,7 +55,7 @@ describe('getDockerSocketPath', () => {
     });
 
     test('checks if /home/test-user/.rd/docker.sock permissions are correct', () => {
-      expect(access as jest.Mock)
+      expect(access as jest.Mock<any>)
         .toHaveBeenCalledWith('/home/test-user/.rd/docker.sock', constants.R_OK | constants.W_OK);
     });
   });
@@ -59,7 +65,7 @@ describe('getDockerSocketPath', () => {
     const oldHome = process.env['HOME'];
     beforeAll(async () => {
       process.env['HOME'] = '/home/test-user';
-      (access as jest.Mock).mockImplementation(async () => {
+      (access as jest.Mock<any>).mockImplementation(async () => {
         throw new Error('file does not exist');
       });
     });

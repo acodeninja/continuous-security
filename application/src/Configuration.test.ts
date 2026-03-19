@@ -1,5 +1,4 @@
-import {access, readFile} from 'fs/promises';
-import {Configuration, ConfigurationLoadError} from './Configuration';
+import {jest, describe, test, expect, beforeAll, afterAll} from '@jest/globals';
 import {
   JSONConfiguration,
   JSONConfigurationWithExtraConfig,
@@ -7,10 +6,13 @@ import {
   YAMLConfigurationWithExtraConfig,
 } from '../tests/fixtures/Configuration';
 
-jest.mock('fs/promises', () => ({
+jest.unstable_mockModule('fs/promises', () => ({
   access: jest.fn(),
   readFile: jest.fn(),
 }));
+
+const {access, readFile} = await import('fs/promises');
+const {Configuration, ConfigurationLoadError} = await import('./Configuration');
 
 describe('Configuration', () => {
   describe('Configuration.load', () => {
@@ -19,18 +21,18 @@ describe('Configuration', () => {
         let configuration: Configuration;
 
         beforeAll(async () => {
-          (access as jest.Mock).mockImplementation(async file => {
+          (access as jest.Mock<any>).mockImplementation(async file => {
             if (file.endsWith('.json')) return null;
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(JSONConfiguration));
+          (readFile as jest.Mock<any>).mockResolvedValueOnce(Buffer.from(JSONConfiguration));
 
           configuration = await Configuration.load('/test');
         });
 
         afterAll(() => {
-          (access as jest.Mock).mockReset();
+          (access as jest.Mock<any>).mockReset();
         });
 
         test('attempts to read from .continuous-security.json', () => {
@@ -50,12 +52,12 @@ describe('Configuration', () => {
         let configuration: Configuration;
 
         beforeAll(async () => {
-          (access as jest.Mock).mockImplementation(async file => {
+          (access as jest.Mock<any>).mockImplementation(async file => {
             if (file.endsWith('.json')) return null;
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(
+          (readFile as jest.Mock<any>).mockResolvedValueOnce(
             Buffer.from(JSONConfigurationWithExtraConfig),
           );
 
@@ -63,7 +65,7 @@ describe('Configuration', () => {
         });
 
         afterAll(() => {
-          (access as jest.Mock).mockReset();
+          (access as jest.Mock<any>).mockReset();
         });
 
         test('attempts to read from .continuous-security.json', () => {
@@ -88,18 +90,18 @@ describe('Configuration', () => {
       describe('with only scanner names', () => {
         let configuration: Configuration;
         beforeAll(async () => {
-          (access as jest.Mock).mockImplementation(async file => {
+          (access as jest.Mock<any>).mockImplementation(async file => {
             if (file.endsWith('.yaml')) return null;
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(Buffer.from(YAMLConfiguration));
+          (readFile as jest.Mock<any>).mockResolvedValueOnce(Buffer.from(YAMLConfiguration));
 
           configuration = await Configuration.load('/test');
         });
 
         afterAll(() => {
-          (access as jest.Mock).mockReset();
+          (access as jest.Mock<any>).mockReset();
         });
 
         test('attempts to read from .continuous-security.yaml', () => {
@@ -118,12 +120,12 @@ describe('Configuration', () => {
       describe('with additional scanner config', () => {
         let configuration: Configuration;
         beforeAll(async () => {
-          (access as jest.Mock).mockImplementation(async file => {
+          (access as jest.Mock<any>).mockImplementation(async file => {
             if (file.endsWith('.yaml')) return null;
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(
+          (readFile as jest.Mock<any>).mockResolvedValueOnce(
             Buffer.from(YAMLConfigurationWithExtraConfig),
           );
 
@@ -131,7 +133,7 @@ describe('Configuration', () => {
         });
 
         afterAll(() => {
-          (access as jest.Mock).mockReset();
+          (access as jest.Mock<any>).mockReset();
         });
 
         test('attempts to read from .continuous-security.yaml', () => {
@@ -153,12 +155,12 @@ describe('Configuration', () => {
 
       describe('with the extension .yml', () => {
         beforeAll(async () => {
-          (access as jest.Mock).mockImplementation(async file => {
+          (access as jest.Mock<any>).mockImplementation(async file => {
             if (file.endsWith('.yml')) return null;
             throw new Error('file does not exist');
           });
 
-          (readFile as jest.Mock).mockResolvedValueOnce(
+          (readFile as jest.Mock<any>).mockResolvedValueOnce(
             Buffer.from(YAMLConfigurationWithExtraConfig),
           );
 
@@ -166,7 +168,7 @@ describe('Configuration', () => {
         });
 
         afterAll(() => {
-          (access as jest.Mock).mockReset();
+          (access as jest.Mock<any>).mockReset();
         });
 
         test('attempts to read from .continuous-security.yml', () => {
@@ -178,12 +180,12 @@ describe('Configuration', () => {
 
     describe('a non-existent configuration file', () => {
       beforeAll(async () => {
-        (access as jest.Mock).mockRejectedValue(new Error('File does not exist'));
+        (access as jest.Mock<any>).mockRejectedValue(new Error('File does not exist'));
         await Configuration.load('/test').catch(() => null);
       });
 
       afterAll(() => {
-        (access as jest.Mock).mockReset();
+        (access as jest.Mock<any>).mockReset();
       });
 
       test('attempts to read from /test/.continuous-security.json', () => {

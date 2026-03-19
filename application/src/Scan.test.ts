@@ -1,7 +1,5 @@
-import {Scan, ValidationError} from './Scan';
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {Emitter} from './Emitter';
-import {buildImage, runImage} from './Helpers/DockerClient';
-import {destroyTemporaryFolder, makeTemporaryFolder} from './Helpers/Files';
 import {resolve} from 'path';
 import {NpmAuditReport} from '../tests/fixtures/NpmAuditReport';
 
@@ -30,19 +28,23 @@ const scanner: Scanner = {
   report: jest.fn().mockResolvedValue({}),
 };
 
-jest.mock('./Helpers/Files', () => ({
+jest.unstable_mockModule('./Helpers/Files', () => ({
   makeTemporaryFolder: jest.fn().mockResolvedValue('/tmp/prefix-random'),
   destroyTemporaryFolder: jest.fn(),
 }));
 
-jest.mock('./Helpers/DockerClient', () => ({
+jest.unstable_mockModule('./Helpers/DockerClient', () => ({
   buildImage: jest.fn().mockResolvedValue('image-hash'),
   runImage: jest.fn(),
 }));
 
-jest.mock('fs/promises', () => ({
+jest.unstable_mockModule('fs/promises', () => ({
   readFile: jest.fn().mockResolvedValue(NpmAuditReport),
 }));
+
+const {buildImage, runImage} = await import('./Helpers/DockerClient');
+const {destroyTemporaryFolder, makeTemporaryFolder} = await import('./Helpers/Files');
+const {Scan, ValidationError} = await import('./Scan');
 
 const processCwd = jest.spyOn(process, 'cwd');
 processCwd.mockReturnValue(resolve('..', '..', 'examples', 'nodejs'));
@@ -194,7 +196,7 @@ describe('Scan', () => {
 
     describe('with no image hash', () => {
       test('raises "imageHash not found" error', async () => {
-        (buildImage as jest.Mock).mockResolvedValueOnce(undefined);
+        (buildImage as jest.Mock<any>).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
         const scan = new Scan(emitter, scanner, configuration, process.cwd());
         await scan.setup();
@@ -205,7 +207,7 @@ describe('Scan', () => {
 
     describe('with no temporary directory', () => {
       test('raises "output directory not found" error', async () => {
-        (makeTemporaryFolder as jest.Mock).mockResolvedValueOnce(undefined);
+        (makeTemporaryFolder as jest.Mock<any>).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
         const scan = new Scan(emitter, scanner, configuration, process.cwd());
         await scan.setup();
@@ -232,7 +234,7 @@ describe('Scan', () => {
 
     describe('where there is no temporary directory', () => {
       test('raises "output directory not found" error', async () => {
-        (makeTemporaryFolder as jest.Mock).mockResolvedValueOnce(undefined);
+        (makeTemporaryFolder as jest.Mock<any>).mockResolvedValueOnce(undefined);
         const emitter = new Emitter();
         const scan = new Scan(emitter, scanner, configuration, process.cwd());
         await scan.setup();

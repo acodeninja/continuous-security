@@ -1,3 +1,5 @@
+import {jest} from '@jest/globals';
+
 export const TestScanner: Scanner = {
   name: '@continuous-security/scanner-test',
   slug: 'test',

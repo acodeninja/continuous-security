@@ -1,21 +1,84 @@
-import {Report} from '../Report';
-import {Emitter} from '../Emitter';
-import {RenderPDF} from './RenderPDF';
-
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {fullReport} from '../../tests/fixtures/Reports';
 import {resolve} from 'path';
-import ComparePdf from 'compare-pdf';
+import {pdfToPng} from 'pdf-to-png-converter';
+import pixelmatch from 'pixelmatch';
+import {PNG} from 'pngjs';
 import {readFile, writeFile} from 'fs/promises';
-import {executed} from '../Helpers/Processes';
 import {promisify} from 'util';
 import {exec} from 'child_process';
 
-jest.mock('../Helpers/Processes');
-jest.mock('../Helpers/Dates', () => ({
+jest.unstable_mockModule('../Helpers/Processes', () => ({
+  executed: jest.fn(),
+}));
+
+jest.unstable_mockModule('../Helpers/Dates', () => ({
   toDate: jest.fn().mockReturnValue('01/04/2020'),
   toTime: jest.fn().mockReturnValue('01:30:10'),
   timezone: jest.fn().mockReturnValue('UTC+0'),
 }));
+
+const {executed} = await import('../Helpers/Processes');
+const {Report} = await import('../Report');
+const {Emitter} = await import('../Emitter');
+const {RenderPDF} = await import('./RenderPDF');
+
+async function comparePdfBuffers(
+  actualBuffer: Buffer,
+  baselineBuffer: Buffer,
+  threshold = 0.1,
+): Promise<{status: string; message: string}> {
+  const actualArray = new Uint8Array(actualBuffer);
+  const baselineArray = new Uint8Array(baselineBuffer);
+  const [actualPages, baselinePages] = await Promise.all([
+    pdfToPng(actualArray.buffer as ArrayBuffer, {disableFontFace: true, verbosityLevel: 0}),
+    pdfToPng(baselineArray.buffer as ArrayBuffer, {disableFontFace: true, verbosityLevel: 0}),
+  ]);
+
+  if (actualPages.length !== baselinePages.length) {
+    return {
+      status: 'failed',
+      message: `Page count mismatch: actual has ${actualPages.length} pages, ` +
+        `baseline has ${baselinePages.length} pages`,
+    };
+  }
+
+  for (let i = 0; i < actualPages.length; i++) {
+    const actual = PNG.sync.read(actualPages[i].content);
+    const baseline = PNG.sync.read(baselinePages[i].content);
+
+    if (actual.width !== baseline.width || actual.height !== baseline.height) {
+      return {
+        status: 'failed',
+        message: `Page ${i + 1} dimension mismatch: ` +
+          `actual ${actual.width}x${actual.height}, ` +
+          `baseline ${baseline.width}x${baseline.height}`,
+      };
+    }
+
+    const diffPixels = pixelmatch(
+      actual.data,
+      baseline.data,
+      null,
+      actual.width,
+      actual.height,
+      {threshold},
+    );
+
+    const totalPixels = actual.width * actual.height;
+    const diffPercent = (diffPixels / totalPixels) * 100;
+
+    if (diffPercent > 1) {
+      return {
+        status: 'failed',
+        message: `Page ${i + 1} differs by ${diffPercent.toFixed(2)}% ` +
+          `(${diffPixels} pixels)`,
+      };
+    }
+  }
+
+  return {status: 'passed', message: 'PDFs match'};
+}
 
 describe('RenderPDF', () => {
   jest.setTimeout(120 * 1000);
@@ -33,7 +96,7 @@ describe('RenderPDF', () => {
       emitter.on('report:render:pdf:started', onReportRenderStarted);
       emitter.on('report:render:pdf:fallback', onReportRenderFallback);
       emitter.on('report:render:pdf:finished', onReportRenderFinished);
-      (executed as jest.Mock).mockImplementationOnce(async (command: string) =>
+      (executed as jest.Mock<any>).mockImplementation(async (command: string) =>
         await promisify(exec)(command)
           .then(() => true)
           .catch(() => false));
@@ -59,13 +122,10 @@ describe('RenderPDF', () => {
 
     test('returns the expected report', async () => {
       const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
-      const comparer = new ComparePdf()
-        .actualPdfBuffer(output, 'actual.pdf')
-        .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
-
-      const comparisonResults =
-          await (comparer.compare as unknown as (type?: string) =>
-              Promise<{status: string, message: string}>)();
+      const comparisonResults = await comparePdfBuffers(
+        output,
+        await readFile(baselinePath),
+      );
 
       if (comparisonResults.status !== 'passed') {
         await writeFile('test-chrome-rendered.pdf', output);
@@ -91,7 +151,7 @@ describe('RenderPDF', () => {
         emitter.on('report:render:pdf:started', onReportRenderStarted);
         emitter.on('report:render:pdf:fallback', onReportRenderFallback);
         emitter.on('report:render:pdf:finished', onReportRenderFinished);
-        (executed as jest.Mock).mockResolvedValueOnce(false);
+        (executed as jest.Mock<any>).mockResolvedValueOnce(false);
         reportToObject.mockResolvedValue(fullReport);
         output = await render.render();
       });
@@ -115,13 +175,10 @@ describe('RenderPDF', () => {
 
       test('returns the expected report', async () => {
         const baselinePath = resolve('tests', 'fixtures', 'baseline.report.pdf');
-        const comparer = new ComparePdf()
-          .actualPdfBuffer(output, 'actual.pdf')
-          .baselinePdfBuffer(await readFile(baselinePath), baselinePath);
-
-        const comparisonResults =
-          await (comparer.compare as unknown as (type?: string) =>
-              Promise<{status: string, message: string}>)();
+        const comparisonResults = await comparePdfBuffers(
+          output,
+          await readFile(baselinePath),
+        );
 
         if (comparisonResults.status !== 'passed') {
           await writeFile('test-fallback-rendered.pdf', output);

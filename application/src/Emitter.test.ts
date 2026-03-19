@@ -1,3 +1,4 @@
+import {jest, describe, test, expect} from '@jest/globals';
 import {Emitter} from './Emitter';
 
 describe('emitted event', () => {

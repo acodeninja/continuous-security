@@ -1,13 +1,16 @@
-import axios from 'axios';
-import {OSV} from './OSV';
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {Github} from '../../../tests/fixtures/OSVResponse';
 
-jest.mock('axios', () => ({
+jest.unstable_mockModule('axios', () => ({
+  default: {get: jest.fn()},
   get: jest.fn(),
 }));
 
+const axios = (await import('axios')).default;
+const {OSV} = await import('./OSV');
+
 describe('OSV.getById', () => {
-  (axios.get as jest.Mock).mockResolvedValueOnce({data: Github});
+  (axios.get as jest.Mock<any>).mockResolvedValueOnce({data: Github});
 
   let reference: ReportOutputIssueReference;
 
@@ -34,7 +37,7 @@ describe('OSV.getById', () => {
   });
 
   describe('when the advisory does not exist', () => {
-    (axios.get as jest.Mock).mockRejectedValueOnce(new Error('404'));
+    (axios.get as jest.Mock<any>).mockRejectedValueOnce(new Error('404'));
 
     test('raises an error', async () => {
       await expect((new OSV()).getById('xxxxxxxxx')).rejects.toThrow('failed to get id xxxxxxxxx');

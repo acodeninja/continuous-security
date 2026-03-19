@@ -3,7 +3,7 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   ...tseslint.configs.recommended,
   {
-    ignores: ['tests/fixtures/*'],
+    ignores: ['build/*', 'webpack.config.js', 'jest.config.js'],
   },
   {
     languageOptions: {
@@ -17,23 +17,10 @@ export default tseslint.config(
       semi: ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],
       'quote-props': ['error', 'as-needed'],
-      'max-len': ['error', { code: 100 }],
       '@typescript-eslint/no-unused-vars': [
         'error',
-        { varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+        { varsIgnorePattern: '^_' },
       ],
-    },
-  },
-  {
-    files: ['**/*.cjs'],
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-  },
-  {
-    files: ['**/*.test.ts'],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 );

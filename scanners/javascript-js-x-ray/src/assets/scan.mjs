@@ -1,29 +1,29 @@
 #!/usr/bin/env node
 
-import {runASTAnalysis} from "@nodesecure/js-x-ray";
-import {getToken} from "@nodesecure/i18n";
-import {lookup} from "mime-types";
-import _ from "lodash";
-import {readdirSync, lstatSync, readFileSync, writeFileSync} from "fs";
-import {join} from "path";
+import {runASTAnalysis} from '@nodesecure/js-x-ray';
+import {getToken} from '@nodesecure/i18n';
+import {lookup} from 'mime-types';
+import _ from 'lodash';
+import {readdirSync, lstatSync, readFileSync, writeFileSync} from 'fs';
+import {join} from 'path';
 
 const getAllFiles = (root = '/target') => {
   return readdirSync(root)
     .map(item =>
       lstatSync(join(root, item)).isDirectory() ?
         getAllFiles(join(root, item)) :
-        join(root, item)
+        join(root, item),
     ).flat();
 };
 
 const translateSeverity = (severity) => {
   switch (severity) {
-    case 'Information':
-      return 'unknown';
-    case 'Warning':
-      return 'moderate';
-    case 'Critical':
-      return 'critical';
+  case 'Information':
+    return 'unknown';
+  case 'Warning':
+    return 'moderate';
+  case 'Critical':
+    return 'critical';
   }
 };
 
@@ -38,7 +38,7 @@ Array.prototype.groupBy = function (field) {
         return b.concat(a);
       }
     });
-  })
+  });
 
   return Object.values(grouped);
 };

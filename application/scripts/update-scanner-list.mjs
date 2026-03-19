@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 
- 
-const {readdir, writeFile, readFile} = require('fs/promises');
-const {resolve} = require('path');
- 
+import {readdir, writeFile, readFile} from 'fs/promises';
+import {resolve} from 'path';
 
-readdir(resolve(process.cwd(), '..', 'scanners'))
+readdir(resolve(import.meta.dirname, '..', '..', 'scanners'))
   .then(l => l.filter(i => i !== '_base'))
   .then(l => Promise.all(l.map(async (name) => {
-    const path = resolve(process.cwd(), '..', 'scanners', name, 'package.json');
-    const {description, continuousSecurityScanner} = JSON.parse((await readFile(path)).toString());
+    const path = resolve(import.meta.dirname, '..', '..', 'scanners', name, 'package.json');
+    const {description, continuousSecurityScanner} =
+      JSON.parse((await readFile(path)).toString());
 
     return {
       name,
@@ -20,7 +19,7 @@ readdir(resolve(process.cwd(), '..', 'scanners'))
   })))
   .then(scanners => ({scanners}))
   .then(scannerData => writeFile(
-    resolve(process.cwd(), 'src', 'scanners.json'),
+    resolve(import.meta.dirname, '..', 'src', 'scanners.json'),
     JSON.stringify(scannerData, null, 2),
   ).then(() => {
     console.log(`Updated scanner list with ${scannerData.scanners.length} scanners`);

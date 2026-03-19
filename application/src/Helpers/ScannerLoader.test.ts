@@ -1,12 +1,16 @@
-import {exec} from 'child_process';
-import {loadScannerModule} from './ScannerLoader';
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 
-jest.mock('child_process');
-jest.mock('os');
+jest.unstable_mockModule('child_process', () => ({
+  exec: jest.fn(),
+}));
+jest.unstable_mockModule('os', () => ({}));
+
+const {exec} = await import('child_process');
+const {loadScannerModule} = await import('./ScannerLoader');
 
 describe('loadScannerModule', () => {
   beforeAll(async () => {
-    (exec as unknown as jest.Mock).mockImplementation((command, options, callback) => {
+    (exec as unknown as jest.Mock<any>).mockImplementation((command, options, callback) => {
       callback(null, {stdout: ''});
     });
     await loadScannerModule('test');

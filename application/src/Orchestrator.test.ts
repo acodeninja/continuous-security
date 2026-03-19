@@ -1,14 +1,11 @@
-import {Orchestrator} from './Orchestrator';
-import {access, cp, readFile, rm, writeFile} from 'fs/promises';
-import {exec} from 'child_process';
-import {loadScannerModule} from './Helpers/ScannerLoader';
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 
 import {TestScanner} from '../tests/fixtures/Scanner';
 import {JSONConfigurationWithExtraConfig} from '../tests/fixtures/Configuration';
 import {TestScanExpectation} from '../tests/fixtures/Scan';
 import {NpmAuditReport} from '../tests/fixtures/NpmAuditReport';
 
-jest.mock('fs/promises', () => ({
+jest.unstable_mockModule('fs/promises', () => ({
   access: jest.fn().mockResolvedValue(null),
   cp: jest.fn().mockResolvedValue(null),
   readFile: jest.fn().mockImplementation((file: string) => {
@@ -25,31 +22,36 @@ jest.mock('fs/promises', () => ({
   writeFile: jest.fn(),
 }));
 
-jest.mock('child_process', () => ({
+jest.unstable_mockModule('child_process', () => ({
   exec: jest.fn().mockImplementation((_args, _options, callback) => {
     callback();
   }),
 }));
 
-jest.mock('../package.json', () => ({
-  version: '1.2.3',
+jest.unstable_mockModule('../package.json', () => ({
+  default: {version: '1.2.3'},
 }));
 
-jest.mock('./Helpers/Files', () => ({
+jest.unstable_mockModule('./Helpers/Files', () => ({
   makeTemporaryFolder: jest.fn().mockResolvedValue('/tmp/prefix-random'),
   destroyTemporaryFolder: jest.fn(),
 }));
 
-jest.mock('./Helpers/DockerClient', () => ({
+jest.unstable_mockModule('./Helpers/DockerClient', () => ({
   buildImage: jest.fn().mockResolvedValue('image-hash'),
   runImage: jest.fn(),
 }));
 
-jest.mock('./Helpers/ScannerLoader', () => ({
+jest.unstable_mockModule('./Helpers/ScannerLoader', () => ({
   loadScannerModule: jest.fn(),
 }));
 
-(loadScannerModule as jest.Mock).mockResolvedValue(TestScanner);
+const {access, cp, readFile, rm, writeFile} = await import('fs/promises');
+const {exec} = await import('child_process');
+const {loadScannerModule} = await import('./Helpers/ScannerLoader');
+const {Orchestrator} = await import('./Orchestrator');
+
+(loadScannerModule as jest.Mock<any>).mockResolvedValue(TestScanner);
 
 describe('Orchestrator', () => {
   describe('Orchestrator.run', () => {
@@ -123,7 +125,7 @@ describe('Orchestrator', () => {
   });
 
   describe('Orchestrator.writeReport', () => {
-    (writeFile as jest.Mock).mockResolvedValue(null);
+    (writeFile as jest.Mock<any>).mockResolvedValue(null);
     const orchestrator = new Orchestrator('/test');
 
     beforeAll(async () => {

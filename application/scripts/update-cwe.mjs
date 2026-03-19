@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
- 
-const {createWriteStream} = require('fs');
-const {get} = require('https');
-const {Parse} = require('unzip-stream');
-const {minifyStream} = require('minify-xml');
- 
+import {createWriteStream} from 'fs';
+import {get} from 'https';
+import {Parse} from 'unzip-stream';
+import {minifyStream} from 'minify-xml';
 
 const url = 'https://cwe.mitre.org/data/xml/cwec_latest.xml.zip';
 new Promise((resolve, reject) => {
