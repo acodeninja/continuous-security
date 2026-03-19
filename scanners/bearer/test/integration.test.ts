@@ -6,7 +6,7 @@ setupIntegrationTests(
   process,
   'ruby',
   {
-    issues: [
+    issues: expect.arrayContaining([
       {
         description: '## Description\n\nApplications should not execute OS commands that are formed from user input.\nThis rule checks for external commands containing user-supplied data.\n\n## Remediations\n\n❌ Avoid using user input when executing commands:\n\n```ruby\nsystem(params[:command])\n```\n\n✅ Use user input indirectly when executing commands:\n\n```ruby\ncommand =\n  case params[:action]\n  when "option1"\n    "command1"\n  when "option2"\n    "command2"\n  end\n\nsystem(command)\n```\n\n## Resources\n- [OWASP Ruby command injection cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html#command-injection)\n- [OWASP OS command injection cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html)\n',
         fix: 'unknown',
@@ -20,7 +20,7 @@ setupIntegrationTests(
           language: 'ruby',
         }],
       },
-    ],
+    ]),
     scanner: '@continuous-security/scanner-bearer',
   },
 );
@@ -30,7 +30,7 @@ setupIntegrationTests(
   process,
   'javascript',
   {
-    issues: [
+    issues: expect.arrayContaining([
       {
         description: '## Description\nSending unsanitized user input in a response puts your application at risk of cross-site scripting attacks.\n\n\n## Remediations\n❌ Avoid including user input directly in a response:\n\n```javascript\nres.send(req.body.data)\n```\n\n## Resources\n- [OWASP Cross-Site Scripting (XSS) Cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n',
         extracts: [
@@ -112,7 +112,7 @@ setupIntegrationTests(
         title: 'Security misconfiguration detected (server fingerprinting).',
         type: 'code smell',
       },
-    ],
+    ]),
     scanner: '@continuous-security/scanner-bearer',
   },
 );

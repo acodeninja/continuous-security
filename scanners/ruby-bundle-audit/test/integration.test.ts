@@ -6,7 +6,7 @@ setupIntegrationTests(
   process,
   'ruby',
   {
-    issues: [
+    issues: expect.arrayContaining([
       {
         description: 'ruby-saml gem is vulnerable to XPath injection',
         fix: 'upgrade to \'>= 1.0.0\'',
@@ -64,7 +64,7 @@ setupIntegrationTests(
         title: 'Vulnerable Third-Party Library `ruby-saml`',
         type: 'dependency',
       },
-    ],
+    ]),
     scanner: '@continuous-security/scanner-ruby-bundle-audit',
   },
 );

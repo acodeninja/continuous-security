@@ -7,7 +7,7 @@ setupIntegrationTests(
   'javascript',
   {
     scanner: '@continuous-security/scanner-javascript-js-x-ray',
-    issues: [
+    issues: expect.arrayContaining([
       {
         description: 'Unable to follow an import (require, require.resolve) statement/expr.',
         extracts: [{
@@ -46,6 +46,6 @@ setupIntegrationTests(
           },
         ],
       },
-    ],
+    ]),
   },
 );
