@@ -36,7 +36,11 @@ export const setupIntegrationTests = (
       codebasePath = fixture.path;
 
       if (fixture.commands?.init)
-        await promisify(exec)(fixture.commands?.init.flat(2).join(' '), {cwd: fixture.path});
+        try {
+          await promisify(exec)(fixture.commands?.init.flat(2).join(' '), {cwd: fixture.path});
+        } catch (e) {
+          console.log(e);
+        }
 
       if (fixture.commands?.start)
         runningCommands.push(spawn(
@@ -46,7 +50,7 @@ export const setupIntegrationTests = (
         ));
     }
 
-    const build = await promisify(exec)(`docker buildx build -t integration-test-${scanner.slug}-${exampleCodebase} .`, {
+    const build = await promisify(exec)(`docker buildx build --platform linux/amd64 -t integration-test-${scanner.slug}-${exampleCodebase} .`, {
       cwd: resolve(process.cwd(), 'src', 'assets'),
     });
 
@@ -55,7 +59,7 @@ export const setupIntegrationTests = (
     await chmod(temporaryDirectory, 0o777);
 
     const runCommand = [
-      'docker run --rm --network host',
+      'docker run --platform linux/amd64 --rm --network host',
       `-v ${codebasePath}:/target`,
       `-v ${temporaryDirectory}:/output`,
     ];

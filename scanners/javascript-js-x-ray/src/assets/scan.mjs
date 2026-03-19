@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {runASTAnalysis} from '@nodesecure/js-x-ray';
+import {AstAnalyser} from '@nodesecure/js-x-ray';
 import {getToken} from '@nodesecure/i18n';
 import {lookup} from 'mime-types';
 import _ from 'lodash';
@@ -43,11 +43,13 @@ Array.prototype.groupBy = function (field) {
   return Object.values(grouped);
 };
 
+const scanner = new AstAnalyser();
+
 const analysis = getAllFiles()
   // Filter out node_modules/
   .filter(path => path.indexOf('node_modules/') === -1)
   // Filter out non-javascript files
-  .filter(path => lookup(path) === 'application/javascript')
+  .filter(path => ['application/javascript', 'text/javascript'].includes(lookup(path)))
   // Filter out files without .js extention
   .filter(path => path.endsWith('.js'))
   // Filter out minified javascript files
@@ -60,7 +62,7 @@ const analysis = getAllFiles()
   // Pass the file through AST analysis
   .map(({path, file}) => {
     try {
-      return ({path, analysis: runASTAnalysis(file)});
+      return ({path, analysis: scanner.analyse(file)});
     } catch (e) {
       console.log(e);
       return null;

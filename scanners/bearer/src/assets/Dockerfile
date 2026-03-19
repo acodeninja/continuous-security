@@ -8,6 +8,7 @@ RUN cd /bearer && git checkout "$(git describe --tags `git rev-list --tags --max
 
 ENTRYPOINT bearer scan \
   --disable-default-rules --external-rule-dir /bearer/rules \
+  --exit-code 0 \
   --format json \
   --output /output/report.json \
   /target
