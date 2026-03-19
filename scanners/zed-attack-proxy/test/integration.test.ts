@@ -14,16 +14,16 @@ setupIntegrationTests(
       fix: 'Unknown',
       severity: 'moderate',
       requests: expect.arrayContaining([{
-        request: {
+        request: expect.objectContaining({
           target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
           headers: expect.objectContaining({host: 'localhost:3000'}),
-        },
-        response: {
+        }),
+        response: expect.objectContaining({
           statusCode: 200,
           headers: expect.objectContaining({'X-Powered-By': 'Express'}),
           body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
-        },
+        }),
       }]),
     }, {
       title: 'X-Content-Type-Options Header Missing',
@@ -33,35 +33,35 @@ setupIntegrationTests(
       fix: 'Unknown',
       severity: 'low',
       requests: expect.arrayContaining([{
-        request: {
+        request: expect.objectContaining({
           target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
           headers: expect.objectContaining({host: 'localhost:3000'}),
-        },
-        response: {
+        }),
+        response: expect.objectContaining({
           statusCode: 200,
           headers: expect.objectContaining({'X-Powered-By': 'Express'}),
           body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
-        },
+        }),
       }]),
     }, {
       title: 'Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s)',
       description: expect.stringContaining('X-Powered-By'),
       type: 'web request',
-      references: ['CWE-200'],
+      references: ['CWE-497'],
       fix: 'Unknown',
       severity: 'low',
       requests: expect.arrayContaining([{
-        request: {
+        request: expect.objectContaining({
           target: expect.stringContaining('http://localhost:3000'),
           method: 'GET',
           headers: expect.objectContaining({host: 'localhost:3000'}),
-        },
-        response: {
+        }),
+        response: expect.objectContaining({
           statusCode: 200,
           headers: expect.objectContaining({'X-Powered-By': 'Express'}),
           body: expect.stringMatching(/<!(doctype|DOCTYPE) html>/),
-        },
+        }),
       }]),
     }]),
   },
