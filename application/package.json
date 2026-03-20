@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/application",
-  "version": "1.8.1",
+  "version": "2.0.0",
   "description": "Command line application for running security scans against application code.",
   "scripts": {
     "test": "LANG=en_GB.utf8 TZ=UTC NODE_OPTIONS=--experimental-vm-modules jest",

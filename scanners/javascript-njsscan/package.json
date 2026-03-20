@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-javascript-njsscan",
-  "version": "1.8.1",
+  "version": "2.0.0",
   "description": "Run njsscan against your nodejs codebase.",
   "main": "build/main.js",
   "scripts": {
