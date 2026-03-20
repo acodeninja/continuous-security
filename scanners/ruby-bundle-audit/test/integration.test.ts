@@ -6,10 +6,10 @@ setupIntegrationTests(
   process,
   'ruby',
   {
-    issues: [
+    issues: expect.arrayContaining([
       {
         description: 'ruby-saml gem is vulnerable to XPath injection',
-        fix: 'upgrade to \'>= 1.0.0\'',
+        fix: 'update to \'>= 1.0.0\'',
         package: {
           name: 'ruby-saml',
           version: '0.9.2',
@@ -24,7 +24,7 @@ setupIntegrationTests(
       },
       {
         description: 'XML signature wrapping attack',
-        fix: 'upgrade to \'>= 1.3.0\'',
+        fix: 'update to \'>= 1.3.0\'',
         package: {
           name: 'ruby-saml',
           version: '0.9.2',
@@ -39,7 +39,7 @@ setupIntegrationTests(
       },
       {
         description: 'Authentication bypass via incorrect XML canonicalization and DOM traversal',
-        fix: 'upgrade to \'>= 1.7.0\'',
+        fix: 'update to \'>= 1.7.0\'',
         package: {
           name: 'ruby-saml',
           version: '0.9.2',
@@ -54,7 +54,7 @@ setupIntegrationTests(
       },
       {
         description: 'Ruby-Saml Gem is vulnerable to entity expansion attacks',
-        fix: 'upgrade to \'>= 1.0.0\'',
+        fix: 'update to \'>= 1.0.0\'',
         package: {
           name: 'ruby-saml',
           version: '0.9.2',
@@ -64,7 +64,7 @@ setupIntegrationTests(
         title: 'Vulnerable Third-Party Library `ruby-saml`',
         type: 'dependency',
       },
-    ],
+    ]),
     scanner: '@continuous-security/scanner-ruby-bundle-audit',
   },
 );

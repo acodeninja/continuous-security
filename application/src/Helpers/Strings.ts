@@ -8,7 +8,7 @@ export const isURL = (input: unknown): input is URL => {
     if (!input) return false;
     const url = new URL(input as string);
     return !!url.protocol && !!url.host;
-  } catch (e) {
+  } catch (_e) {
     return false;
   }
 };

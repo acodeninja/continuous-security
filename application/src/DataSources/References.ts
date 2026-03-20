@@ -42,7 +42,7 @@ export class References {
         } else {
           expandedReferences[ref] = await this.osvDataset.getById(ref);
         }
-      } catch (e) {
+      } catch (_e) {
         this.emitter.emit(
           'report:reference:failure',
           `Failed to fetch vulnerability reference ${ref}`,

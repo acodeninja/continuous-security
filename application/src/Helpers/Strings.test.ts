@@ -1,3 +1,4 @@
+import {describe, test, expect} from '@jest/globals';
 import {capitalise, isURL, tidyString} from './Strings';
 
 describe('isURL', () => {

@@ -4,6 +4,6 @@
     "resolveJsonModule": true,
     "outDir": "build",
     "types": ["node", "jest"],
-    "lib": ["ES2015"]
+    "lib": ["ES2022"]
   },
 }

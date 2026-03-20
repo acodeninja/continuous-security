@@ -1,3 +1,4 @@
+import {describe, test, expect} from '@jest/globals';
 import {CWE, CWEDoesNotExist} from './CWE';
 
 describe('with a CWE id that exists', () => {

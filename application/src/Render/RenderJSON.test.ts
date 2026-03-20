@@ -1,3 +1,4 @@
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';
 import {RenderJSON} from './RenderJSON';

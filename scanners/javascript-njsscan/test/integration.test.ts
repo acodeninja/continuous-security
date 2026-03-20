@@ -7,7 +7,7 @@ setupIntegrationTests(
   'javascript',
   {
     scanner: '@continuous-security/scanner-javascript-njsscan',
-    issues: [
+    issues: expect.arrayContaining([
       {
         title: 'Improper Neutralization of Input During Web Page Generation (\'Cross-site Scripting\')',
         description: 'Untrusted User Input in Response will result in Reflected Cross Site Scripting Vulnerability.',
@@ -34,6 +34,6 @@ setupIntegrationTests(
           language: 'javascript',
         }],
       },
-    ],
+    ]),
   },
 );

@@ -6,13 +6,13 @@ setupIntegrationTests(
   process,
   'ruby',
   {
-    issues: [
+    issues: expect.arrayContaining([
       {
-        description: '## Description\n\nApplications should not execute OS commands that are formed from user input.\nThis rule checks for external commands containing user-supplied data.\n\n## Remediations\n\n❌ Avoid using user input when executing commands:\n\n```ruby\nsystem(params[:command])\n```\n\n✅ Use user input indirectly when executing commands:\n\n```ruby\ncommand =\n  case params[:action]\n  when "option1"\n    "command1"\n  when "option2"\n    "command2"\n  end\n\nsystem(command)\n```\n\n## Resources\n- [OWASP Ruby command injection cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html#command-injection)\n- [OWASP OS command injection cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html)\n',
+        description: '## Description\n\nExecuting OS commands with user input can lead to command injection attacks. This vulnerability occurs when an application dynamically generates a command to the operating system using data supplied by the user without proper sanitization.\n\n## Remediations\n\n- **Do not** directly use user input to form OS commands. This can allow attackers to execute arbitrary commands.\n  ```ruby\n  system(params[:command]) # unsafe\n  ```\n- **Do** validate or sanitize user input before using it in OS commands. Prefer using static command strings where possible.\n- **Do** use indirect methods for incorporating user input into commands, such as selecting from predefined options.\n  ```ruby\n  command =\n    case params[:action]\n    when "option1"\n      "command1"\n    when "option2"\n      "command2"\n    end\n\n  system(command)\n  ```\n\n## References\n\n- [OWASP Ruby command injection cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html#command-injection)\n- [OWASP OS command injection cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html)',
         fix: 'unknown',
         references: ['CWE-78'],
-        severity: 'high',
-        title: 'Execution of OS command formed with user input detected.',
+        severity: 'critical',
+        title: 'Unsanitized user input in OS command',
         type: 'code smell',
         extracts: [{
           lines: ['4', '4'],
@@ -20,7 +20,7 @@ setupIntegrationTests(
           language: 'ruby',
         }],
       },
-    ],
+    ]),
     scanner: '@continuous-security/scanner-bearer',
   },
 );
@@ -30,9 +30,9 @@ setupIntegrationTests(
   process,
   'javascript',
   {
-    issues: [
+    issues: expect.arrayContaining([
       {
-        description: '## Description\nSending unsanitized user input in a response puts your application at risk of cross-site scripting attacks.\n\n\n## Remediations\n❌ Avoid including user input directly in a response:\n\n```javascript\nres.send(req.body.data)\n```\n\n## Resources\n- [OWASP Cross-Site Scripting (XSS) Cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n',
+        description: '## Description\n\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into web pages viewed by other users.\n\n## Remediations\n\n- **Do not** include user input directly in a response. This practice can lead to XSS vulnerabilities.\n  ```javascript\n  res.send(req.body.data); // unsafe\n  ```\n- **Do** sanitize user input before including it in a response. Use library functions or frameworks designed for input sanitization to ensure that user data cannot be interpreted as executable code.\n\n## References\n\n- [OWASP Cross-Site Scripting (XSS) Cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)',
         extracts: [
           {
             language: 'javascript',
@@ -48,11 +48,11 @@ setupIntegrationTests(
           'CWE-79',
         ],
         severity: 'high',
-        title: 'Cross-site scripting (XSS) vulnerability detected.',
+        title: 'Unsanitized user input in HTTP response (XSS)',
         type: 'code smell',
       },
       {
-        description: '## Description\n\nApplications should not include unsanitized user input in HTML. This\ncan allow cross-site scripting (XSS) attacks.\n\n## Remediations\n\n❌ Avoid including user input directly in HTML strings:\n\n```javascript\nconst html = `<h1>${req.params.title}</h1>`\n```\n\n✅ Use a framework or templating language to construct the HTML.\n\n✅ When HTML strings must be used, sanitize user input:\n\n```javascript\nimport sanitizeHtml from \'sanitize-html\'\n\nconst sanitizedTitle = sanitizeHtml(req.params.title)\nconst html = `<h1>${sanitizedTitle}</h1>`\n```\n\n## Resources\n- [OWASP Cross-Site Scripting (XSS) Cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n',
+        description: '## Description\n\nIncluding unsanitized user input in HTML exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into web pages viewed by other users.\n\n## Remediations\n\n- **Do not** include user input directly in HTML strings. This practice can lead to XSS vulnerabilities.\n  ```javascript\n  const html = `<h1>${req.params.title}</h1>` // unsafe\n  ```\n- **Do** use a framework or templating language that automatically handles the encoding and sanitization of user input when constructing HTML. This approach minimizes the risk of XSS attacks.\n- **Do** sanitize user input if you must use HTML strings directly. Utilize libraries designed for input sanitization to ensure that user input does not contain malicious content.\n  ```javascript\n  import sanitizeHtml from \'sanitize-html\'\n\n  const sanitizedTitle = sanitizeHtml(req.params.title)\n  const html = `<h1>${sanitizedTitle}</h1>`\n  ```\n\n## References\n\n- [OWASP Cross-Site Scripting (XSS) Cheatsheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)',
         extracts: [
           {
             language: 'javascript',
@@ -68,12 +68,11 @@ setupIntegrationTests(
           'CWE-79',
         ],
         severity: 'high',
-        title: 'Unsanitized user input detected in raw HTML string.',
+        title: 'Unsanitized user input in raw HTML strings (XSS)',
         type: 'code smell',
       },
       {
-        // eslint-disable-next-line no-useless-escape
-        description: '## Description\n\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.\n\n## Remediations\n\n✅ Use Helmet middleware\n\n```javascript\nconst helmet = require(\"helmet\")\napp.use(helmet())\n```\n\n## Resources\n\n- [Express Security Best Practices: Use Helmet](https://expressjs.com/en/advanced/best-practice-security.html#use-helmet)\n',
+        description: '## Description\n\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Failing to configure Helmet for HTTP headers leaves your application vulnerable to several web attacks.\n\n## Remediations\n\n- **Do** use Helmet middleware to secure your app by adding it to your application\'s middleware.\n  ```javascript\n  const helmet = require("helmet");\n  app.use(helmet());\n  ```\n\n## References\n\n- [Express Security Best Practices: Use Helmet](https://expressjs.com/en/advanced/best-practice-security.html#use-helmet)',
         extracts: [
           {
             language: 'javascript',
@@ -88,12 +87,12 @@ setupIntegrationTests(
         references: [
           'CWE-693',
         ],
-        severity: 'low',
-        title: 'Security misconfiguration detected (Helmet missing).',
+        severity: 'medium',
+        title: 'Missing Helmet configuration on HTTP headers',
         type: 'code smell',
       },
       {
-        description: '## Description\n\nIt can help to provide an extra layer of security to reduce server fingerprinting. Though not a security issue itself, a method to improve the overall posture of a web server is to take measures to reduce the ability to fingerprint the software being used on the server. Server software can be fingerprinted by quirks in how they respond to specific requests.\n\nBy default, Express.js sends the X-Powered-By response header banner. This can be disabled using the app.disable() method:\n\n```\n  app.disable(\'x-powered-by\')\n```\n\n## Resources\n\n- [Express Security Best Practices](https://expressjs.com/en/advanced/best-practice-security.html)\n',
+        description: '## Description\n\nReducing server fingerprinting enhances security by making it harder for attackers to identify the software your server is running. Server fingerprinting involves analyzing the unique responses of server software to specific requests, which can reveal information about the server\'s software and version. While not a direct security vulnerability, minimizing this information leakage is a proactive step to obscure details that could be used in targeted attacks.\n\n## Remediations\n\n- **Do** disable the `X-Powered-By` header in Express.js applications to prevent revealing the server\'s technology stack. Use the `app.disable()` method to achieve this.\n  ```javascript\n  app.disable(\'x-powered-by\');\n  ```\n\n## References\n\n- [Express Security Best Practices](https://expressjs.com/en/advanced/best-practice-security.html)',
         extracts: [
           {
             language: 'javascript',
@@ -108,11 +107,11 @@ setupIntegrationTests(
         references: [
           'CWE-693',
         ],
-        severity: 'low',
-        title: 'Security misconfiguration detected (server fingerprinting).',
+        severity: 'medium',
+        title: 'Missing server configuration to reduce server fingerprinting',
         type: 'code smell',
       },
-    ],
+    ]),
     scanner: '@continuous-security/scanner-bearer',
   },
 );

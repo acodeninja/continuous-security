@@ -1,13 +1,16 @@
-import axios from 'axios';
-import {CVE} from './CVE';
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {CVEResponse} from '../../../tests/fixtures/CVEResponse';
 
-jest.mock('axios', () => ({
+jest.unstable_mockModule('axios', () => ({
+  default: {get: jest.fn()},
   get: jest.fn(),
 }));
 
+const axios = (await import('axios')).default;
+const {CVE} = await import('./CVE');
+
 describe('CVE.getById', () => {
-  (axios.get as jest.Mock).mockResolvedValueOnce({data: CVEResponse});
+  (axios.get as jest.Mock<any>).mockResolvedValueOnce({data: CVEResponse});
 
   let reference: ReportOutputIssueReference;
 
@@ -34,7 +37,7 @@ describe('CVE.getById', () => {
   });
 
   describe('when the cve does not exist', () => {
-    (axios.get as jest.Mock).mockRejectedValueOnce(new Error('404'));
+    (axios.get as jest.Mock<any>).mockRejectedValueOnce(new Error('404'));
 
     test('raises an error', async () => {
       await expect((new CVE()).getById('xxxxxxxxx')).rejects.toThrow('failed to get id xxxxxxxxx');

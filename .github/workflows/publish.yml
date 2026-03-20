@@ -9,21 +9,26 @@ jobs:
   publish-application:
     name: application / publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '22.14'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: application/package-lock.json
+      - name: upgrade npm
+        run: npm install -g npm@latest
       - name: publish
         working-directory: application/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm ci
-          npm publish
+          npm run build
+          cd build
+          npm publish --provenance
 
   enumerate-scanners:
     name: scanner / enumerate
@@ -31,31 +36,33 @@ jobs:
     outputs:
       scanners: ${{ steps.scanners.outputs.scanners }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - id: scanners
         run: echo "scanners=$(ls -1 ./scanners | jq -Rnrc '[inputs] | map(select(. != "_base"))')" >> $GITHUB_OUTPUT
 
-  scanners:
+  publish-scanners:
     name: scanner / ${{ matrix.scanner }} / publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     needs: [ enumerate-scanners ]
     strategy:
       matrix:
         scanner: ${{ fromJSON(needs.enumerate-scanners.outputs.scanners) }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '22.14'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
           cache-dependency-path: scanners/${{ matrix.scanner }}/package-lock.json
-
+      - name: upgrade npm
+        run: npm install -g npm@latest
       - name: publish
         working-directory: scanners/${{ matrix.scanner }}/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm ci
           npm run build
-          npm publish
+          npm publish --provenance

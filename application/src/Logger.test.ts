@@ -1,3 +1,4 @@
+import {jest, describe, test, expect, beforeAll, afterAll} from '@jest/globals';
 import {Logger} from './Logger';
 import {Emitter} from './Emitter';
 

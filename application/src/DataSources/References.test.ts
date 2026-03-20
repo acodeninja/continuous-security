@@ -1,11 +1,14 @@
-import {References} from './References';
-import {Emitter} from '../Emitter';
+import {jest, describe, test, expect, beforeAll} from '@jest/globals';
 import {Github} from '../../tests/fixtures/OSVResponse';
-import axios from 'axios';
 
-jest.mock('axios', () => ({
+jest.unstable_mockModule('axios', () => ({
+  default: {get: jest.fn()},
   get: jest.fn(),
 }));
+
+const axios = (await import('axios')).default;
+const {References} = await import('./References');
+const {Emitter} = await import('../Emitter');
 
 describe('References.getAll', () => {
   describe('when the reference does not exist', () => {
@@ -16,7 +19,7 @@ describe('References.getAll', () => {
     emitter.on('report:reference:failure', onReferenceFetchError);
 
     beforeAll(async () => {
-      (axios.get as jest.Mock).mockImplementation(async (url: string) => {
+      (axios.get as jest.Mock<any>).mockImplementation(async (url: string) => {
         if (url.indexOf('GHSA-pjpc-87mp-4332') !== -1) return {data: Github};
         throw new Error('404');
       });

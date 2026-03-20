@@ -1,4 +1,5 @@
-import {template} from 'lodash';
+import _ from 'lodash';
+const {template} = _;
 
 import {Report} from '../Report';
 import {Emitter} from '../Emitter';
@@ -7,7 +8,8 @@ import {capitalise} from '../Helpers/Strings';
 
 import HTMLTemplate from '../assets/report.html.template.md';
 import HTMLTemplateWrapper from '../assets/report.html.wrapper.html';
-import {Converter as Showdown} from 'showdown';
+import showdown from 'showdown';
+const {Converter: Showdown} = showdown;
 import {timezone, toDate, toTime} from '../Helpers/Dates';
 
 export class RenderHTML {
@@ -20,7 +22,7 @@ export class RenderHTML {
   }
 
   async render(): Promise<Buffer> {
-    this.emitter.emit('report:render:html:started');
+    this.emitter.emit('report:render:html:started', '');
 
     const report = await this.report.toObject();
     const convert = new Showdown();
@@ -36,7 +38,7 @@ export class RenderHTML {
 
     const output = HTMLTemplateWrapper.toString().replace('%%REPORT%%', innerReport);
 
-    this.emitter.emit('report:render:html:finished');
+    this.emitter.emit('report:render:html:finished', '');
 
     return Buffer.from(output);
   }

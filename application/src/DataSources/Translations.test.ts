@@ -1,3 +1,4 @@
+import {describe, test, expect} from '@jest/globals';
 import {getAllTerms, translate} from './Translations';
 
 describe('a string without any excluding terms', () => {

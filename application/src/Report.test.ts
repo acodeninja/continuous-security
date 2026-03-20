@@ -1,17 +1,23 @@
-import axios from 'axios';
+import {jest, describe, test, expect, beforeAll, afterAll} from '@jest/globals';
+import {fileURLToPath} from 'url';
 
-import {Report} from './Report';
-import {Emitter} from './Emitter';
+const __filename = fileURLToPath(import.meta.url);
 
 import {CVEResponse} from '../tests/fixtures/CVEResponse';
 import {Github} from '../tests/fixtures/OSVResponse';
 
-jest.mock('axios', () => ({
-  get: jest.fn().mockImplementation(async (url) => {
-    if (url.indexOf('services.nvd.nist.gov') !== -1) return {data: CVEResponse};
-    if (url.indexOf('api.osv.dev') !== -1) return {data: Github};
-  }),
+jest.unstable_mockModule('axios', () => ({
+  default: {
+    get: jest.fn().mockImplementation(async (url) => {
+      if (url.indexOf('services.nvd.nist.gov') !== -1) return {data: CVEResponse};
+      if (url.indexOf('api.osv.dev') !== -1) return {data: Github};
+    }),
+  },
 }));
+
+const {default: axios} = await import('axios');
+const {Report} = await import('./Report');
+const {Emitter} = await import('./Emitter');
 
 beforeAll(() => {
   jest.useFakeTimers();
@@ -53,10 +59,10 @@ describe('fetching vulnerability data', () => {
   });
 
   test('does not fetch the same vulnerability twice', () => {
-    expect((axios.get as jest.Mock).mock.calls
+    expect((axios.get as jest.Mock<any>).mock.calls
       .filter(u => u[0].indexOf('CVE-2022-25772') !== -1))
       .toHaveLength(1);
-    expect((axios.get as jest.Mock).mock.calls
+    expect((axios.get as jest.Mock<any>).mock.calls
       .filter(u => u[0].indexOf('GHSA-f9xv-q969-pqx4') !== -1))
       .toHaveLength(1);
   });
