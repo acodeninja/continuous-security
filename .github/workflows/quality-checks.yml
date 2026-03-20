@@ -88,9 +88,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: application
-          path: |
-            application/
-            !application/node_modules
+          path: application/build/
 
   enumerate-scanners:
     name: scanner / enumerate
