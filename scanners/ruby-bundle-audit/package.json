@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-ruby-bundle-audit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Run bundle-audit against your ruby codebase.",
   "main": "build/main.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-javascript-npm-audit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Run npm audit against your codebase.",
   "main": "build/main.js",
   "scripts": {

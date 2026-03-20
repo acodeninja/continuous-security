@@ -1,6 +1,6 @@
 {
   "name": "@continuous-security/scanner-bearer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Run bearer against your ruby, java or javascript codebase.",
   "main": "build/main.js",
   "scripts": {
