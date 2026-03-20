@@ -9,7 +9,7 @@ This repository is the codebase for TM470 Project by Lawrence Goldstien
 **Requirements**
 
 * Docker (via [Docker CE](https://docs.docker.com/engine/install/),  [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Rancher](https://github.com/rancher-sandbox/rancher-desktop/))
-* [NodeJS >= 18](https://nodejs.org/en/download/package-manager)
+* [NodeJS >= 20](https://nodejs.org/en/download/package-manager)
 
 ```shell
 npm i -g @continuous-security/application
