@@ -27,7 +27,7 @@ export class RenderPDF {
   }
 
   async render(): Promise<Buffer> {
-    this.emitter.emit('report:render:pdf:started');
+    this.emitter.emit('report:render:pdf:started', '');
 
     const report = await this.report.toObject();
     const convert = new Showdown();
@@ -68,7 +68,7 @@ export class RenderPDF {
       );
 
       if (chromeRun) {
-        this.emitter.emit('report:render:pdf:finished');
+        this.emitter.emit('report:render:pdf:finished', '');
         return Buffer.from(await readFile(pdfPath));
       }
     }
@@ -97,7 +97,7 @@ export class RenderPDF {
       volumes: {output: htmlCacheLocation},
     });
 
-    this.emitter.emit('report:render:pdf:finished');
+    this.emitter.emit('report:render:pdf:finished', '');
 
     return Buffer.from(await readFile(pdfPath));
   }

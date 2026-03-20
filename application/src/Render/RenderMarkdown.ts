@@ -19,7 +19,7 @@ export class RenderMarkdown {
   }
 
   async render(): Promise<Buffer> {
-    this.emitter.emit('report:render:markdown:started');
+    this.emitter.emit('report:render:markdown:started', '');
 
     const report = await this.report.toObject();
     const output = template(MarkdownTemplate)({...report, functions: {
@@ -31,7 +31,7 @@ export class RenderMarkdown {
       timezone,
     }});
 
-    this.emitter.emit('report:render:markdown:finished');
+    this.emitter.emit('report:render:markdown:finished', '');
 
     return Buffer.from(output);
   }
